@@ -1,0 +1,66 @@
+Vagrant.configure("2") do |config|
+  # config.vm.box = "ubuntu/lunar64"
+  # config.vm.box = "db"
+  config.ssh.private_key_path = "key"
+  # config.vm.network "forwarded_port", guest: 5432, host: 5432
+  # config.vm.network "forwarded_port", guest: 6443, host: 6443
+  #   su - postgres -c 'psql -f /vagrant/users.sql'
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y postgresql
+  #   echo "listen_addresses = '*'" >> /etc/postgresql/15/main/conf.d/listen.conf
+  #   echo "host all all 0.0.0.0/0 trust" >> /etc/postgresql/15/main/pg_hba.conf
+  # SHELL
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y golang
+  # SHELL
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   apt-get update
+  #   apt-get install -y nginx
+  # SHELL
+
+  # config.vm.provision "shell", inline: <<-SHELL
+  #   su - postgres -c 'psql -f /vagrant/users.sql'
+  # SHELL
+
+  config.vm.define "db" do |c|
+    c.vm.box = "db"
+    c.vm.network "private_network", ip: "192.168.56.30"
+    c.vm.provision "shell", inline: <<-SHELL
+      su - postgres -c 'psql -f /vagrant/users.sql'
+      echo 192.168.56.10 front >> /etc/hosts
+      echo 192.168.56.20 back >> /etc/hosts
+      echo 192.168.56.30 db >> /etc/hosts
+    SHELL
+  end
+
+  config.vm.define "front" do |c|
+    c.vm.box = "front"
+    c.vm.network "forwarded_port", guest: 80, host: 8888
+    c.vm.network "private_network", ip: "192.168.56.10"
+    c.vm.provision "shell", inline: <<-SHELL
+      cat /vagrant/index.html > /var/www/html/index.html
+      echo 192.168.56.10 front >> /etc/hosts
+      echo 192.168.56.20 back >> /etc/hosts
+      echo 192.168.56.30 db >> /etc/hosts
+    SHELL
+  end
+
+  config.vm.define "back" do |c|
+    c.vm.box = "back"
+    c.vm.network "forwarded_port", guest: 80, host: 8889
+    c.vm.network "private_network", ip: "192.168.56.20"
+    c.vm.provision "shell", inline: <<-SHELL
+      echo 192.168.56.10 front >> /etc/hosts
+      echo 192.168.56.20 back >> /etc/hosts
+      echo 192.168.56.30 db >> /etc/hosts
+      cp /vagrant/main.go /home/vagrant/
+      cd /home/vagrant/
+      go mod init example
+      go mod tidy
+      go build main.go
+      /home/vagrant/main &
+    SHELL
+  end
+end

@@ -201,7 +201,7 @@ vagrant@ubuntu-lunar:~$ uname -a
 Linux ubuntu-lunar 6.2.0-31-generic #31-Ubuntu SMP PREEMPT_DYNAMIC Mon Aug 14 13:42:26 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
-```{info}
+```{note}
 По умолчанию vagrant синхронизирует ваш текущий каталог с каталогом `/vagrant` внутри
 виртуальной машины.
 ```
@@ -245,7 +245,7 @@ provider supports automatic port collision detection and resolution.
     22 (guest) => 2222 (host)
 ```
 
-```{info}
+```{note}
 По-умолчанию проброшен 22 порт с виртуальной машины на 2222 порт хоста,
 через который мы подключаемся по ssh.
 ```
