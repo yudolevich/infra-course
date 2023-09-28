@@ -4,5 +4,9 @@
 :relative-images:
 ```
 
+```{include} 02_topic_docker.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
