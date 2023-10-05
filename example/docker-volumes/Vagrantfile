@@ -1,0 +1,37 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "storage" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "storage"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      mkdir /data;chmod 777 /data
+      echo '/data *(rw)' > /etc/exports
+      export DEBIAN_FRONTEND=noninteractive 
+      apt-get update -q
+      apt-get install -yq libnss-mdns nfs-server docker.io
+      usermod -a -G docker vagrant
+    SHELL
+  end
+
+  config.vm.define "docker1" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "docker1"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq libnss-mdns nfs-common docker.io
+      usermod -a -G docker vagrant
+    SHELL
+  end
+
+  config.vm.define "docker2" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "docker2"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq libnss-mdns nfs-common docker.io
+      usermod -a -G docker vagrant
+    SHELL
+  end
+end
