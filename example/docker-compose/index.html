@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Users table:</h2>
+
+<p id="users"></p>
+
+<script>
+var req = function() {
+  var http = new XMLHttpRequest();
+  http.onload = function() {
+    const users = JSON.parse(this.responseText);
+    let text = "<table border='1'>"
+    for (let x in users) {
+      text += "<tr><td>" + users[x].name + "</td>";
+      text += "<td>" + users[x].email + "</td></tr>";
+    }
+    text += "</table>"
+    document.getElementById("users").innerHTML = text;
+  }
+
+  http.open("GET", "/back");
+  http.send();
+}
+setInterval(req, 1000);
+</script>
+
+</body>
+</html>
