@@ -8,5 +8,9 @@
 :relative-images:
 ```
 
+```{include} 03_topic_compose.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
