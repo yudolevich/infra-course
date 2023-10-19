@@ -1,0 +1,38 @@
+---
+- hosts: nodes
+  become: True
+  gather_facts: False
+  vars:
+    html_dir: /var/www/html
+  tasks:
+  - name: nginx package
+    ansible.builtin.package:
+      name: nginx
+  - name: nginx config
+    ansible.builtin.copy:
+      src: default
+      dest: /etc/nginx/sites-enabled/default
+    notify: nginx restart
+  - name: index.html to "{{ html_dir }}"
+    ansible.builtin.template:
+      src: index.html.j2
+      dest: "{{ html_dir }}/index.html"
+  - name: node1only file
+    ansible.builtin.copy:
+      content: "hello from node1 only\n"
+      dest: "{{ html_dir }}/node1only"
+    when: ansible_host == "node1.local"
+  - name: loop files
+    ansible.builtin.copy:
+      content: "{{ ansible_host }}\n"
+      dest: "{{ html_dir}}/{{ item }}"
+    loop:
+      - test1
+      - test2
+      - test3
+
+  handlers:
+  - name: nginx restart
+    ansible.builtin.systemd:
+      name: nginx
+      state: restarted

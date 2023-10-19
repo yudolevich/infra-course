@@ -1,0 +1,6 @@
+[bastion]
+bastion.local
+
+[nodes]
+node1.local
+node2.local
