@@ -12,5 +12,9 @@
 :relative-images:
 ```
 
+```{include} 04_topic_ansible.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```

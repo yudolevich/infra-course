@@ -1,0 +1,32 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "bastion" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "bastion"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq libnss-mdns ansible
+    SHELL
+  end
+
+  config.vm.define "node1" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "node1"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq libnss-mdns
+    SHELL
+  end
+
+  config.vm.define "node2" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "node2"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq libnss-mdns
+    SHELL
+  end
+
+end

@@ -7,4 +7,5 @@
 05_practice_docker_volume_network.md
 06_practice_docker_compose.md
 07_practice_ansible.md
+08_practice_ansible_roles.md
 ```

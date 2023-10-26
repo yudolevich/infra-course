@@ -43,8 +43,14 @@ end
 $ vagrant ssh-config bastion | grep IdentityFile
   IdentityFile ~/.vagrant.d/boxes/ubuntu-VAGRANTSLASH-lunar64/0/virtualbox/vagrant_insecure_key
 ```
-Скопируем данный файл в директорию проекта с `Vagrantfile` с именем `key`. Все дальнейшие
-команды будем вводить находясь на машине `bastion` в директории `/vagrant`.
+Скопируем данный файл в директорию проекта с `Vagrantfile` с именем `key`.
+Все дальнейшие команды будем вводить находясь на машине `bastion`, в первую очередь добавив
+ключ пользователю `vagrant` и выставив переменную `ANSIBLE_HOST_KEY_CHECKING` в значение
+`False` для отключения проверки `ssh` ключей.
+```console
+$ install -m 600 -o vagrant /vagrant/key /home/vagrant/.ssh/id_rsa
+$ export ANSIBLE_HOST_KEY_CHECKING=False
+```
 
 ## Inventory
 Для управления другими машинами нам необходимо создать [inventory][] файл с их списком,
@@ -68,7 +74,7 @@ node2.local
 [запустим проверку всех машин][adhoc]:
 ```console
 $ export ANSIBLE_HOST_KEY_CHECKING=False
-$ ansible -i hosts --key-file key -m ping all
+$ ansible -i hosts -m ping all
 bastion.local | SUCCESS => {
     "ansible_facts": {
         "discovered_interpreter_python": "/usr/bin/python3"
@@ -95,7 +101,7 @@ node2.local | SUCCESS => {
 Можно также выбрать группу для запуска, если не требуется запуск на всех машинах. Воспользуемся
 [модулем][module] `shell` для запуска команды на группе `nodes`:
 ```console
-$ ansible -i hosts --key-file key -m shell -a 'uname -a' nodes
+$ ansible -i hosts -m shell -a 'uname -a' nodes
 node1.local | CHANGED | rc=0 >>
 Linux node1 6.2.0-31-generic #31-Ubuntu SMP PREEMPT_DYNAMIC Mon Aug 14 13:42:26 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux
 node2.local | CHANGED | rc=0 >>
@@ -104,7 +110,7 @@ Linux node2 6.2.0-31-generic #31-Ubuntu SMP PREEMPT_DYNAMIC Mon Aug 14 13:42:26 
 
 Также ограничить выполнения только определенными хостами/группами можно опцией `-l|--limit`:
 ```console
-$ ansible -i hosts --key-file key -m shell -a 'hostname' nodes -l node1.local
+$ ansible -i hosts -m shell -a 'hostname' nodes -l node1.local
 node1.local | CHANGED | rc=0 >>
 node1
 ```
@@ -133,7 +139,7 @@ node1
 пакетов в систему требуются права `root`. Сохраним в файл `playbook.yaml` и запустим с помощью
 команды `ansible-playbook`:
 ```console
-$ ansible-playbook -i hosts --key-file key playbook.yaml
+$ ansible-playbook -i hosts playbook.yaml
 
 PLAY [nodes] *******************************************************************************************
 
@@ -168,7 +174,7 @@ $ curl -s node2.local | grep title
       name: nginx
 ```
 ```console
-$ ansible-playbook -i hosts --key-file key playbook.yaml
+$ ansible-playbook -i hosts playbook.yaml
 
 PLAY [nodes] *******************************************************************************************
 
@@ -227,7 +233,7 @@ server {
 ```
 
 ```console
-$ ansible-playbook -i hosts --key-file key playbook.yaml
+$ ansible-playbook -i hosts playbook.yaml
 
 PLAY [nodes] *****************************************************************************
 
@@ -286,7 +292,7 @@ hello from {{ ansible_host }}
 можно использовать переменные в самом плейбуке.
 
 ```console
-$ ansible-playbook -i hosts --key-file key playbook.yaml
+$ ansible-playbook -i hosts playbook.yaml
 
 PLAY [nodes] ******************************************************************************************
 
@@ -349,7 +355,7 @@ hello from node2.local
 ```
 
 ```console
-$ ansible-playbook -i hosts --key-file key playbook.yaml
+$ ansible-playbook -i hosts playbook.yaml
 
 PLAY [nodes] ******************************************************************************************
 
@@ -431,7 +437,7 @@ $ curl node2.local/node1only
 ```
 
 ```console
-$ ansible-playbook -i hosts --key-file key playbook.yaml
+$ ansible-playbook -i hosts playbook.yaml
 
 PLAY [nodes] ******************************************************************************************
 

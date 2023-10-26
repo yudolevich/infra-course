@@ -1,0 +1,14 @@
+---
+# tasks file for nginx
+- name: nginx package
+  ansible.builtin.package:
+    name: nginx
+- name: nginx config
+  ansible.builtin.copy:
+    src: "{{ nginx_config_file }}"
+    dest: "/etc/nginx/sites-enabled/default"
+  notify: nginx restart
+- name: "index.html to {{ nginx_html_dir }}"
+  ansible.builtin.template:
+    src: "{{ nginx_template_file }}"
+    dest: "{{ nginx_html_dir }}/index.html"

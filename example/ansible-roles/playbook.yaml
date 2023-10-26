@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: True
+  roles:
+  - name: nginx
+    nginx_template_file: overrided.html.j2
+    nginx_config_file: overrided.conf

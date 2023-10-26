@@ -1,0 +1,5 @@
+---
+# defaults file for nginx
+nginx_html_dir: /var/www/html
+nginx_config_file: default
+nginx_template_file: index.html.j2
