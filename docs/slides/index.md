@@ -16,5 +16,9 @@
 :relative-images:
 ```
 
+```{include} 05_topic_salt.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
