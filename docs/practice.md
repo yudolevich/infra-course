@@ -10,4 +10,5 @@
 08_practice_ansible_roles.md
 09_practice_saltstack.md
 10_practice_saltstack_reactor.md
+11_practice_secrets.md
 ```
