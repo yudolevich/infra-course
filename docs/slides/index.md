@@ -20,5 +20,9 @@
 :relative-images:
 ```
 
+```{include} 06_topic_secrets.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
