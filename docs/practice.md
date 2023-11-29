@@ -12,4 +12,5 @@
 10_practice_saltstack_reactor.md
 11_practice_secrets.md
 12_practice_vault.md
+13_practice_rabbit.md
 ```

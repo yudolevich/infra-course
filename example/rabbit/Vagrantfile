@@ -1,0 +1,17 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "node" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "node"
+    c.vm.network "forwarded_port", guest: 15672, host: 15672
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq python3-pip rabbitmq-server
+      rabbitmq-plugins enable rabbitmq_management
+      rabbitmqctl add_user admin admin
+      rabbitmqctl set_user_tags admin administrator
+      rabbitmqctl set_permissions -p / admin ".*" ".*" ".*"
+      pip3 install pika --break-system-packages
+    SHELL
+  end
+end
