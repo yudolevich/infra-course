@@ -24,5 +24,9 @@
 :relative-images:
 ```
 
+```{include} 07_topic_rabbitmq.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
