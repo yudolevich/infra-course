@@ -1,0 +1,25 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "node" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    #c.vm.provider "virtualbox" do |v|
+    #  v.cpus = 1
+    #  v.memory = 2096
+    #end
+    c.vm.hostname = "node"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq python3-kafka openjdk-17-jre
+      mkdir /opt/kafka
+      curl https://dlcdn.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz \
+        | tar xz --strip-components=1 -C /opt/kafka
+      /opt/kafka/bin/kafka-storage.sh format \
+        -t "$(/opt/kafka/bin/kafka-storage.sh random-uuid)" \
+        -c /opt/kafka/config/kraft/server.properties
+      systemd-run -u kafka -E KAFKA_HEAP_OPTS="-Xmx256M -Xms128M" \
+        /opt/kafka/bin/kafka-server-start.sh \
+        /opt/kafka/config/kraft/server.properties
+      echo 'PATH="$PATH:/opt/kafka/bin"' > /etc/profile.d/kafka.sh
+    SHELL
+  end
+end
