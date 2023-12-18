@@ -28,5 +28,9 @@
 :relative-images:
 ```
 
+```{include} 08_topic_kafka.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
