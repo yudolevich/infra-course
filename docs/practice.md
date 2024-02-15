@@ -16,4 +16,5 @@
 14_practice_rabbit_routing.md
 15_practice_kafka.md
 16_practice_kafka_cluster.md
+17_practice_terraform.md
 ```

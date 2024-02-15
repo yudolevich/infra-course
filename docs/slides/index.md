@@ -32,5 +32,9 @@
 :relative-images:
 ```
 
+```{include} 09_topic_terraform.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
