@@ -1,0 +1,49 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "provider1" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "provider1"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.network "forwarded_port", guest: 8888, host: 8888
+    c.vm.network "forwarded_port", guest: 8889, host: 8889
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq docker.io libnss-mdns ansible python3-psycopg2
+      usermod -a -G docker vagrant
+      systemctl cat docker.service > /etc/systemd/system/docker.service
+      sed -i '/ExecStart/s#$# -H tcp://0.0.0.0:2375#' /etc/systemd/system/docker.service
+      systemctl daemon-reload
+      systemctl restart docker.service
+      curl -L https://hashicorp-releases.yandexcloud.net/terraform/1.7.3/terraform_1.7.3_linux_amd64.zip \
+        | zcat > /usr/local/bin/terraform
+      chmod +x /usr/local/bin/terraform
+      cat > /home/vagrant/.terraformrc <<EOF
+provider_installation {
+    network_mirror {
+        url = "https://terraform-mirror.yandexcloud.net/"
+        include = ["registry.terraform.io/*/*"]
+}
+    direct {
+        exclude = ["registry.terraform.io/*/*"]
+    }
+}
+EOF
+    SHELL
+  end
+
+  config.vm.define "provider2" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.hostname = "provider2"
+    c.vm.network "private_network", type: "dhcp"
+    c.vm.network "forwarded_port", guest: 5432, host: 5432
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq docker.io libnss-mdns 
+      usermod -a -G docker vagrant
+      systemctl cat docker.service > /etc/systemd/system/docker.service
+      sed -i '/ExecStart/s#$# -H tcp://0.0.0.0:2375#' /etc/systemd/system/docker.service
+      systemctl daemon-reload
+      systemctl restart docker.service
+    SHELL
+  end
+end
+
