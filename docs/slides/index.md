@@ -36,5 +36,9 @@
 :relative-images:
 ```
 
+```{include} 10_topic_cicd.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```

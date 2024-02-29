@@ -1,0 +1,60 @@
+stages:
+- test
+- build
+- deploy
+
+test:
+  stage: test
+  script:
+    - go test -cover
+  coverage: '/coverage: (\d+.\d+)% of statements$/'
+
+build:
+  stage: build
+  script:
+    - docker build -t test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA} .
+  rules:
+    - if: $CI_COMMIT_TAG
+    - when: manual
+
+deploy_test:
+  stage: deploy
+  script:
+    - docker run -p 8000:8080 -d --name test test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
+  environment:
+    name: test
+    on_stop: stop_test
+  rules:
+    - when: manual
+
+stop_test:
+  stage: deploy
+  script:
+    - docker rm -f test
+  environment:
+    name: test
+    action: stop
+  rules:
+    - when: manual
+
+deploy_production:
+  stage: deploy
+  script:
+    - docker run -p 9000:8080 -d --name prod test:$CI_COMMIT_TAG
+  environment:
+    name: production
+    on_stop: stop_production
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual
+
+stop_production:
+  stage: deploy
+  script:
+    - docker rm -f prod
+  environment:
+    name: production
+    action: stop
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: manual

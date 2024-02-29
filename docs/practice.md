@@ -18,4 +18,5 @@
 16_practice_kafka_cluster.md
 17_practice_terraform.md
 18_practice_terraform_ansible.md
+19_practice_gitlab.md
 ```

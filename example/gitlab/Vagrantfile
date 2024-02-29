@@ -1,0 +1,36 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "gitlab" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.provider "virtualbox" do |v|
+      v.cpus = 2
+      v.memory = 5120
+    end
+    c.vm.hostname = "gitlab"
+    c.vm.network "forwarded_port", guest: 8888, host: 8888
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq golang-go docker.io
+      usermod -a -G docker vagrant
+      host="http://localhost:8888"
+      curl -LO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/jammy/gitlab-ce_16.8.3-ce.0_amd64.deb/download.deb \
+        && EXTERNAL_URL=$host dpkg -i download.deb && rm download.deb
+      gitlab-ctl reconfigure
+      pass="$(awk '/^Password/{print $2}' /etc/gitlab/initial_root_password)"
+      otoken=$(curl -sH "Content-Type: application/json" "$host/oauth/token" \
+        -d '{"grant_type":"password","username":"root","password":"'"$pass"'"}' \
+        | jq -r '.access_token')
+      ptoken=$(curl -s "$host/api/v4/users/1/personal_access_tokens" \
+        -H "Authorization: Bearer $otoken" -d "name=test" -d "scopes[]=api" \
+        | jq -r '.token')
+      rtoken=$(curl -sH "PRIVATE-TOKEN: $ptoken" "$host/api/v4/user/runners" \
+        -d "runner_type=instance_type" -d "tag_list=shared" | jq -r '.token')
+      curl -LO https://packages.gitlab.com/runner/gitlab-runner/packages/ubuntu/jammy/gitlab-runner_16.8.1_amd64.deb/download.deb \
+        && dpkg -i download.deb && rm download.deb \
+        && gitlab-runner register --non-interactive --url $host --executor shell --token "$rtoken"
+      curl -XPUT -sH "PRIVATE-TOKEN: $ptoken" -o /dev/null \
+        "$host/api/v4/application/settings?auto_devops_enabled=false"
+      echo "root password: $pass"
+      usermod -a -G docker gitlab-runner
+    SHELL
+  end
+end
