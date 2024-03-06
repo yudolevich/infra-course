@@ -1,0 +1,31 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "jenkins" do |c|
+    c.vm.box = "ubuntu/lunar64"
+    c.vm.provider "virtualbox" do |v|
+      v.cpus = 2
+      v.memory = 4096
+    end
+    c.vm.hostname = "jenkins"
+    c.vm.network "forwarded_port", guest: 8888, host: 8888
+    c.vm.network "forwarded_port", guest: 8889, host: 8889
+    c.vm.provision "shell", inline: <<-SHELL
+      apt-get update -q
+      apt-get install -yq golang-go docker.io
+      chmod o+rw /var/run/docker.sock
+      docker run --name gitea -p 8889:3000 -d --restart on-failure \
+        -e GITEA__security__INSTALL_LOCK=true -e GITEA__webhook__ALLOWED_HOST_LIST=private gitea/gitea
+      docker run --name jenkins -p 8888:8080 -d --restart on-failure \
+        -v /var/run/docker.sock:/var/run/docker.sock \
+        -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false jenkins/jenkins:2.448-jdk17
+      docker exec jenkins jenkins-plugin-cli --verbose \
+        -p workflow-aggregator git generic-webhook-trigger
+      docker exec jenkins sh -c 'cd /var/jenkins_home/
+        && curl -LO https://go.dev/dl/go1.21.8.linux-amd64.tar.gz
+        && tar xf go1.21.8.linux-amd64.tar.gz'
+      docker exec jenkins sh -c 'cd /var/jenkins_home/
+        && curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-25.0.3.tgz
+        && tar xf docker-25.0.3.tgz && mv docker/docker go/bin/'
+      docker restart jenkins
+    SHELL
+  end
+end

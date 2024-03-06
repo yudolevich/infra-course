@@ -19,4 +19,5 @@
 17_practice_terraform.md
 18_practice_terraform_ansible.md
 19_practice_gitlab.md
+20_practice_jenkins.md
 ```
