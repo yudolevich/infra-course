@@ -40,5 +40,9 @@
 :relative-images:
 ```
 
+```{include} 11_topic_prometheus.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```

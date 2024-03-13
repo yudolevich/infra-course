@@ -1,0 +1,33 @@
+name: mon
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.50.1
+    ports:
+      - 8889:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+  grafana:
+    image: grafana/grafana:10.4.0
+    ports:
+      - 8888:3000
+  node-exporter:
+    image: prom/node-exporter:v1.7.0
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+  app:
+    image: test
+    build: .
+    ports:
+      - 8080:8080
+
+volumes:
+  prometheus_data: {}
