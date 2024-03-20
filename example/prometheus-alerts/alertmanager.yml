@@ -1,0 +1,17 @@
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 24h
+  receiver: telegram
+
+inhibit_rules:
+  - source_matchers: [severity="crit"]
+    target_matchers: [severity="warn"]
+    equal: [alertname]
+
+receivers:
+- name: telegram
+  telegram_configs:
+  - bot_token: <token>
+    chat_id: <chat_id>

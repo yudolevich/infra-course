@@ -1,0 +1,17 @@
+groups:
+- name: example
+  rules:
+  - alert: HighFilesystemUsage
+    expr: node_filesystem_avail_bytes{mountpoint="/"}/node_filesystem_size_bytes < 0.6
+    for: 1m
+    labels:
+      severity: warn
+    annotations:
+      summary: Filesystem Usage
+  - alert: HighFilesystemUsage
+    expr: node_filesystem_avail_bytes{mountpoint="/"}/node_filesystem_size_bytes < 0.3
+    for: 1m
+    labels:
+      severity: crit
+    annotations:
+      summary: Filesystem Usage
