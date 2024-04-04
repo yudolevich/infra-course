@@ -23,4 +23,5 @@
 21_practice_prometheus.md
 22_practice_alertmanager.md
 23_practice_elasticsearch.md
+24_practice_elk_app_logs.md
 ```

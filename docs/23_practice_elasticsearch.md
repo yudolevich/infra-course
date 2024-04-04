@@ -5,9 +5,13 @@
 Для работы будем использовать следующий `Vagrantfile`:
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.define "prometheus" do |c|
+  config.vm.define "logging" do |c|
+    c.vm.provider "virtualbox" do |v|
+      v.cpus = 2
+      v.memory = 4096
+    end
     c.vm.box = "ubuntu/lunar64"
-    c.vm.hostname = "prometheus"
+    c.vm.hostname = "logging"
     c.vm.network "forwarded_port", guest: 8888, host: 8888
     c.vm.network "forwarded_port", guest: 8889, host: 8889
     c.vm.provision "shell", inline: <<-SHELL
@@ -366,7 +370,7 @@ health status index uuid pri rep docs.count docs.deleted store.size pri.store.si
 ## Logstash
 Развернем также [logstash][], который позволяет принимать, обрабатывать и записывать
 данные в [elasticsearch][]. Для этого определим два конфигурационных файла
-`logstash.yaml` и `logstash.conf`:
+`logstash.yml` и `logstash.conf`:
 ```yaml
 http.host: 0.0.0.0
 xpack.monitoring.elasticsearch.hosts: ["http://elasticsearch:9200"]

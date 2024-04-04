@@ -44,5 +44,9 @@
 :relative-images:
 ```
 
+```{include} 12_topic_elk.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
