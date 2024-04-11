@@ -48,5 +48,9 @@
 :relative-images:
 ```
 
+```{include} 13_topic_jaeger.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```

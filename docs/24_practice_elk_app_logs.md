@@ -335,6 +335,8 @@ OK
 
 
 [elk]:https://www.elastic.co/elastic-stack
+[docker]:https://docs.docker.com/engine/
+[docker-compose]:https://docs.docker.com/compose/
 [golang]:https://go.dev/
 [syslog]:https://ru.wikipedia.org/wiki/Syslog
 [logstash]:https://www.elastic.co/guide/en/logstash/current/introduction.html

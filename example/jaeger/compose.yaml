@@ -1,0 +1,13 @@
+
+services:
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one
+    ports:
+      - "8889:14268"
+      - "8888:16686"
+  app:
+    container_name: test
+    image: test
+    build: .
+
