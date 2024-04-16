@@ -1,0 +1,28 @@
+
+services:
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one
+    ports:
+      - "8889:14268"
+      - "8888:16686"
+  app1:
+    container_name: app1
+    image: app
+    build: .
+    environment:
+      - NAME=app1
+    ports:
+      - "8080:8080"
+  app2:
+    container_name: app2
+    image: app
+    build: .
+    environment:
+      - NAME=app2
+  app3:
+    container_name: app3
+    image: app
+    build: .
+    environment:
+      - NAME=app3
