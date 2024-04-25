@@ -26,4 +26,5 @@
 24_practice_elk_app_logs.md
 25_practice_jaeger.md
 26_practice_jaeger_e2e.md
+27_practice_opentelemetry.md
 ```
