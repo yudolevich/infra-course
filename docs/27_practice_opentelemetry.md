@@ -729,3 +729,4 @@ $ telemetrygen traces --otlp-insecure --duration=1h --rate=10 & \
 [prometheus]:https://prometheus.io/docs/introduction/overview/
 [elasticsearch]:https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html
 [jaeger]:https://www.jaegertracing.io/docs/1.56/
+[grafana]:https://grafana.com/docs/grafana/latest/introduction/
