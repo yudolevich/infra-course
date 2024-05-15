@@ -52,5 +52,13 @@
 :relative-images:
 ```
 
+```{include} 14_topic_opentelemetry.md
+:relative-images:
+```
+
+```{include} 15_topic_istio.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
