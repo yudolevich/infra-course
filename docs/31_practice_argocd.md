@@ -195,13 +195,13 @@ Context 'argo.traefik.me' updated
 ```
 
 Воспользуемся `argocd` для доставки тестового приложения, которое находится в
-git репозитории [argocd-example-apps.git][], для этого выполним команду:
+git репозитории [argocd-example-apps][], для этого выполним команду:
 ```console
 $ argocd app create guestbook --repo https://github.com/argoproj/argocd-example-apps.git --path guestbook --dest-server https://kubernetes.default.svc --dest-namespace default
 application 'guestbook' created
 ```
 Данная команда создаст ресурс `application` в кластере, где будет указан
-репозиторий [argocd-exapmle-apps.git][], путь до директории `guestbook` в данном
+репозиторий [argocd-example-apps][], путь до директории `guestbook` в данном
 репозитории, где находятся описания `kubernetes` ресурсов для деплоя, а также
 текущий кластер и неймспейс, в которые развернется приложение.
 
@@ -337,7 +337,7 @@ $ curl -s guestbook.traefik.me | grep title
 ![](img/argocd2.png)
 
 В источнике укажем репозиторий
-[https://github.com/argoproj/argocd-example-apps.git][argocd-example-apps.git]
+[https://github.com/argoproj/argocd-example-apps.git][argocd-example-apps]
 и путь до директории `guestbook`:
 
 ![](img/argocd3.png)
@@ -367,4 +367,4 @@ $ curl -s guestbook.traefik.me | grep title
 [docker]:https://docs.docker.com/engine/
 [kubectl]:https://kubernetes.io/ru/docs/reference/kubectl/kubectl/
 [kind]:https://kind.sigs.k8s.io/
-[argocd-exapmle-apps.git]:https://github.com/argoproj/argocd-example-apps.git
+[argocd-example-apps]:https://github.com/argoproj/argocd-example-apps.git
