@@ -60,5 +60,9 @@
 :relative-images:
 ```
 
+```{include} 16_topic_argocd.md
+:relative-images:
+```
+
 ```{include} custom_html.md
 ```
