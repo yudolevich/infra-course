@@ -30,5 +30,5 @@
 28_practice_otel_instrumentation.md
 29_practice_istio.md
 30_practice_istio_kiali.md
-33_final.md
+33_practice_final.md
 ```
