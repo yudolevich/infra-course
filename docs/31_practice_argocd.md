@@ -6,23 +6,24 @@
 Для работы будем использовать следующий `Vagrantfile`:
 ```ruby
 Vagrant.configure("2") do |config|
-  config.vm.define "otel" do |c|
+  config.vm.define "argocd" do |c|
     c.vm.provider "virtualbox" do |v|
       v.cpus = 2
       v.memory = 4096
     end
     c.vm.box = "ubuntu/lunar64"
-    c.vm.hostname = "otel"
+    c.vm.hostname = "argocd"
     c.vm.network "forwarded_port", guest: 80, host: 8888
     c.vm.provision "shell", inline: <<-SHELL
       apt-get update -q
       apt-get install -yq docker.io docker-compose-v2
       usermod -a -G docker vagrant
+      echo '{"registry-mirrors":["https:\\/\\/mirror.gcr.io"]}' > /etc/docker/daemon.json
+      systemctl restart docker
       curl -LO https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl
       curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64
       curl -Lo ./argocd https://github.com/argoproj/argo-cd/releases/download/v2.11.2/argocd-linux-amd64
       install -m 755 kubectl kind argocd /usr/local/bin/
-      rm kubectl kind argocd
     SHELL
   end
 end
