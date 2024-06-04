@@ -31,5 +31,6 @@
 29_practice_istio.md
 30_practice_istio_kiali.md
 31_practice_argocd.md
+32_practice_argocd_gitops.md
 33_practice_final.md
 ```
