@@ -1,0 +1,4 @@
+# Infrastructure
+```{toctree}
+practice.md
+```

@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terraform + Ansible &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Gitlab CI" href="19_practice_gitlab.html" />
+    <link rel="prev" title="Terraform" href="17_practice_terraform.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Terraform + Ansible</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#providers">Providers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#front">Front</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db">DB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#back">Back</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#result">Result</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Terraform + Ansible</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/18_practice_terraform_ansible.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="terraform-ansible">
+<h1>Terraform + Ansible<a class="headerlink" href="#terraform-ansible" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии рассмотрим работу связку инструментов:
+<a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a> - для развертывания инфраструктурных ресурсов и
+<a class="reference external" href="https://docs.ansible.com/ansible/latest/index.html">ansible</a> - для управления конфигурациями приложений.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;provider1&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;provider1&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io libnss-mdns ansible python3-psycopg2</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      systemctl cat docker.service &gt; /etc/systemd/system/docker.service</span>
+<span class="sh">      sed -i &#39;/ExecStart/s#$# -H tcp://0.0.0.0:2375#&#39; /etc/systemd/system/docker.service</span>
+<span class="sh">      systemctl daemon-reload</span>
+<span class="sh">      systemctl restart docker.service</span>
+<span class="sh">      curl -L https://hashicorp-releases.yandexcloud.net/terraform/1.7.3/terraform_1.7.3_linux_amd64.zip \</span>
+<span class="sh">        | zcat &gt; /usr/local/bin/terraform</span>
+<span class="sh">      chmod +x /usr/local/bin/terraform</span>
+<span class="sh">      cat &gt; /home/vagrant/.terraformrc &lt;&lt;EOF</span>
+<span class="sh">provider_installation {</span>
+<span class="sh">    network_mirror {</span>
+<span class="sh">        url = &quot;https://terraform-mirror.yandexcloud.net/&quot;</span>
+<span class="sh">        include = [&quot;registry.terraform.io/*/*&quot;]</span>
+<span class="sh">}</span>
+<span class="sh">    direct {</span>
+<span class="sh">        exclude = [&quot;registry.terraform.io/*/*&quot;]</span>
+<span class="sh">    }</span>
+<span class="sh">}</span>
+<span class="sh">EOF</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;provider2&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;provider2&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">5432</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">5432</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io libnss-mdns </span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      systemctl cat docker.service &gt; /etc/systemd/system/docker.service</span>
+<span class="sh">      sed -i &#39;/ExecStart/s#$# -H tcp://0.0.0.0:2375#&#39; /etc/systemd/system/docker.service</span>
+<span class="sh">      systemctl daemon-reload</span>
+<span class="sh">      systemctl restart docker.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация развернет две виртуальные машины, которые будут
+использоваться как разные <a class="reference external" href="https://developer.hashicorp.com/terraform/language/providers">провайдеры в terraform</a>. Все операции
+будем производить на машине <code class="docutils literal notranslate"><span class="pre">provider1</span></code> в директории <code class="docutils literal notranslate"><span class="pre">/home/vagrant</span></code>, если
+не указано явно другое.</p>
+</section>
+<section id="providers">
+<h2>Providers<a class="headerlink" href="#providers" title="Permalink to this heading"></a></h2>
+<p>Создадим файл <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>, в котором опишем конфигурацию наших провайдеров.
+Так как оба провайдера будут использовать одинаковый плагин, то используем
+aliases для разделения их конфигурации. Утилита <code class="docutils literal notranslate"><span class="pre">terraform</span></code> использует
+встроенный механизм разрешения имен и не сможет определить адрес провайдера
+на другом узле, так что воспользуемся еще одним провайдером - <a class="reference external" href="https://github.com/hashicorp/terraform-provider-external">external</a>,
+который позволяет использовать <a class="reference external" href="https://developer.hashicorp.com/terraform/language/data-sources">data sources</a> из вывода сторонних
+утилит. Таким образом получим адрес второго узла используя системный резолвер.</p>
+<div class="highlight-tf notranslate"><div class="highlight"><pre><span></span><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">docker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;kreuzwerker/docker&quot;</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 3.0.2&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">data</span><span class="w"> </span><span class="nc">&quot;external&quot;</span><span class="w"> </span><span class="nv">&quot;p2_host&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;/bin/sh&quot;, &quot;-c&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;jq -n --arg ip $(getent hosts provider2.local | cut -f1 -d&#39; &#39;) &#39;{\&quot;ip\&quot;:$ip}&#39;&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p1&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tcp://${data.external.p2_host.result.ip}:2375&quot;</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p2&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>init
+
+<span class="go">Initializing the backend...</span>
+
+<span class="go">Initializing provider plugins...</span>
+<span class="go">- Finding kreuzwerker/docker versions matching &quot;~&gt; 3.0.2&quot;...</span>
+<span class="go">- Finding latest version of hashicorp/external...</span>
+<span class="go">- Installing kreuzwerker/docker v3.0.2...</span>
+<span class="go">- Installed kreuzwerker/docker v3.0.2 (unauthenticated)</span>
+<span class="go">- Installing hashicorp/external v2.3.3...</span>
+<span class="go">- Installed hashicorp/external v2.3.3 (unauthenticated)</span>
+
+<span class="go">Terraform has been successfully initialized!</span>
+</pre></div>
+</div>
+</section>
+<section id="front">
+<h2>Front<a class="headerlink" href="#front" title="Permalink to this heading"></a></h2>
+<p>Опишем в <code class="docutils literal notranslate"><span class="pre">main.tf</span></code> ресурсы для размещения frontend приложения. В качестве веб
+сервера как обычно возьмем <code class="docutils literal notranslate"><span class="pre">nginx</span></code> и опишем образ с контейнером. Для размещения
+же самого приложения воспользуемся механизмом <a class="reference external" href="https://developer.hashicorp.com/terraform/language/resources/provisioners/syntax">provisioners</a>, который
+позволяет запустить внешние инструменты для конфигурирования ресурса после
+его развертывания. В качестве такого инструмента будем использовать <a class="reference external" href="https://docs.ansible.com/ansible/latest/index.html">ansible</a>.
+Создадим файл <code class="docutils literal notranslate"><span class="pre">index.html</span></code>:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Users table:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;users&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">onload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;table border=&#39;1&#39;&gt;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nx">users</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;tr&gt;&lt;td&gt;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">;</span>
+<span class="w">      </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">email</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;&lt;/td&gt;&lt;/tr&gt;&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;/table&gt;&quot;</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;http://localhost:8889&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">setInterval</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="mf">1000</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>Для доставки этого файла создадим <code class="docutils literal notranslate"><span class="pre">playbook.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/vagrant/html</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">html</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/vagrant/index.html</span>
+<span class="w">      </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/vagrant/html/index.html</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">html</span>
+</pre></div>
+</div>
+<p>И опишем ресурсы в <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>:</p>
+<div class="highlight-tf notranslate"><div class="highlight"><pre><span></span><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">docker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;kreuzwerker/docker&quot;</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 3.0.2&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">data</span><span class="w"> </span><span class="nc">&quot;external&quot;</span><span class="w"> </span><span class="nv">&quot;p2_host&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;/bin/sh&quot;, &quot;-c&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;jq -n --arg ip $(getent hosts provider2.local | cut -f1 -d&#39; &#39;) &#39;{\&quot;ip\&quot;:$ip}&#39;&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p1&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tcp://${local.p2_ip}:2375&quot;</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p2&quot;</span>
+<span class="p">}</span>
+
+<span class="nb">locals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">p2_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">data.external.p2_host.result.ip</span>
+<span class="w">  </span><span class="na">front_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8888</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">name</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;nginx:alpine&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;front&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.nginx.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;front&quot;</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">80</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.front_port</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">volumes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">container_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/usr/share/nginx/html/&quot;</span>
+<span class="w">    </span><span class="na">host_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/home/vagrant/html&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kr">provisioner</span><span class="w"> </span><span class="nv">&quot;local-exec&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ansible-playbook -i localhost, playbook.yaml -t html&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Здесь мы также добавили блок <code class="docutils literal notranslate"><span class="pre">locals</span></code> с локальными переменными для использования
+в ресурсах. Теперь можем запустить <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">apply</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>apply
+<span class="go">data.external.p2_host: Reading...</span>
+<span class="go">data.external.p2_host: Read complete after 0s [id=-]</span>
+
+<span class="go">Terraform used the selected providers to generate the following execution plan.</span>
+<span class="go">Resource actions are indicated with the following symbols:</span>
+<span class="go">  + create</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.front<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_container&quot; &quot;front&quot; {</span>
+<span class="go">      + attach                                      = false</span>
+<span class="go">      + bridge                                      = (known after apply)</span>
+<span class="go">      + command                                     = (known after apply)</span>
+<span class="go">      + container_logs                              = (known after apply)</span>
+<span class="go">      + container_read_refresh_timeout_milliseconds = 15000</span>
+<span class="go">      + entrypoint                                  = (known after apply)</span>
+<span class="go">      + env                                         = (known after apply)</span>
+<span class="go">      + exit_code                                   = (known after apply)</span>
+<span class="go">      + hostname                                    = (known after apply)</span>
+<span class="go">      + id                                          = (known after apply)</span>
+<span class="go">      + image                                       = (known after apply)</span>
+<span class="go">      + init                                        = (known after apply)</span>
+<span class="go">      + ipc_mode                                    = (known after apply)</span>
+<span class="go">      + log_driver                                  = (known after apply)</span>
+<span class="go">      + logs                                        = false</span>
+<span class="go">      + must_run                                    = true</span>
+<span class="go">      + name                                        = &quot;front&quot;</span>
+<span class="go">      + network_data                                = (known after apply)</span>
+<span class="go">      + read_only                                   = false</span>
+<span class="go">      + remove_volumes                              = true</span>
+<span class="go">      + restart                                     = &quot;no&quot;</span>
+<span class="go">      + rm                                          = false</span>
+<span class="go">      + runtime                                     = (known after apply)</span>
+<span class="go">      + security_opts                               = (known after apply)</span>
+<span class="go">      + shm_size                                    = (known after apply)</span>
+<span class="go">      + start                                       = true</span>
+<span class="go">      + stdin_open                                  = false</span>
+<span class="go">      + stop_signal                                 = (known after apply)</span>
+<span class="go">      + stop_timeout                                = (known after apply)</span>
+<span class="go">      + tty                                         = false</span>
+<span class="go">      + wait                                        = false</span>
+<span class="go">      + wait_timeout                                = 60</span>
+
+<span class="go">      + ports {</span>
+<span class="go">          + external = 8888</span>
+<span class="go">          + internal = 80</span>
+<span class="go">          + ip       = &quot;0.0.0.0&quot;</span>
+<span class="go">          + protocol = &quot;tcp&quot;</span>
+<span class="go">        }</span>
+
+<span class="go">      + volumes {</span>
+<span class="go">          + container_path = &quot;/usr/share/nginx/html/&quot;</span>
+<span class="go">          + host_path      = &quot;/home/vagrant/html&quot;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_image&quot; &quot;nginx&quot; {</span>
+<span class="go">      + id          = (known after apply)</span>
+<span class="go">      + image_id    = (known after apply)</span>
+<span class="go">      + name        = &quot;nginx:alpine&quot;</span>
+<span class="go">      + repo_digest = (known after apply)</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 2 to add, 0 to change, 0 to destroy.</span>
+
+<span class="go">Do you want to perform these actions?</span>
+<span class="go">  Terraform will perform the actions described above.</span>
+<span class="go">  Only &#39;yes&#39; will be accepted to approve.</span>
+
+<span class="go">  Enter a value: yes</span>
+
+<span class="go">docker_image.nginx: Creating...</span>
+<span class="go">docker_image.nginx: Creation complete after 6s [id=sha256:6913ed9ec8d009744018c1740879327fe2e085935b2cce7a234bf05347b670d7nginx:alpine]</span>
+<span class="go">docker_container.front: Creating...</span>
+<span class="go">docker_container.front: Provisioning with &#39;local-exec&#39;...</span>
+<span class="go">docker_container.front (local-exec): Executing: [&quot;/bin/sh&quot; &quot;-c&quot; &quot;ansible-playbook -i localhost, playbook.yaml -t html&quot;]</span>
+
+<span class="go">docker_container.front (local-exec): PLAY [all] *********************************************************************</span>
+
+<span class="go">docker_container.front (local-exec): TASK [Gathering Facts] *********************************************************</span>
+<span class="go">docker_container.front (local-exec): ok: [localhost]</span>
+
+<span class="go">docker_container.front (local-exec): TASK [ansible.builtin.file] ****************************************************</span>
+<span class="go">docker_container.front (local-exec): changed: [localhost]</span>
+
+<span class="go">docker_container.front (local-exec): TASK [ansible.builtin.copy] ****************************************************</span>
+<span class="go">docker_container.front (local-exec): changed: [localhost]</span>
+
+<span class="go">docker_container.front (local-exec): PLAY RECAP *********************************************************************</span>
+<span class="go">docker_container.front (local-exec): localhost                  : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+
+<span class="go">docker_container.front: Creation complete after 4s [id=db1eaf886bcd42eaa359a4ffb188d3dd30da0f86985902d09cdc82adf7eef5d1]</span>
+</pre></div>
+</div>
+<p>Как видно, создались ресурсы образа и контейнера нашего веб сервера, после чего
+с помощью плейбука был размещен <code class="docutils literal notranslate"><span class="pre">html</span></code> файл на нем. Проверим созданные ресурсы:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG       IMAGE ID       CREATED      SIZE</span>
+<span class="go">nginx        alpine    6913ed9ec8d0   6 days ago   42.6MB</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                  NAMES</span>
+<span class="go">db1eaf886bcd   6913ed9ec8d0   &quot;/docker-entrypoint.…&quot;   3 minutes ago   Up 3 minutes   0.0.0.0:8888-&gt;80/tcp   front</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">&lt;!DOCTYPE html&gt;</span>
+<span class="go">&lt;html&gt;</span>
+<span class="go">&lt;body&gt;</span>
+
+<span class="go">&lt;h2&gt;Users table:&lt;/h2&gt;</span>
+
+<span class="go">&lt;p id=&quot;users&quot;&gt;&lt;/p&gt;</span>
+
+<span class="go">&lt;script&gt;</span>
+<span class="go">var req = function() {</span>
+<span class="go">  var http = new XMLHttpRequest();</span>
+<span class="go">  http.onload = function() {</span>
+<span class="go">    const users = JSON.parse(this.responseText);</span>
+<span class="go">    let text = &quot;&lt;table border=&#39;1&#39;&gt;&quot;</span>
+<span class="go">    for (let x in users) {</span>
+<span class="go">      text += &quot;&lt;tr&gt;&lt;td&gt;&quot; + users[x].name + &quot;&lt;/td&gt;&quot;;</span>
+<span class="go">      text += &quot;&lt;td&gt;&quot; + users[x].email + &quot;&lt;/td&gt;&lt;/tr&gt;&quot;;</span>
+<span class="go">    }</span>
+<span class="go">    text += &quot;&lt;/table&gt;&quot;</span>
+<span class="go">    document.getElementById(&quot;users&quot;).innerHTML = text;</span>
+<span class="go">  }</span>
+
+<span class="go">  http.open(&quot;GET&quot;, &quot;http://localhost:8889&quot;);</span>
+<span class="go">  http.send();</span>
+<span class="go">}</span>
+<span class="go">setInterval(req, 1000);</span>
+<span class="go">&lt;/script&gt;</span>
+
+<span class="go">&lt;/body&gt;</span>
+<span class="go">&lt;/html&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="db">
+<h2>DB<a class="headerlink" href="#db" title="Permalink to this heading"></a></h2>
+<p>Развернем теперь ресурсы для нашей базы данных, для этого нам понадобятся
+образ, контейнер и том для данных. Также нам понадобится создать базу и
+таблицу, которые мы будем использовать в приложении, для этого также
+воспользуемся <a class="reference external" href="https://docs.ansible.com/ansible/latest/index.html">ansible</a>. Допишем наш плейбук дополнительными задачами
+для конфигурирования базы, также добавим возможность получения авторизационных
+данных снаружи, таким образом получим следующее содержимое <code class="docutils literal notranslate"><span class="pre">playbook.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">connection</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">vars</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;&quot;</span>
+<span class="w">    </span><span class="nt">pg</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">login_host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">provider2.local</span>
+<span class="w">      </span><span class="nt">login_user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{user}}&quot;</span>
+<span class="w">      </span><span class="nt">login_password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{password}}&quot;</span>
+<span class="w">      </span><span class="nt">db</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">  </span><span class="nt">module_defaults</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">community.postgresql.postgresql_db</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">pg</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">    </span><span class="nt">community.postgresql.postgresql_user</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">pg</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">    </span><span class="nt">community.postgresql.postgresql_query</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">pg</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">    </span><span class="nt">community.postgresql.postgresql_table</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">pg</span><span class="nv"> </span><span class="s">}}&#39;</span>
+
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.builtin.file</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/vagrant/html</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">html</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/vagrant/index.html</span>
+<span class="w">      </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/home/vagrant/html/index.html</span>
+<span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">      </span><span class="nt">group</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">101</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">html</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.postgresql.postgresql_db</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.postgresql.postgresql_user</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">      </span><span class="nt">db</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">      </span><span class="nt">priv</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ALL</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">community.postgresql.postgresql_table</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">db</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+<span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">users</span>
+<span class="w">      </span><span class="nt">columns</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">id serial primary key</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">name varchar(50)</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">email varchar(100)</span>
+<span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sql</span>
+</pre></div>
+</div>
+<p>Далее опишем новые ресурсы в <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>:</p>
+<div class="highlight-tf notranslate"><div class="highlight"><pre><span></span><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">docker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;kreuzwerker/docker&quot;</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 3.0.2&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">data</span><span class="w"> </span><span class="nc">&quot;external&quot;</span><span class="w"> </span><span class="nv">&quot;p2_host&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;/bin/sh&quot;, &quot;-c&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;jq -n --arg ip $(getent hosts provider2.local | cut -f1 -d&#39; &#39;) &#39;{\&quot;ip\&quot;:$ip}&#39;&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p1&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">host</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tcp://${local.p2_ip}:2375&quot;</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p2&quot;</span>
+<span class="p">}</span>
+
+<span class="nb">locals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">p2_ip</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="nv">data.external.p2_host.result.ip</span>
+<span class="w">  </span><span class="na">front_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8888</span>
+<span class="w">  </span><span class="na">back_port</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="m">8889</span>
+<span class="w">  </span><span class="na">db_port</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="m">5432</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;db_user&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;db_password&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">type</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">  </span><span class="na">sensitive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;nginx:alpine&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;front&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">image</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.nginx.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;front&quot;</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">80</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.front_port</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">volumes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">container_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/usr/share/nginx/html/&quot;</span>
+<span class="w">    </span><span class="na">host_path</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/home/vagrant/html&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kr">provisioner</span><span class="w"> </span><span class="nv">&quot;local-exec&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ansible-playbook -i localhost, playbook.yaml -t html&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;postgres&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p2</span>
+<span class="w">  </span><span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;postgres:alpine&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_volume&quot;</span><span class="w"> </span><span class="nv">&quot;data&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p2</span>
+<span class="w">  </span><span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;data&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;db&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p2</span>
+<span class="w">  </span><span class="na">image</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.postgres.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;db&quot;</span>
+<span class="w">  </span><span class="na">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;POSTGRES_USER=${var.db_user}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;POSTGRES_PASSWORD=${var.db_password}&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.db_port</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.db_port</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">volumes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">volume_name</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">resource.docker_volume.data.name</span>
+<span class="w">    </span><span class="na">container_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/lib/postgresql/data&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kr">provisioner</span><span class="w"> </span><span class="nv">&quot;local-exec&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ansible-playbook -i localhost, playbook.yaml -t sql -e user=${var.db_user} -e password=${var.db_password}&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Дополним локальные переменные, а также воспользуемся <a class="reference external" href="https://developer.hashicorp.com/terraform/language/values/variables">input variables</a>
+для описания входных переменных для указания пользователя и пароля
+для подключения к субд при запуске. После чего применим конфигурацию, указав
+в качестве пользователя и пароля <code class="docutils literal notranslate"><span class="pre">postgres</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>apply<span class="w"> </span>--auto-approve
+<span class="go">var.db_password</span>
+<span class="go">  Enter a value:</span>
+
+<span class="go">var.db_user</span>
+<span class="go">  Enter a value: postgres</span>
+
+<span class="go">data.external.p2_host: Reading...</span>
+<span class="go">docker_image.nginx: Refreshing state... [id=sha256:6913ed9ec8d009744018c1740879327fe2e085935b2cce7a234bf05347b670d7nginx:alpine]</span>
+<span class="go">docker_container.front: Refreshing state... [id=db1eaf886bcd42eaa359a4ffb188d3dd30da0f86985902d09cdc82adf7eef5d1]</span>
+<span class="go">data.external.p2_host: Read complete after 0s [id=-]</span>
+
+<span class="go">Terraform used the selected providers to generate the following execution plan.</span>
+<span class="go">Resource actions are indicated with the following symbols:</span>
+<span class="go">  + create</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.db<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_container&quot; &quot;db&quot; {</span>
+<span class="go">      + attach                                      = false</span>
+<span class="go">      + bridge                                      = (known after apply)</span>
+<span class="go">      + command                                     = (known after apply)</span>
+<span class="go">      + container_logs                              = (known after apply)</span>
+<span class="go">      + container_read_refresh_timeout_milliseconds = 15000</span>
+<span class="go">      + entrypoint                                  = (known after apply)</span>
+<span class="go">      + env                                         = (sensitive value)</span>
+<span class="go">      + exit_code                                   = (known after apply)</span>
+<span class="go">      + hostname                                    = (known after apply)</span>
+<span class="go">      + id                                          = (known after apply)</span>
+<span class="go">      + image                                       = (known after apply)</span>
+<span class="go">      + init                                        = (known after apply)</span>
+<span class="go">      + ipc_mode                                    = (known after apply)</span>
+<span class="go">      + log_driver                                  = (known after apply)</span>
+<span class="go">      + logs                                        = false</span>
+<span class="go">      + must_run                                    = true</span>
+<span class="go">      + name                                        = &quot;db&quot;</span>
+<span class="go">      + network_data                                = (known after apply)</span>
+<span class="go">      + read_only                                   = false</span>
+<span class="go">      + remove_volumes                              = true</span>
+<span class="go">      + restart                                     = &quot;no&quot;</span>
+<span class="go">      + rm                                          = false</span>
+<span class="go">      + runtime                                     = (known after apply)</span>
+<span class="go">      + security_opts                               = (known after apply)</span>
+<span class="go">      + shm_size                                    = (known after apply)</span>
+<span class="go">      + start                                       = true</span>
+<span class="go">      + stdin_open                                  = false</span>
+<span class="go">      + stop_signal                                 = (known after apply)</span>
+<span class="go">      + stop_timeout                                = (known after apply)</span>
+<span class="go">      + tty                                         = false</span>
+<span class="go">      + wait                                        = false</span>
+<span class="go">      + wait_timeout                                = 60</span>
+
+<span class="go">      + ports {</span>
+<span class="go">          + external = 5432</span>
+<span class="go">          + internal = 5432</span>
+<span class="go">          + ip       = &quot;0.0.0.0&quot;</span>
+<span class="go">          + protocol = &quot;tcp&quot;</span>
+<span class="go">        }</span>
+
+<span class="go">      + volumes {</span>
+<span class="go">          + container_path = &quot;/var/lib/postgresql/data&quot;</span>
+<span class="go">          + volume_name    = &quot;data&quot;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.postgres<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_image&quot; &quot;postgres&quot; {</span>
+<span class="go">      + id          = (known after apply)</span>
+<span class="go">      + image_id    = (known after apply)</span>
+<span class="go">      + name        = &quot;postgres:alpine&quot;</span>
+<span class="go">      + repo_digest = (known after apply)</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_volume.data<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_volume&quot; &quot;data&quot; {</span>
+<span class="go">      + driver     = (known after apply)</span>
+<span class="go">      + id         = (known after apply)</span>
+<span class="go">      + mountpoint = (known after apply)</span>
+<span class="go">      + name       = &quot;data&quot;</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 3 to add, 0 to change, 0 to destroy.</span>
+<span class="go">docker_volume.data: Creating...</span>
+<span class="go">docker_image.postgres: Creating...</span>
+<span class="go">docker_volume.data: Creation complete after 0s [id=data]</span>
+<span class="go">docker_image.postgres: Still creating... [10s elapsed]</span>
+<span class="go">docker_image.postgres: Creation complete after 14s [id=sha256:09ac24c200ca00e1e699bd76aea3987400e6451b98171ca6d648f0c8f637c23epostgres:alpine]</span>
+<span class="go">docker_container.db: Creating...</span>
+<span class="go">docker_container.db: Provisioning with &#39;local-exec&#39;...</span>
+<span class="go">docker_container.db (local-exec): (output suppressed due to sensitive value in config)</span>
+<span class="go">docker_container.db: Creation complete after 4s [id=4d236481a7b1e25e5e370be94ddb3495dece6ebe5409de4a4ad4214db9b7a0fa]</span>
+
+<span class="go">Apply complete! Resources: 3 added, 0 changed, 0 destroyed.</span>
+</pre></div>
+</div>
+<p>Зайдем на машину второго провайдера <code class="docutils literal notranslate"><span class="pre">provider2</span></code> и проверим созданные ресурсы
+и конфигурацию базы:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG       IMAGE ID       CREATED       SIZE</span>
+<span class="go">postgres     alpine    09ac24c200ca   12 days ago   243MB</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                    NAMES</span>
+<span class="go">4d236481a7b1   09ac24c200ca   &quot;docker-entrypoint.s…&quot;   3 minutes ago   Up 3 minutes   0.0.0.0:5432-&gt;5432/tcp   db</span>
+<span class="gp">$ </span>docker<span class="w"> </span>volume<span class="w"> </span>ls
+<span class="go">DRIVER    VOLUME NAME</span>
+<span class="go">local     data</span>
+<span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>db<span class="w"> </span>su<span class="w"> </span>postgres<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;psql app&#39;</span>
+<span class="go">psql (16.2)</span>
+<span class="go">Type &quot;help&quot; for help.</span>
+
+<span class="go">app=# \d users</span>
+<span class="go">                                    Table &quot;public.users&quot;</span>
+<span class="go"> Column |          Type          | Collation | Nullable |              Default</span>
+<span class="go">--------+------------------------+-----------+----------+-----------------------------------</span>
+<span class="go"> id     | integer                |           | not null | nextval(&#39;users_id_seq&#39;::regclass)</span>
+<span class="go"> name   | character varying(50)  |           |          |</span>
+<span class="go"> email  | character varying(100) |           |          |</span>
+<span class="go">Indexes:</span>
+<span class="go">    &quot;users_pkey&quot; PRIMARY KEY, btree (id)</span>
+
+<span class="go">app=# \du</span>
+<span class="go">                             List of roles</span>
+<span class="go"> Role name |                         Attributes</span>
+<span class="go">-----------+------------------------------------------------------------</span>
+<span class="go"> app       |</span>
+<span class="go"> postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS</span>
+</pre></div>
+</div>
+</section>
+<section id="back">
+<h2>Back<a class="headerlink" href="#back" title="Permalink to this heading"></a></h2>
+<p>Осталось развернуть ресурсы backend приложения, чтобы связать frontend и базу
+данных. Для этого потребуется собрать образ приложения, опишем его в <code class="docutils literal notranslate"><span class="pre">main.go</span></code>:</p>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;context&quot;</span>
+<span class="w">        </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">        </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">        </span><span class="s">&quot;os&quot;</span>
+
+<span class="w">        </span><span class="s">&quot;github.com/jackc/pgx/v5&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;id&quot;`</span>
+<span class="w">        </span><span class="nx">Name</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
+<span class="w">        </span><span class="nx">Email</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;email&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span>
+<span class="w">        </span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">Connect</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Getenv</span><span class="p">(</span><span class="s">&quot;CONNECTION&quot;</span><span class="p">)))</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Unable to connect to database: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">defer</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;0.0.0.0:80&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span>
+<span class="w">                </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">rows</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;select * from users&quot;</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error db query: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                                </span><span class="k">return</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">users</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">CollectRows</span><span class="p">(</span><span class="nx">rows</span><span class="p">,</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">RowToStructByName</span><span class="p">[</span><span class="nx">users</span><span class="p">])</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error collect rows: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                                </span><span class="k">return</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">jsonUsers</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">users</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error marshal json: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Add</span><span class="p">(</span><span class="s">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;*&quot;</span><span class="p">)</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">(</span><span class="nx">jsonUsers</span><span class="p">)</span>
+<span class="w">                </span><span class="p">}),</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>А также <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.21</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">build</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/src</span>
+
+<span class="k">COPY</span><span class="w"> </span>main.go<span class="w"> </span>/src/main.go
+<span class="k">RUN</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>example<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>tidy<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>/bin/app<span class="w"> </span>./main.go
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">scratch</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>build<span class="w"> </span>/bin/app<span class="w"> </span>/app
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/app&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Данное приложение будет принимать строку соединения из переменной среды
+<code class="docutils literal notranslate"><span class="pre">CONNECTION</span></code> для подключения к субд и отдавать в <code class="docutils literal notranslate"><span class="pre">json</span></code> формате содержимое
+нашей таблицы по запросу.</p>
+<p>Теперь мы можем описать ресурсы образа со сборкой и контейнера в <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>:</p>
+<div class="highlight-tf notranslate"><div class="highlight"><pre><span></span><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">docker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;kreuzwerker/docker&quot;</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 3.0.2&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">data</span><span class="w"> </span><span class="nc">&quot;external&quot;</span><span class="w"> </span><span class="nv">&quot;p2_host&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">program</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;/bin/sh&quot;, &quot;-c&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;jq -n --arg ip $(getent hosts provider2.local | cut -f1 -d&#39; &#39;) &#39;{\&quot;ip\&quot;:$ip}&#39;&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p1&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">host</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tcp://${local.p2_ip}:2375&quot;</span>
+<span class="w">  </span><span class="na">alias</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;p2&quot;</span>
+<span class="p">}</span>
+
+<span class="nb">locals</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">p2_ip</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">data.external.p2_host.result.ip</span>
+<span class="w">  </span><span class="na">front_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8888</span>
+<span class="w">  </span><span class="na">back_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8889</span>
+<span class="w">  </span><span class="na">db_port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5432</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;db_user&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+<span class="p">}</span>
+
+<span class="kr">variable</span><span class="w"> </span><span class="nv">&quot;db_password&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">string</span>
+<span class="w">  </span><span class="na">sensitive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">name</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;nginx:alpine&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;front&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.nginx.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;front&quot;</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">80</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.front_port</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">volumes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">container_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/usr/share/nginx/html/&quot;</span>
+<span class="w">    </span><span class="na">host_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/home/vagrant/html&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kr">provisioner</span><span class="w"> </span><span class="nv">&quot;local-exec&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ansible-playbook -i localhost, playbook.yaml -t html&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;back&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;back&quot;</span>
+<span class="w">  </span><span class="nb">build</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;.&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;back&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p1</span>
+<span class="w">  </span><span class="na">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.back.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;back&quot;</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">80</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.back_port</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="na">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;CONNECTION=postgres://${var.db_user}:${var.db_password}@${local.p2_ip}:${local.db_port}/app?sslmode=disable&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="w">  </span><span class="na">depends_on</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="nv">docker_container.db</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;postgres&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p2</span>
+<span class="w">  </span><span class="na">name</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;postgres:alpine&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_volume&quot;</span><span class="w"> </span><span class="nv">&quot;data&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p2</span>
+<span class="w">  </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;data&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;db&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker.p2</span>
+<span class="w">  </span><span class="na">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.postgres.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;db&quot;</span>
+<span class="w">  </span><span class="na">env</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="s2">&quot;POSTGRES_USER=${var.db_user}&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;POSTGRES_PASSWORD=${var.db_password}&quot;</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.db_port</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">local.db_port</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nb">volumes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">volume_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">resource.docker_volume.data.name</span>
+<span class="w">    </span><span class="na">container_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/lib/postgresql/data&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kr">provisioner</span><span class="w"> </span><span class="nv">&quot;local-exec&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ansible-playbook -i localhost, playbook.yaml -t sql -e user=${var.db_user} -e password=${var.db_password}&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Передавать переменные в <code class="docutils literal notranslate"><span class="pre">terraform</span></code> можно через аргументы запуска, через файл
+или через переменные среды, добавив префикс <code class="docutils literal notranslate"><span class="pre">TF_VAR</span></code>. Применим обновленную
+конфигурацию:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">TF_VAR_db_user</span><span class="o">=</span>postgres<span class="w"> </span><span class="nv">TF_VAR_db_password</span><span class="o">=</span>postgres
+<span class="gp">$ </span>terraform<span class="w"> </span>apply<span class="w"> </span>--auto-approve
+<span class="go">docker_image.nginx: Refreshing state... [id=sha256:6913ed9ec8d009744018c1740879327fe2e085935b2cce7a234bf05347b670d7nginx:alpine]</span>
+<span class="go">data.external.p2_host: Reading...</span>
+<span class="go">docker_container.front: Refreshing state... [id=db1eaf886bcd42eaa359a4ffb188d3dd30da0f86985902d09cdc82adf7eef5d1]</span>
+<span class="go">data.external.p2_host: Read complete after 0s [id=-]</span>
+<span class="go">docker_volume.data: Refreshing state... [id=data]</span>
+<span class="go">docker_image.postgres: Refreshing state... [id=sha256:09ac24c200ca00e1e699bd76aea3987400e6451b98171ca6d648f0c8f637c23epostgres:alpine]</span>
+<span class="go">docker_container.db: Refreshing state... [id=4d236481a7b1e25e5e370be94ddb3495dece6ebe5409de4a4ad4214db9b7a0fa]</span>
+
+<span class="go">Terraform used the selected providers to generate the following execution plan.</span>
+<span class="go">Resource actions are indicated with the following symbols:</span>
+<span class="go">  + create</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.back<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_container&quot; &quot;back&quot; {</span>
+<span class="go">      + attach                                      = false</span>
+<span class="go">      + bridge                                      = (known after apply)</span>
+<span class="go">      + command                                     = (known after apply)</span>
+<span class="go">      + container_logs                              = (known after apply)</span>
+<span class="go">      + container_read_refresh_timeout_milliseconds = 15000</span>
+<span class="go">      + entrypoint                                  = (known after apply)</span>
+<span class="go">      + env                                         = (sensitive value)</span>
+<span class="go">      + exit_code                                   = (known after apply)</span>
+<span class="go">      + hostname                                    = (known after apply)</span>
+<span class="go">      + id                                          = (known after apply)</span>
+<span class="go">      + image                                       = (known after apply)</span>
+<span class="go">      + init                                        = (known after apply)</span>
+<span class="go">      + ipc_mode                                    = (known after apply)</span>
+<span class="go">      + log_driver                                  = (known after apply)</span>
+<span class="go">      + logs                                        = false</span>
+<span class="go">      + must_run                                    = true</span>
+<span class="go">      + name                                        = &quot;back&quot;</span>
+<span class="go">      + network_data                                = (known after apply)</span>
+<span class="go">      + read_only                                   = false</span>
+<span class="go">      + remove_volumes                              = true</span>
+<span class="go">      + restart                                     = &quot;no&quot;</span>
+<span class="go">      + rm                                          = false</span>
+<span class="go">      + runtime                                     = (known after apply)</span>
+<span class="go">      + security_opts                               = (known after apply)</span>
+<span class="go">      + shm_size                                    = (known after apply)</span>
+<span class="go">      + start                                       = true</span>
+<span class="go">      + stdin_open                                  = false</span>
+<span class="go">      + stop_signal                                 = (known after apply)</span>
+<span class="go">      + stop_timeout                                = (known after apply)</span>
+<span class="go">      + tty                                         = false</span>
+<span class="go">      + wait                                        = false</span>
+<span class="go">      + wait_timeout                                = 60</span>
+
+<span class="go">      + ports {</span>
+<span class="go">          + external = 8889</span>
+<span class="go">          + internal = 80</span>
+<span class="go">          + ip       = &quot;0.0.0.0&quot;</span>
+<span class="go">          + protocol = &quot;tcp&quot;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.back<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_image&quot; &quot;back&quot; {</span>
+<span class="go">      + id          = (known after apply)</span>
+<span class="go">      + image_id    = (known after apply)</span>
+<span class="go">      + name        = &quot;back&quot;</span>
+<span class="go">      + repo_digest = (known after apply)</span>
+
+<span class="go">      + build {</span>
+<span class="go">          + cache_from   = []</span>
+<span class="go">          + context      = &quot;.&quot;</span>
+<span class="go">          + dockerfile   = &quot;Dockerfile&quot;</span>
+<span class="go">          + extra_hosts  = []</span>
+<span class="go">          + remove       = true</span>
+<span class="go">          + security_opt = []</span>
+<span class="go">          + tag          = []</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 2 to add, 0 to change, 0 to destroy.</span>
+<span class="go">docker_image.back: Creating...</span>
+<span class="go">docker_image.back: Still creating... [10s elapsed]</span>
+<span class="go">docker_image.back: Still creating... [1m0s elapsed]</span>
+<span class="go">docker_image.back: Creation complete after 1m0s [id=sha256:2649c141424a9d53a8bd3a03121455597710408550d2722f7a0df0e1626fc271back]</span>
+<span class="go">docker_container.back: Creating...</span>
+<span class="go">docker_container.back: Creation complete after 0s [id=597f469d9d32783b9839e9da187c7cf6af0ecf68270f2580eee9ef38e0708adc]</span>
+
+<span class="go">Apply complete! Resources: 2 added, 0 changed, 0 destroyed.</span>
+</pre></div>
+</div>
+</section>
+<section id="result">
+<h2>Result<a class="headerlink" href="#result" title="Permalink to this heading"></a></h2>
+<p>После развертывания всех ресурсов и их конфигурирования мы получили работающее
+приложение, которое доступно по адресу <a class="reference external" href="http://localhost:8888/">localhost:8888</a>:</p>
+<p><img alt="" src="_images/terraform-ansible1.png" /></p>
+<p>Добавим в базу пару строк и убедимся, что они отразились в приложении. Для этого
+на втором узле <code class="docutils literal notranslate"><span class="pre">provider2</span></code> выполним:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@provider2:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>db<span class="w"> </span>su<span class="w"> </span>postgres<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;psql app&#39;</span>
+<span class="go">psql (16.2)</span>
+<span class="go">Type &quot;help&quot; for help.</span>
+
+<span class="go">app=# insert into users (name,email) values (&#39;alex&#39;,&#39;alex@mail.ru&#39;);</span>
+<span class="go">INSERT 0 1</span>
+<span class="go">app=# insert into users (name,email) values (&#39;vasya&#39;,&#39;vasya@gmail.com&#39;);</span>
+<span class="go">INSERT 0 1</span>
+</pre></div>
+</div>
+<p>После чего увидим:</p>
+<p><img alt="" src="_images/terraform-ansible2.png" /></p>
+<p>После того, как необходимости в ресурсах больше нет - их следует уничтожить
+командами <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">destroy</span></code> и <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">destroy</span></code>.</p>
+<p>По итогу мы получили работающее приложение. Таким образом связка инструментов
+<a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a> и <a class="reference external" href="https://docs.ansible.com/ansible/latest/index.html">ansible</a> позволяет разделить ответственность между
+управлением развертыванием инфраструктурных ресурсов и управлением
+конфигурациями компонентов, упрощая в целом развертывание конечных приложений.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="17_practice_terraform.html" class="btn btn-neutral float-left" title="Terraform" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="19_practice_gitlab.html" class="btn btn-neutral float-right" title="Gitlab CI" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

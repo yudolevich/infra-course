@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vagrant Multi-Node &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Docker" href="03_practice_docker.html" />
+    <link rel="prev" title="Vagrant" href="01_practice_vagrant.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vagrant Multi-Node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#package">Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#front">Front</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#back">Back</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#db">DB</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#multi-node">Multi-Node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#code">Code</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#vagrantfile">Vagrantfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#up">UP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Vagrant Multi-Node</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/02_practice_vagrant.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vagrant-multi-node">
+<h1>Vagrant Multi-Node<a class="headerlink" href="#vagrant-multi-node" title="Permalink to this heading"></a></h1>
+<p>В данной практике рассмотрим такие функции <a class="reference external" href="https://www.vagrantup.com/">vagrant</a> как создание собственного
+<a class="reference external" href="https://developer.hashicorp.com/vagrant/docs/boxes">box</a> из развернутой машины, а также создание нескольких машин в одном <a class="reference external" href="https://developer.hashicorp.com/vagrant/docs/vagrantfile">Vagrantfile</a>.</p>
+<p>В качестве лабораторного стенда попробуем реализовать простую схему развертывания в
+виде трех виртуальных машин: front - машина отдающая статическую html страницу,
+back - машина с приложением реализующим бизнес логику, db - машина с базой данных.</p>
+<section id="package">
+<h2>Package<a class="headerlink" href="#package" title="Permalink to this heading"></a></h2>
+<p>Для удобства развертывания можно на основе базового бокса создать боксы с необходимой
+конфигурацией, чтобы не производить подготовку при каждом запуске. Для данной операции
+есть команда <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">package</span></code>, которая создаст и сохранит на файловой системе бокс
+из текущей запущенной виртуальной машины.</p>
+<section id="front">
+<h3>Front<a class="headerlink" href="#front" title="Permalink to this heading"></a></h3>
+<p>Создадим подготовленный бокс для виртуальной машины front, за базовый бокс
+возьмем <code class="docutils literal notranslate"><span class="pre">ubuntu/lunar64</span></code> и напишем <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> для установки <code class="docutils literal notranslate"><span class="pre">nginx</span></code>, который
+будет отдавать статическую страницу:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">    apt-get update</span>
+<span class="sh">    apt-get install -y nginx</span>
+<span class="dl">  SHELL</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Запустим вм:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>up
+<span class="go">Bringing machine &#39;default&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">==&gt; default: Importing base box &#39;ubuntu/lunar64&#39;...</span>
+<span class="go">==&gt; default: Matching MAC address for NAT networking...</span>
+<span class="go">==&gt; default: Setting the name of the VM: vagrant2_default_1694453192956_9259</span>
+<span class="go">==&gt; default: Clearing any previously set network interfaces...</span>
+<span class="go">==&gt; default: Preparing network interfaces based on configuration...</span>
+<span class="go">    default: Adapter 1: nat</span>
+<span class="go">==&gt; default: Forwarding ports...</span>
+<span class="go">    default: 22 (guest) =&gt; 2222 (host) (adapter 1)</span>
+<span class="go">==&gt; default: Running &#39;pre-boot&#39; VM customizations...</span>
+<span class="go">==&gt; default: Booting VM...</span>
+<span class="go">==&gt; default: Waiting for machine to boot. This may take a few minutes...</span>
+<span class="go">    default: SSH address: 127.0.0.1:2222</span>
+<span class="go">    default: SSH username: vagrant</span>
+<span class="go">    default: SSH auth method: private key</span>
+<span class="go">==&gt; default: Machine booted and ready!</span>
+</pre></div>
+</div>
+<p>Дополнительно сохраним себе приватный ключ для доступа по ssh к виртуальной машине -
+он нам понадобится в дальнейшем, путь к нему указан в параметре <code class="docutils literal notranslate"><span class="pre">IdentityFile</span></code>
+в выводе команды <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">ssh-config</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh-config<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>IdentityFile
+<span class="go">  IdentityFile /home/alex/infra-course/example/vagrant2/vagrant_insecure_key</span>
+<span class="gp"># </span>сохранить<span class="w"> </span>в<span class="w"> </span>текущую<span class="w"> </span>директорию<span class="w"> </span>по<span class="w"> </span>именем<span class="w"> </span><span class="s2">&quot;key&quot;</span><span class="w"> </span>можно<span class="w"> </span>следующей<span class="w"> </span>командой
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh-config<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;/IdentityFile/{print $2}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-i<span class="w"> </span>cp<span class="w"> </span><span class="o">{}</span><span class="w"> </span>./key
+</pre></div>
+</div>
+<p>Сохраним бокс на файловую систему и добавим в локальное хранилище:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>package<span class="w"> </span>--output<span class="w"> </span>front.box
+<span class="go">==&gt; default: Attempting graceful shutdown of VM...</span>
+<span class="go">==&gt; default: Clearing any previously set forwarded ports...</span>
+<span class="go">==&gt; default: Exporting VM...</span>
+<span class="go">==&gt; default: Compressing package to: /home/alex/infra-course/example/vagrant2/front.box</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>add<span class="w"> </span>--name<span class="w"> </span>front<span class="w"> </span>front.box
+<span class="go">==&gt; box: Box file was not detected as metadata. Adding it directly...</span>
+<span class="go">==&gt; box: Adding box &#39;front&#39; (v0) for provider:</span>
+<span class="go">    box: Unpacking necessary files from: file:///home/alex/infra-course/example/vagrant2/front.box</span>
+<span class="go">==&gt; box: Successfully added box &#39;front&#39; (v0) for &#39;virtualbox&#39;!</span>
+</pre></div>
+</div>
+<p>После чего уничтожим вм и удалим бокс из файловой системы:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>destroy<span class="w"> </span>-f
+<span class="go">==&gt; default: Forcing shutdown of VM...</span>
+<span class="go">==&gt; default: Destroying VM and associated drives...</span>
+<span class="gp">$ </span>rm<span class="w"> </span>front.box
+</pre></div>
+</div>
+</section>
+<section id="back">
+<h3>Back<a class="headerlink" href="#back" title="Permalink to this heading"></a></h3>
+<p>Для виртуальной машины back подготовим среду для работы приложения, для бэкенда
+будем использовать язык golang, так что нам понадобится установить пакеты для сборки.
+В качестве базового образа также возьмем <code class="docutils literal notranslate"><span class="pre">ubuntu/lunar64</span></code>, напишем <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">    apt-get update</span>
+<span class="sh">    apt-get install -y golang</span>
+<span class="dl">  SHELL</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Проделаем те же действия, что и в предыдущем пункте:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>up
+<span class="go">Bringing machine &#39;default&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">==&gt; default: Importing base box &#39;ubuntu/lunar64&#39;...</span>
+<span class="go">==&gt; default: Matching MAC address for NAT networking...</span>
+<span class="go">==&gt; default: Setting the name of the VM: vagrant2_default_1694457463073_44923</span>
+<span class="go">==&gt; default: Clearing any previously set network interfaces...</span>
+<span class="go">==&gt; default: Preparing network interfaces based on configuration...</span>
+<span class="go">    default: Adapter 1: nat</span>
+<span class="go">==&gt; default: Forwarding ports...</span>
+<span class="go">    default: 22 (guest) =&gt; 2222 (host) (adapter 1)</span>
+<span class="go">==&gt; default: Running &#39;pre-boot&#39; VM customizations...</span>
+<span class="go">==&gt; default: Booting VM...</span>
+<span class="go">==&gt; default: Waiting for machine to boot. This may take a few minutes...</span>
+<span class="go">    default: SSH address: 127.0.0.1:2222</span>
+<span class="go">    default: SSH username: vagrant</span>
+<span class="go">    default: SSH auth method: private key</span>
+<span class="go">==&gt; default: Machine booted and ready!</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>package<span class="w"> </span>--output<span class="w"> </span>back.box
+<span class="go">==&gt; default: Attempting graceful shutdown of VM...</span>
+<span class="go">==&gt; default: Clearing any previously set forwarded ports...</span>
+<span class="go">==&gt; default: Exporting VM...</span>
+<span class="go">==&gt; default: Compressing package to: /home/alex/infra-course/example/vagrant2/back.box</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>add<span class="w"> </span>--name<span class="w"> </span>back<span class="w"> </span>back.box
+<span class="go">==&gt; box: Box file was not detected as metadata. Adding it directly...</span>
+<span class="go">==&gt; box: Adding box &#39;back&#39; (v0) for provider:</span>
+<span class="go">    box: Unpacking necessary files from: file:///home/alex/infra-course/example/vagrant2/back.box</span>
+<span class="go">==&gt; box: Successfully added box &#39;back&#39; (v0) for &#39;virtualbox&#39;!</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>destroy<span class="w"> </span>-f
+<span class="go">==&gt; default: Destroying VM and associated drives...</span>
+<span class="gp">$ </span>rm<span class="w"> </span>back.box
+</pre></div>
+</div>
+</section>
+<section id="db">
+<h3>DB<a class="headerlink" href="#db" title="Permalink to this heading"></a></h3>
+<p>Для виртуальной машины с базой данных также используем в качестве базового образа
+<code class="docutils literal notranslate"><span class="pre">ubuntu/lunar64</span></code>, в качестве субд возьмем postgresql. Также при подготовке добавим
+конфигурацию, которая даст возможность удаленного подключения из любой доступной сети.
+Таким образом получим следующее содержание для <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">    apt-get update</span>
+<span class="sh">    apt-get install -y postgresql</span>
+<span class="sh">    echo &quot;listen_addresses = &#39;*&#39;&quot; &gt;&gt; /etc/postgresql/15/main/conf.d/listen.conf</span>
+<span class="sh">    echo &quot;host all all 0.0.0.0/0 trust&quot; &gt;&gt; /etc/postgresql/15/main/pg_hba.conf</span>
+<span class="dl">  SHELL</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Проделаем те же действия, что и в предыдущем пункте:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>up
+<span class="go">Bringing machine &#39;default&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">==&gt; default: Importing base box &#39;ubuntu/lunar64&#39;...</span>
+<span class="go">==&gt; default: Matching MAC address for NAT networking...</span>
+<span class="go">==&gt; default: Setting the name of the VM: vagrant2_default_1694458609907_72643</span>
+<span class="go">==&gt; default: Clearing any previously set network interfaces...</span>
+<span class="go">==&gt; default: Preparing network interfaces based on configuration...</span>
+<span class="go">    default: Adapter 1: nat</span>
+<span class="go">==&gt; default: Forwarding ports...</span>
+<span class="go">    default: 22 (guest) =&gt; 2222 (host) (adapter 1)</span>
+<span class="go">==&gt; default: Running &#39;pre-boot&#39; VM customizations...</span>
+<span class="go">==&gt; default: Booting VM...</span>
+<span class="go">==&gt; default: Waiting for machine to boot. This may take a few minutes...</span>
+<span class="go">    default: SSH address: 127.0.0.1:2222</span>
+<span class="go">    default: SSH username: vagrant</span>
+<span class="go">    default: SSH auth method: private key</span>
+<span class="go">==&gt; default: Machine booted and ready!</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>package<span class="w"> </span>--output<span class="w"> </span>db.box
+<span class="go">==&gt; default: Attempting graceful shutdown of VM...</span>
+<span class="go">==&gt; default: Clearing any previously set forwarded ports...</span>
+<span class="go">==&gt; default: Exporting VM...</span>
+<span class="go">==&gt; default: Compressing package to: /home/alex/infra-course/example/vagrant2/db.box</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>add<span class="w"> </span>--name<span class="w"> </span>db<span class="w"> </span>db.box
+<span class="go">==&gt; box: Box file was not detected as metadata. Adding it directly...</span>
+<span class="go">==&gt; box: Adding box &#39;db&#39; (v0) for provider:</span>
+<span class="go">    box: Unpacking necessary files from: file:///home/alex/infra-course/example/vagrant2/db.box</span>
+<span class="go">==&gt; box: Successfully added box &#39;db&#39; (v0) for &#39;virtualbox&#39;!</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>destroy<span class="w"> </span>-f
+<span class="go">==&gt; default: Destroying VM and associated drives...</span>
+<span class="gp">$ </span>rm<span class="w"> </span>db.box
+</pre></div>
+</div>
+</section>
+</section>
+<section id="multi-node">
+<h2>Multi-Node<a class="headerlink" href="#multi-node" title="Permalink to this heading"></a></h2>
+<p>После проделанных действий у нас появилось еще 3 бокса:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>list
+<span class="go">back           (virtualbox, 0)</span>
+<span class="go">db             (virtualbox, 0)</span>
+<span class="go">front          (virtualbox, 0)</span>
+<span class="go">ubuntu/lunar64 (virtualbox, 0)</span>
+</pre></div>
+</div>
+<p>Теперь имея боксы для разных виртуальных машин можно позаботиться их наполнением.</p>
+<section id="code">
+<h3>Code<a class="headerlink" href="#code" title="Permalink to this heading"></a></h3>
+<p>Опишем программный код, который будет деплоиться на каждую машину.</p>
+<section id="id1">
+<h4>Front<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>На виртуальной машине front мы будем отдавать статичную <code class="docutils literal notranslate"><span class="pre">html</span></code> страницу с простым
+<code class="docutils literal notranslate"><span class="pre">js</span></code> скриптом, сохраним его в файл <code class="docutils literal notranslate"><span class="pre">index.html</span></code>:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Users table:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;users&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">onload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;table border=&#39;1&#39;&gt;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nx">users</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;tr&gt;&lt;td&gt;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">;</span>
+<span class="w">      </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">email</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;&lt;/td&gt;&lt;/tr&gt;&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;/table&gt;&quot;</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;http://localhost:8889&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">setInterval</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="mf">1000</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h4>Back<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
+<p>На виртуальной машине back соберем приложение на <code class="docutils literal notranslate"><span class="pre">golang</span></code>, которое будет подключаться
+к базе данных и отдавать список пользователей из базы в виде <code class="docutils literal notranslate"><span class="pre">json</span></code> по <code class="docutils literal notranslate"><span class="pre">http</span></code>.
+Опишем это в файле <code class="docutils literal notranslate"><span class="pre">main.go</span></code>:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;context&quot;</span>
+<span class="w">        </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">        </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">        </span><span class="s">&quot;os&quot;</span>
+
+<span class="w">        </span><span class="s">&quot;github.com/jackc/pgx/v5&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;id&quot;`</span>
+<span class="w">        </span><span class="nx">Name</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
+<span class="w">        </span><span class="nx">Email</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;email&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span>
+<span class="w">        </span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">Connect</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;postgres://app:pass@db:5432/app?sslmode=disable&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Unable to connect to database: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">defer</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;0.0.0.0:80&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span>
+<span class="w">                </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">rows</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;select * from users&quot;</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error db query: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                                </span><span class="k">return</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">users</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">CollectRows</span><span class="p">(</span><span class="nx">rows</span><span class="p">,</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">RowToStructByName</span><span class="p">[</span><span class="nx">users</span><span class="p">])</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error collect rows: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                                </span><span class="k">return</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">jsonUsers</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">users</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error marshal json: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Add</span><span class="p">(</span><span class="s">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;*&quot;</span><span class="p">)</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">(</span><span class="nx">jsonUsers</span><span class="p">)</span>
+<span class="w">                </span><span class="p">}),</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h4>DB<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
+<p>На виртуальной машине db подготовим пользователя, базу и таблицу. Для этого опишем
+файл <code class="docutils literal notranslate"><span class="pre">users.sql</span></code>:</p>
+<div class="highlight-psql notranslate"><div class="highlight"><pre><span></span><span class="k">create</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
+<span class="go">create user app;</span>
+<span class="go">grant all on database app to app;</span>
+<span class="go">\connect app;</span>
+<span class="go">create table users(</span>
+<span class="go">  id serial primary key,</span>
+<span class="go">  name varchar(50),</span>
+<span class="go">  email varchar(100)</span>
+<span class="go">);</span>
+<span class="go">grant all on all tables in schema public to app;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="vagrantfile">
+<h3>Vagrantfile<a class="headerlink" href="#vagrantfile" title="Permalink to this heading"></a></h3>
+<p>Опишем подготовку виртуальных машин в <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">ssh</span><span class="o">.</span><span class="n">private_key_path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;key&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;db&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;db&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ip</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;192.168.56.30&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      su - postgres -c &#39;psql -f /vagrant/users.sql&#39;</span>
+<span class="sh">      echo 192.168.56.10 front &gt;&gt; /etc/hosts</span>
+<span class="sh">      echo 192.168.56.20 back &gt;&gt; /etc/hosts</span>
+<span class="sh">      echo 192.168.56.30 db &gt;&gt; /etc/hosts</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;front&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;front&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ip</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;192.168.56.10&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      cat /vagrant/index.html &gt; /var/www/html/index.html</span>
+<span class="sh">      echo 192.168.56.10 front &gt;&gt; /etc/hosts</span>
+<span class="sh">      echo 192.168.56.20 back &gt;&gt; /etc/hosts</span>
+<span class="sh">      echo 192.168.56.30 db &gt;&gt; /etc/hosts</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;back&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;back&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">ip</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;192.168.56.20&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      echo 192.168.56.10 front &gt;&gt; /etc/hosts</span>
+<span class="sh">      echo 192.168.56.20 back &gt;&gt; /etc/hosts</span>
+<span class="sh">      echo 192.168.56.30 db &gt;&gt; /etc/hosts</span>
+<span class="sh">      cp /vagrant/main.go /home/vagrant/</span>
+<span class="sh">      cd /home/vagrant/</span>
+<span class="sh">      go mod init example</span>
+<span class="sh">      go mod tidy</span>
+<span class="sh">      go build main.go</span>
+<span class="sh">      /home/vagrant/main &amp;</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</section>
+<section id="up">
+<h3>UP<a class="headerlink" href="#up" title="Permalink to this heading"></a></h3>
+<p>После всех операций содержимое директории будет выглядеть так:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls
+<span class="go">index.html  key  main.go  users.sql  Vagrantfile</span>
+</pre></div>
+</div>
+<p>Теперь можем запустить команду <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">up</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>up
+<span class="go">Bringing machine &#39;db&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">Bringing machine &#39;front&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">Bringing machine &#39;back&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">...</span>
+<span class="go">==&gt; back: Running provisioner: shell...</span>
+<span class="go">    back: Running: inline script</span>
+<span class="go">    back: go: creating new go.mod: module example</span>
+<span class="go">    back: go: to add module requirements and sums:</span>
+<span class="go">    back:       go mod tidy</span>
+<span class="go">    back: go: finding module for package github.com/jackc/pgx/v5</span>
+<span class="go">    back: go: downloading github.com/jackc/pgx/v5 v5.4.3</span>
+<span class="go">    back: go: downloading github.com/jackc/pgx v3.6.2+incompatible</span>
+<span class="go">    back: go: found github.com/jackc/pgx/v5 in github.com/jackc/pgx/v5 v5.4.3</span>
+<span class="go">    back: go: downloading github.com/stretchr/testify v1.8.1</span>
+<span class="go">    back: go: downloading github.com/jackc/pgpassfile v1.0.0</span>
+<span class="go">    back: go: downloading github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a</span>
+<span class="go">    back: go: downloading golang.org/x/crypto v0.9.0</span>
+<span class="go">    back: go: downloading golang.org/x/text v0.9.0</span>
+<span class="go">    back: go: downloading github.com/davecgh/go-spew v1.1.1</span>
+<span class="go">    back: go: downloading github.com/pmezard/go-difflib v1.0.0</span>
+<span class="go">    back: go: downloading gopkg.in/yaml.v3 v3.0.1</span>
+</pre></div>
+</div>
+<p>После чего можно открыть страницу <a class="reference external" href="http://localhost:8888">http://localhost:8888</a> и
+убедиться, что она работает:
+<img alt="" src="_images/vagrant_users1.png" /></p>
+<p>Добавим пару пользователей в нашу базу:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>db<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;sudo -u postgres psql&#39;</span>
+<span class="go">could not change directory to &quot;/home/vagrant&quot;: Permission denied</span>
+<span class="go">psql (15.4 (Ubuntu 15.4-0ubuntu0.23.04.1))</span>
+<span class="go">Type &quot;help&quot; for help.</span>
+
+<span class="go">postgres=# \c app</span>
+<span class="go">You are now connected to database &quot;app&quot; as user &quot;postgres&quot;.</span>
+<span class="go">app=# insert into users (name,email) values (&#39;alex&#39;, &#39;alex@mail.ru&#39;);</span>
+<span class="go">INSERT 0 1</span>
+<span class="go">app=# insert into users (name,email) values (&#39;jo&#39;, &#39;jo@ya.ru&#39;);</span>
+<span class="go">INSERT 0 1</span>
+<span class="go">\q</span>
+</pre></div>
+</div>
+<p>После чего можно убедиться, что они попали на наш фронтенд:
+<img alt="" src="_images/vagrant_users2.png" /></p>
+<p>После того как мы убедились, что связка наших виртуальных машин с приложениями на них
+функционирует как ожидается, можно уничтожить данный стенд:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>destroy<span class="w"> </span>-f
+<span class="go">==&gt; back: Forcing shutdown of VM...</span>
+<span class="go">==&gt; back: Destroying VM and associated drives...</span>
+<span class="go">==&gt; front: Forcing shutdown of VM...</span>
+<span class="go">==&gt; front: Destroying VM and associated drives...</span>
+<span class="go">==&gt; db: Forcing shutdown of VM...</span>
+<span class="go">==&gt; db: Destroying VM and associated drives...</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="01_practice_vagrant.html" class="btn btn-neutral float-left" title="Vagrant" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="03_practice_docker.html" class="btn btn-neutral float-right" title="Docker" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

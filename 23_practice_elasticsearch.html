@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ELK Stack &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="ELK Log Visualization" href="24_practice_elk_app_logs.html" />
+    <link rel="prev" title="Alertmanager" href="22_practice_alertmanager.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ELK Stack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#elasticsearch">Elasticsearch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logstash">Logstash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kibana">Kibana</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">ELK Stack</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/23_practice_elasticsearch.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="elk-stack">
+<h1>ELK Stack<a class="headerlink" href="#elk-stack" title="Permalink to this heading"></a></h1>
+<p>Данное практическое занятие посвящено базовому взаимодействию со стеком <a class="reference external" href="https://www.elastic.co/elastic-stack">ELK</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;logging&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="s2">&quot;virtualbox&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">v</span><span class="o">|</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;logging&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io docker-compose-v2</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация установит на виртуальную машину <a class="reference external" href="https://docs.docker.com/engine/">docker</a> и
+<a class="reference external" href="https://docs.docker.com/compose/">docker compose</a>, с помощью которых в дальнейшем будут
+развернуты остальные компоненты.</p>
+</section>
+<section id="elasticsearch">
+<h2>Elasticsearch<a class="headerlink" href="#elasticsearch" title="Permalink to this heading"></a></h2>
+<p>Запустим <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a>, для этого зададим его конфигурацию <code class="docutils literal notranslate"><span class="pre">elasticsearch.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">cluster.name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;elasticsearch&quot;</span>
+<span class="nt">network.host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+</pre></div>
+</div>
+<p>И <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:7.9.1</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8889:9200&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9300:9300&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_data:/usr/share/elasticsearch/data/</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transport.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.monitoring.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=elasticsearch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ES_JAVA_OPTS=-Xms256m -Xmx256m</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elk</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">elk</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test_data</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>После чего запустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Network vagrant_elk         Created                                                 0.1s</span>
+<span class="go"> ✔ Volume &quot;vagrant_test_data&quot;  Created                                                 0.0s</span>
+<span class="go"> ✔ Container elasticsearch     Started                                                 1.5s</span>
+</pre></div>
+</div>
+<p>Теперь <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a> доступен по адресу <code class="docutils literal notranslate"><span class="pre">localhost:8889</span></code>, можем взаимодействовать
+с его api утилитой <code class="docutils literal notranslate"><span class="pre">curl</span></code>. Для удобочитаемого вывода в api есть специальная группа
+<a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/cat.html"><code class="docutils literal notranslate"><span class="pre">_cat</span></code></a> в которой можно получить различную информацию о кластере:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat
+<span class="go">=^.^=</span>
+<span class="go">/_cat/allocation</span>
+<span class="go">/_cat/shards</span>
+<span class="go">/_cat/shards/{index}</span>
+<span class="go">/_cat/master</span>
+<span class="go">/_cat/nodes</span>
+<span class="go">/_cat/tasks</span>
+<span class="go">/_cat/indices</span>
+<span class="go">/_cat/indices/{index}</span>
+<span class="go">/_cat/segments</span>
+<span class="go">/_cat/segments/{index}</span>
+<span class="go">/_cat/count</span>
+<span class="go">/_cat/count/{index}</span>
+<span class="go">/_cat/recovery</span>
+<span class="go">/_cat/recovery/{index}</span>
+<span class="go">/_cat/health</span>
+<span class="go">/_cat/pending_tasks</span>
+<span class="go">/_cat/aliases</span>
+<span class="go">/_cat/aliases/{alias}</span>
+<span class="go">/_cat/thread_pool</span>
+<span class="go">/_cat/thread_pool/{thread_pools}</span>
+<span class="go">/_cat/plugins</span>
+<span class="go">/_cat/fielddata</span>
+<span class="go">/_cat/fielddata/{fields}</span>
+<span class="go">/_cat/nodeattrs</span>
+<span class="go">/_cat/repositories</span>
+<span class="go">/_cat/snapshots/{repository}</span>
+<span class="go">/_cat/templates</span>
+<span class="go">/_cat/ml/anomaly_detectors</span>
+<span class="go">/_cat/ml/anomaly_detectors/{job_id}</span>
+<span class="go">/_cat/ml/trained_models</span>
+<span class="go">/_cat/ml/trained_models/{model_id}</span>
+<span class="go">/_cat/ml/datafeeds</span>
+<span class="go">/_cat/ml/datafeeds/{datafeed_id}</span>
+<span class="go">/_cat/ml/data_frame/analytics</span>
+<span class="go">/_cat/ml/data_frame/analytics/{id}</span>
+<span class="go">/_cat/transforms</span>
+<span class="go">/_cat/transforms/{transform_id}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/health
+<span class="go">1711480438 19:13:58 elasticsearch green 1 1 0 0 0 0 0 0 - 100.0%</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/health?v<span class="o">=</span><span class="nb">true</span>
+<span class="go">epoch      timestamp cluster       status node.total node.data shards pri relo init unassign pending_tasks max_task_wait_time active_shards_percent</span>
+<span class="go">1711480449 19:14:09  elasticsearch green           1         1      0   0    0    0        0             0                  -                100.0%</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/health?help
+<span class="go">epoch                 | t,time                                   | seconds since 1970-01-01 00:00:00</span>
+<span class="go">timestamp             | ts,hms,hhmmss                            | time in HH:MM:SS</span>
+<span class="go">cluster               | cl                                       | cluster name</span>
+<span class="go">status                | st                                       | health status</span>
+<span class="go">node.total            | nt,nodeTotal                             | total number of nodes</span>
+<span class="go">node.data             | nd,nodeData                              | number of nodes that can store data</span>
+<span class="go">shards                | t,sh,shards.total,shardsTotal            | total number of shards</span>
+<span class="go">pri                   | p,shards.primary,shardsPrimary           | number of primary shards</span>
+<span class="go">relo                  | r,shards.relocating,shardsRelocating     | number of relocating nodes</span>
+<span class="go">init                  | i,shards.initializing,shardsInitializing | number of initializing nodes</span>
+<span class="go">unassign              | u,shards.unassigned,shardsUnassigned     | number of unassigned shards</span>
+<span class="go">pending_tasks         | pt,pendingTasks                          | number of pending tasks</span>
+<span class="go">max_task_wait_time    | mtwt,maxTaskWaitTime                     | wait time of longest task pending</span>
+<span class="go">active_shards_percent | asp,activeShardsPercent                  | active number of shards in percent</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/indices?v<span class="o">=</span><span class="nb">true</span>
+<span class="go">health status index uuid pri rep docs.count docs.deleted store.size pri.store.size</span>
+</pre></div>
+</div>
+<p>Как видно, на текущий момент индексы отсутствуют. Создадим новый индекс:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-XPUT<span class="w"> </span>localhost:8889/test
+<span class="go">{&quot;acknowledged&quot;:true,&quot;shards_acknowledged&quot;:true,&quot;index&quot;:&quot;test&quot;}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/indices?v<span class="o">=</span><span class="nb">true</span>
+<span class="go">health status index uuid                   pri rep docs.count docs.deleted store.size pri.store.size</span>
+<span class="go">yellow open   test  ehKCGlmsRMG9a3ZC1nf13g   1   1          0            0       208b           208b</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/test/_search<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 5,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 0,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: null,</span>
+<span class="go">    &quot;hits&quot;: []</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Сейчас он пуст, добавим в него документ:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-sH<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>localhost:8889/test/_doc/<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;:&quot;hello&quot;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">  &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">  &quot;_id&quot;: &quot;Us0-fI4BJUxYkdJGSOu-&quot;,</span>
+<span class="go">  &quot;_version&quot;: 1,</span>
+<span class="go">  &quot;result&quot;: &quot;created&quot;,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 2,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;_seq_no&quot;: 0,</span>
+<span class="go">  &quot;_primary_term&quot;: 1</span>
+<span class="go">}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/test/_search<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 1045,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 1,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;Us0-fI4BJUxYkdJGSOu-&quot;,</span>
+<span class="go">        &quot;_score&quot;: 1,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;hello&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Поиск без аргументов выводит все документы в индексе. Добавим еще один документ
+и попробуем сделать поисковый запрос с помощью параметра <code class="docutils literal notranslate"><span class="pre">q</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-sH<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span>localhost:8889/test/_doc/<span class="w"> </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;message&quot;:&quot;hello world&quot;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">  &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">  &quot;_id&quot;: &quot;Zs1NfI4BJUxYkdJGDOtc&quot;,</span>
+<span class="go">  &quot;_version&quot;: 1,</span>
+<span class="go">  &quot;result&quot;: &quot;created&quot;,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 2,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;_seq_no&quot;: 1,</span>
+<span class="go">  &quot;_primary_term&quot;: 1</span>
+<span class="go">}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/test/_search?q<span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 6,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 2,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 0.6931471,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;Us0-fI4BJUxYkdJGSOu-&quot;,</span>
+<span class="go">        &quot;_score&quot;: 0.6931471,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;hello&quot;</span>
+<span class="go">        }</span>
+<span class="go">      },</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;Zs1NfI4BJUxYkdJGDOtc&quot;,</span>
+<span class="go">        &quot;_score&quot;: 0.160443,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;hello world&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/test/_search?q<span class="o">=</span><span class="s2">&quot;world&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 6,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 0.60996956,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;Zs1NfI4BJUxYkdJGDOtc&quot;,</span>
+<span class="go">        &quot;_score&quot;: 0.60996956,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;hello world&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:8889/test/_search?q=message.keyword:&quot;hello&quot;&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 1,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 0.6931471,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;Us0-fI4BJUxYkdJGSOu-&quot;,</span>
+<span class="go">        &quot;_score&quot;: 0.6931471,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;hello&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/test/_search?q<span class="o">=</span>/.*world/<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 14,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 1,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;Zs1NfI4BJUxYkdJGDOtc&quot;,</span>
+<span class="go">        &quot;_score&quot;: 1,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;hello world&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Как видно <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a> позволяет делать запросы различного вида для поиска в индексе.
+В конце удалим наш индекс:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-XDELETE<span class="w"> </span>localhost:8889/test
+<span class="go">{&quot;acknowledged&quot;:true}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/indices?v<span class="o">=</span><span class="nb">true</span>
+<span class="go">health status index uuid pri rep docs.count docs.deleted store.size pri.store.size</span>
+</pre></div>
+</div>
+</section>
+<section id="logstash">
+<h2>Logstash<a class="headerlink" href="#logstash" title="Permalink to this heading"></a></h2>
+<p>Развернем также <a class="reference external" href="https://www.elastic.co/guide/en/logstash/current/introduction.html">logstash</a>, который позволяет принимать, обрабатывать и записывать
+данные в <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a>. Для этого определим два конфигурационных файла
+<code class="docutils literal notranslate"><span class="pre">logstash.yml</span></code> и <code class="docutils literal notranslate"><span class="pre">logstash.conf</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">http.host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0</span>
+<span class="nt">xpack.monitoring.elasticsearch.hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&quot;http://elasticsearch:9200&quot;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span> <span class="p">{</span>
+  <span class="n">file</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;/var/lib/docker/containers/*/*.log&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nb">filter</span> <span class="p">{</span>
+<span class="p">}</span>
+
+<span class="n">output</span> <span class="p">{</span>
+   <span class="n">elasticsearch</span> <span class="p">{</span>
+   <span class="n">hosts</span> <span class="o">=&gt;</span> <span class="s2">&quot;http://elasticsearch:9200&quot;</span>
+   <span class="n">index</span> <span class="o">=&gt;</span> <span class="s2">&quot;test-logs-%{+YYYY.MM.DD}&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Данная конфигурация позволит считывать логи контейнеров и отправлять их elastic. Но для
+этого потребуется изменить конфигурацию <a class="reference external" href="https://docs.docker.com/engine/">docker</a> демона <code class="docutils literal notranslate"><span class="pre">/etc/docker/daemon.json</span></code>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;log-driver&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;json-file&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;log-opts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;max-size&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;10m&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;max-file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;3&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;tag&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;{{.ImageName}}/{{.Name}}&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>После чего потребуется перезапустить его командой:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">sudo systemctl restart docker</span>
+</pre></div>
+</div>
+<p>Теперь опишем сервис <a class="reference external" href="https://www.elastic.co/guide/en/logstash/current/introduction.html">logstash</a> в <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:7.9.1</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8889:9200&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9300:9300&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_data:/usr/share/elasticsearch/data/</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transport.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.monitoring.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=elasticsearch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ES_JAVA_OPTS=-Xms256m -Xmx256m</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elk</span>
+
+<span class="w">  </span><span class="nt">logstash</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logstash:7.9.1</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logstash</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5044:5044/udp&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9600:9600&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./logstash.conf:/usr/share/logstash/pipeline/logstash.conf</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./logstash.yml:/usr/share/logstash/config/logstash.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ls_data:/usr/share/logstash/data</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/lib/docker/containers:/var/lib/docker/containers</span>
+
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elk</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">elk</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test_data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ls_data</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>И запустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Volume &quot;vagrant_ls_data&quot;  Created                                                   0.0s</span>
+<span class="go"> ✔ Container elasticsearch   Started                                                   0.3s</span>
+<span class="go"> ✔ Container logstash        Started                                                   0.6s</span>
+</pre></div>
+</div>
+<p>После запуска <a class="reference external" href="https://www.elastic.co/guide/en/logstash/current/introduction.html">logstash</a> создаст свой индекс и начнет писать в него сообщения:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>localhost:8889/_cat/indices?v<span class="o">=</span><span class="nb">true</span>
+<span class="go">health status index                uuid                   pri rep docs.count docs.deleted store.size pri.store.size</span>
+<span class="go">yellow open   test-logs-2024.03.86 2hpFb0ffRgmgtnyMI4_plw   1   1          4            0     10.2kb         10.2kb</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/test-logs-2024.03.86/_search?size<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 1,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 4,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 1,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test-logs-2024.03.86&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;4ViDfI4BPacsZSlTAf5s&quot;,</span>
+<span class="go">        &quot;_score&quot;: 1,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;{\&quot;log\&quot;:\&quot;[2024-03-26T20:45:42,599][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=\\u003e9600}\\n\&quot;,\&quot;stream\&quot;:\&quot;stdout\&quot;,\&quot;attrs\&quot;:{\&quot;tag\&quot;:\&quot;logstash:7.9.1/logstash\&quot;},\&quot;time\&quot;:\&quot;2024-03-26T20:45:42.607986242Z\&quot;}&quot;,</span>
+<span class="go">          &quot;@timestamp&quot;: &quot;2024-03-26T20:45:43.682Z&quot;,</span>
+<span class="go">          &quot;path&quot;: &quot;/var/lib/docker/containers/34fa05cc4d33e34a8ef0b385419f3714773a6e12b4d5a4919a4aebf90a13155a/34fa05cc4d33e34a8ef0b385419f3714773a6e12b4d5a4919a4aebf90a13155a-json.log&quot;,</span>
+<span class="go">          &quot;host&quot;: &quot;34fa05cc4d33&quot;,</span>
+<span class="go">          &quot;@version&quot;: &quot;1&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Можем запустить свой контейнер, который будет только выводить введенный текст:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--name<span class="w"> </span>alpine<span class="w"> </span>alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &gt;/dev/null&#39;</span>
+<span class="go">Unable to find image &#39;alpine:latest&#39; locally</span>
+<span class="go">latest: Pulling from library/alpine</span>
+<span class="go">4abcf2066143: Pull complete</span>
+<span class="go">Digest: sha256:c5b1261d6d3e43071626931fc004f70149baeba2c8ec672bd4f27761f8e1ad6b</span>
+<span class="go">Status: Downloaded newer image for alpine:latest</span>
+<span class="go">hello</span>
+</pre></div>
+</div>
+<p>После переноса строки можно завершить ввод комбинацией <code class="docutils literal notranslate"><span class="pre">ctrl+d</span></code> и попытаться найти
+наш текст в индексе:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:8889/test-logs-2024.03.86/_search?size=1&amp;sort=@timestamp:desc&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 1,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 5,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: null,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test-logs-2024.03.86&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;6FiKfI4BPacsZSlT9v5L&quot;,</span>
+<span class="go">        &quot;_score&quot;: null,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;message&quot;: &quot;{\&quot;log\&quot;:\&quot;hello\\r\\n\&quot;,\&quot;stream\&quot;:\&quot;stdout\&quot;,\&quot;attrs\&quot;:{\&quot;tag\&quot;:\&quot;alpine/alpine\&quot;},\&quot;time\&quot;:\&quot;2024-03-26T20:54:24.873049246Z\&quot;}&quot;,</span>
+<span class="go">          &quot;@timestamp&quot;: &quot;2024-03-26T20:54:25.503Z&quot;,</span>
+<span class="go">          &quot;path&quot;: &quot;/var/lib/docker/containers/a7320f962f5b0a7a087831b685b38517a1ef8c84d64ce6018d160b54bbdeb07f/a7320f962f5b0a7a087831b685b38517a1ef8c84d64ce6018d160b54bbdeb07f-json.log&quot;,</span>
+<span class="go">          &quot;host&quot;: &quot;34fa05cc4d33&quot;,</span>
+<span class="go">          &quot;@version&quot;: &quot;1&quot;</span>
+<span class="go">        },</span>
+<span class="go">        &quot;sort&quot;: [</span>
+<span class="go">          1711486465503</span>
+<span class="go">        ]</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Помимо получения из файла и отправки в индекс в конфигурации <a class="reference external" href="https://www.elastic.co/guide/en/logstash/current/introduction.html">logstash</a> можно также
+задать обработку данных в параметре <code class="docutils literal notranslate"><span class="pre">filter</span></code>. Как видно в <code class="docutils literal notranslate"><span class="pre">message</span></code> нашего документа
+содержится текст в формате <code class="docutils literal notranslate"><span class="pre">json</span></code>, в котором по ключу <code class="docutils literal notranslate"><span class="pre">attrs.tag</span></code> хранится информация
+об образе и имени контейнера. Попробуем достать эти данные и положить в отдельные поля,
+для этого дополним <code class="docutils literal notranslate"><span class="pre">logstash.conf</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">input</span> <span class="p">{</span>
+  <span class="n">file</span> <span class="p">{</span>
+    <span class="n">path</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;/var/lib/docker/containers/*/*.log&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nb">filter</span> <span class="p">{</span>
+  <span class="n">json</span> <span class="p">{</span>
+    <span class="n">source</span> <span class="o">=&gt;</span> <span class="s2">&quot;message&quot;</span>
+  <span class="p">}</span>
+  <span class="n">mutate</span> <span class="p">{</span>
+    <span class="n">split</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="s2">&quot;[attrs][tag]&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;/&quot;</span> <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">mutate</span> <span class="p">{</span>
+    <span class="n">add_field</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="s2">&quot;image&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;%{[attrs][tag][0]}&quot;</span>
+      <span class="s2">&quot;container&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;%{[attrs][tag][1]}&quot;</span>
+    <span class="p">}</span>
+    <span class="n">remove_field</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s2">&quot;attrs&quot;</span><span class="p">,</span> <span class="s2">&quot;message&quot;</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">output</span> <span class="p">{</span>
+   <span class="n">elasticsearch</span> <span class="p">{</span>
+   <span class="n">hosts</span> <span class="o">=&gt;</span> <span class="s2">&quot;http://elasticsearch:9200&quot;</span>
+   <span class="n">index</span> <span class="o">=&gt;</span> <span class="s2">&quot;test-logs-%{+YYYY.MM.DD}&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>После чего перезапустим контейнеры:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 2/2</span>
+<span class="go"> ✔ Container elasticsearch  Started                                                    2.1s</span>
+<span class="go"> ✔ Container logstash       Started                                                    2.0s</span>
+</pre></div>
+</div>
+<p>Повторно запустим тестовый контейнер:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>alpine
+<span class="go">alpine</span>
+<span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--name<span class="w"> </span>alpine<span class="w"> </span>alpine<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;cat &gt;/dev/null&#39;</span>
+<span class="go">test 123</span>
+</pre></div>
+</div>
+<p>И посмотрим как теперь выглядит документ:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:8889/test-logs-2024.03.86/_search?q=container:alpine&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 22,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 1.2039728,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test-logs-2024.03.86&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;ctSXfI4BBZ7dkKnP6S3b&quot;,</span>
+<span class="go">        &quot;_score&quot;: 1.2039728,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;image&quot;: &quot;alpine&quot;,</span>
+<span class="go">          &quot;@timestamp&quot;: &quot;2024-03-26T21:08:34.285Z&quot;,</span>
+<span class="go">          &quot;log&quot;: &quot;test 123\r\n&quot;,</span>
+<span class="go">          &quot;path&quot;: &quot;/var/lib/docker/containers/ecedf32cc76a9e3d7843bee34f86a3873fd1b21a0cb9ad41689308b1051b984d/ecedf32cc76a9e3d7843bee34f86a3873fd1b21a0cb9ad41689308b1051b984d-json.log&quot;,</span>
+<span class="go">          &quot;stream&quot;: &quot;stdout&quot;,</span>
+<span class="go">          &quot;@version&quot;: &quot;1&quot;,</span>
+<span class="go">          &quot;host&quot;: &quot;12b43b1d6336&quot;,</span>
+<span class="go">          &quot;time&quot;: &quot;2024-03-26T21:08:33.97032219Z&quot;,</span>
+<span class="go">          &quot;container&quot;: &quot;alpine&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span><span class="s1">&#39;localhost:8889/test-logs-2024.03.86/_search?q=container:logstash&amp;size=1&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 2,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 1.2039728,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;test-logs-2024.03.86&quot;,</span>
+<span class="go">        &quot;_type&quot;: &quot;_doc&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;b9SWfI4BBZ7dkKnP7y0b&quot;,</span>
+<span class="go">        &quot;_score&quot;: 1.2039728,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;image&quot;: &quot;logstash:7.9.1&quot;,</span>
+<span class="go">          &quot;@timestamp&quot;: &quot;2024-03-26T21:07:30.049Z&quot;,</span>
+<span class="go">          &quot;log&quot;: &quot;[2024-03-26T21:07:28,894][INFO ][logstash.agent           ] Successfully started Logstash API endpoint {:port=&gt;9600}\n&quot;,</span>
+<span class="go">          &quot;path&quot;: &quot;/var/lib/docker/containers/12b43b1d6336d6e88c82405cb6e22d04a2f79750386d811af4a80f0304af225e/12b43b1d6336d6e88c82405cb6e22d04a2f79750386d811af4a80f0304af225e-json.log&quot;,</span>
+<span class="go">          &quot;stream&quot;: &quot;stdout&quot;,</span>
+<span class="go">          &quot;@version&quot;: &quot;1&quot;,</span>
+<span class="go">          &quot;host&quot;: &quot;12b43b1d6336&quot;,</span>
+<span class="go">          &quot;time&quot;: &quot;2024-03-26T21:07:28.894641313Z&quot;,</span>
+<span class="go">          &quot;container&quot;: &quot;logstash&quot;</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</section>
+<section id="kibana">
+<h2>Kibana<a class="headerlink" href="#kibana" title="Permalink to this heading"></a></h2>
+<p>Для удобной визуализации логов в <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a> воспользуемся инструментом <a class="reference external" href="https://www.elastic.co/guide/en/kibana/current/introduction.html">kibana</a>.
+Создадим конфигурацию <code class="docutils literal notranslate"><span class="pre">kibana.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">server.name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kibana</span>
+<span class="nt">server.host</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span>
+<span class="nt">elasticsearch.hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="w"> </span><span class="s">&quot;http://elasticsearch:9200&quot;</span><span class="w"> </span><span class="p p-Indicator">]</span>
+<span class="nt">monitoring.ui.container.elasticsearch.enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+<p>И дополним наш <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;3&#39;</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:7.9.1</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8889:9200&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9300:9300&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_data:/usr/share/elasticsearch/data/</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transport.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.monitoring.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=elasticsearch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ES_JAVA_OPTS=-Xms256m -Xmx256m</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elk</span>
+
+<span class="w">  </span><span class="nt">logstash</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logstash:7.9.1</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">logstash</span>
+<span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;0&quot;</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5044:5044/udp&quot;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9600:9600&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./logstash.conf:/usr/share/logstash/pipeline/logstash.conf</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./logstash.yml:/usr/share/logstash/config/logstash.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ls_data:/usr/share/logstash/data</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/lib/docker/containers:/var/lib/docker/containers</span>
+
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elk</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+
+<span class="w">  </span><span class="nt">kibana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kibana:7.9.1</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kibana</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;8888:5601&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./kibana.yml:/usr/share/kibana/config/kibana.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">kb_data:/usr/share/kibana/data</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elk</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">elk</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">driver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bridge</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">test_data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">ls_data</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">kb_data</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>После чего можем запустить:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container elasticsearch  Running                                                    0.0s</span>
+<span class="go"> ✔ Container logstash       Running                                                    0.0s</span>
+<span class="go"> ✔ Container kibana         Started                                                    0.3s</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://www.elastic.co/guide/en/kibana/current/introduction.html">Kibana</a> будет доступна по адресу <a class="reference external" href="http://localhost:8888">localhost:8888</a>, а по
+адресу <a class="reference external" href="http://localhost:8888/app/discover">localhost:8888/app/discover</a> можно будет
+сделать поиск наших логов. Для этого потребуется добавить паттерн для нашего индекса:</p>
+<p><img alt="" src="_images/elk1.png" /></p>
+<p><img alt="" src="_images/elk2.png" /></p>
+<p>И можно будет вернуться на страницу <a class="reference external" href="http://localhost:8888/app/discover">/app/discover</a>:</p>
+<p><img alt="" src="_images/elk3.png" /></p>
+<p>В левой панели можно выбрать поля для отображения:</p>
+<p><img alt="" src="_images/elk4.png" /></p>
+<p>Добавим поля <code class="docutils literal notranslate"><span class="pre">container</span></code> и <code class="docutils literal notranslate"><span class="pre">log</span></code>:</p>
+<p><img alt="" src="_images/elk5.png" /></p>
+<p>Поиск можно осуществлять с помощью <a class="reference external" href="https://www.elastic.co/guide/en/kibana/current/kuery-query.html">KQL</a>:</p>
+<p><img alt="" src="_images/elk6.png" /></p>
+<p>Различные визуализации можно создавать на странице
+<a class="reference external" href="http://localhost:8888/app/visualize">/app/visualize</a>. Добавим визуализацию в виде
+pie chart:</p>
+<p><img alt="" src="_images/elk7.png" /></p>
+<p>После чего в правой панели зададим метрику <code class="docutils literal notranslate"><span class="pre">Count</span></code>:</p>
+<p><img alt="" src="_images/elk8.png" /></p>
+<p>И разбиение по бакетам:</p>
+<p><img alt="" src="_images/elk9.png" /></p>
+<p>Нажав кнопку <code class="docutils literal notranslate"><span class="pre">Update</span></code> увидим визуализацию, которая отображает соотношение логов
+по разным контейнерам:</p>
+<p><img alt="" src="_images/elk10.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="22_practice_alertmanager.html" class="btn btn-neutral float-left" title="Alertmanager" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="24_practice_elk_app_logs.html" class="btn btn-neutral float-right" title="ELK Log Visualization" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

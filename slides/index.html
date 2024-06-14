@@ -1,0 +1,2241 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <title></title>
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/dist/reveal.css" />
+    <link rel="stylesheet" href="_static/revealjs4/dist/theme/league.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/revealjs4/plugin/highlight/zenburn.css" />
+    <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+    <script>mermaid.initialize({startOnLoad:true});</script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  </head><body>
+    <div class="reveal">
+        <div class="slides" role="main">
+            <section >
+<h1></h1>
+</section>
+<section>
+<section >
+<h2>Vagrant</h2>
+<a class="reference internal image-reference" href="_images/vagrant.svg"><img alt="_images/vagrant.svg" src="_images/vagrant.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Основные концепции</h3>
+<ul class="simple">
+<li class="fragment"><p>Vagrantfile</p></li>
+<li class="fragment"><p>Boxes</p></li>
+<li class="fragment"><p>Providers</p></li>
+<li class="fragment"><p>Provisioning</p></li>
+</ul>
+</section>
+<section >
+<h3>Vagrantfile</h3>
+<pre data-id="vagrantfile"><code data-trim data-noescape class="ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  # ...
+end</code></pre>
+</section>
+<section >
+<h3>Vagrantfile lookup</h3>
+<pre data-id="vagrantfile-lookup"><code data-trim data-noescape class="bash" data-line-numbers="1-5|7">/home/mitchellh/projects/foo/Vagrantfile
+/home/mitchellh/projects/Vagrantfile
+/home/mitchellh/Vagrantfile
+/home/Vagrantfile
+/Vagrantfile
+
+$VAGRANT_CWD</code></pre>
+</section>
+<section >
+<h3>Vagrantfile merging</h3>
+<ul class="simple">
+<li class="fragment"><p>Box</p></li>
+<li class="fragment"><p>Home (~/.vagrant.d)</p></li>
+<li class="fragment"><p>Project</p></li>
+<li class="fragment"><p>Multi-machine</p></li>
+<li class="fragment"><p>Provider</p></li>
+</ul>
+</section>
+<section >
+<h3>Box</h3>
+<pre data-id="box"><code data-trim data-noescape class="console">$ vagrant init hashicorp/bionic64</code></pre>
+<pre data-id="box"><code data-trim data-noescape class="ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.box = &quot;hashicorp/bionic64&quot;
+end</code></pre>
+</section>
+<section >
+<h3>Box</h3>
+<pre data-id="id3"><code data-trim data-noescape class="console" data-line-numbers="1|2|3-4|5|6|7-8">$ ls ~/.vagrant.d/boxes/ubuntu-VAGRANTSLASH-lunar64/0/virtualbox
+box.ovf
+metadata.json
+ubuntu-lunar-23.04-cloudimg-configdrive.vmdk
+ubuntu-lunar-23.04-cloudimg.vmdk
+ubuntu-lunar-23.04-cloudimg.mf
+Vagrantfile
+vagrant_insecure_key
+vagrant_insecure_key.pub</code></pre>
+</section>
+<section >
+<h3>Provider</h3>
+<ul class="simple">
+<li class="fragment"><p>VirtualBox</p></li>
+<li class="fragment"><p>VMware</p></li>
+<li class="fragment"><p>Hyper-V</p></li>
+<li class="fragment"><p>Libvirt</p></li>
+<li class="fragment"><p>Docker</p></li>
+</ul>
+</section>
+<section >
+<h3>Provider configuration</h3>
+<pre data-id="provider-configuration"><code data-trim data-noescape class="ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  # ...
+  config.vm.provider &quot;virtualbox&quot; do |vb|
+    vb.customize [&quot;modifyvm&quot;, :id, &quot;--cpuexecutioncap&quot;, &quot;50&quot;]
+    vb.memory = 1024
+    vb.cpus = 2
+  end
+end</code></pre>
+</section>
+<section >
+<h3>Provider Usage</h3>
+<pre data-id="provider-usage"><code data-trim data-noescape class="console" data-line-numbers="1-3|4">$ vagrant box list
+bionic64 (virtualbox)
+bionic64 (vmware_fusion)
+$ vagrant up --provider=vmware_fusion</code></pre>
+</section>
+<section >
+<h3>Provision</h3>
+<pre data-id="provision"><code data-trim data-noescape class="ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  # ... other configuration
+  config.vm.provision &quot;shell&quot; do |s|
+    s.inline = &quot;echo hello&quot;
+  end
+end</code></pre>
+</section>
+<section >
+<h3>Provision run</h3>
+<pre data-id="provision-run"><code data-trim data-noescape class="console">$ vagrant up
+$ vagrant reload --provision
+$ vagrant provision</code></pre>
+</section>
+<section >
+<h3>Provision run</h3>
+<pre data-id="id4"><code data-trim data-noescape class="ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  # ... other configuration
+  config.vm.provision &quot;bootstrap&quot;, type: &quot;shell&quot; do |s|
+    s.inline = &quot;echo hello&quot;
+  end
+end</code></pre>
+<pre data-id="id4"><code data-trim data-noescape class="console">$ vagrant provision --provision-with bootstrap</code></pre>
+</section>
+<section >
+<h3>Provision run</h3>
+<pre data-id="id5"><code data-trim data-noescape class="ruby">Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.provision &quot;bootstrap&quot;, type: &quot;shell&quot;, run: &quot;never&quot; do |s|
+    s.inline = &quot;echo hello&quot;
+  end
+end</code></pre>
+</section>
+<section >
+<h3>Provision type</h3>
+<ul class="simple">
+<li class="fragment"><p>File</p></li>
+<li class="fragment"><p>Shell</p></li>
+<li class="fragment"><p>Ansible</p></li>
+<li class="fragment"><p>Docker</p></li>
+<li class="fragment"><p>Chef</p></li>
+<li class="fragment"><p>Puppet</p></li>
+<li class="fragment"><p>Salt</p></li>
+</ul>
+</section>
+<section >
+<h3>Networking</h3>
+<pre data-id="networking"><code data-trim data-noescape class="ruby" data-line-numbers="3|4|5|6">Vagrant.configure(&quot;2&quot;) do |config|
+  # ...
+  config.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8080
+  config.vm.hostname = &quot;myhost.local&quot;
+  config.vm.network &quot;private_network&quot;, ip: &quot;192.168.50.4&quot;
+  config.vm.network &quot;public_network&quot;, ip: &quot;192.168.0.17&quot;
+end</code></pre>
+</section>
+<section >
+<h3>Synced Folders</h3>
+<pre data-id="synced-folders"><code data-trim data-noescape class="ruby" data-line-numbers="3|4">Vagrant.configure(&quot;2&quot;) do |config|
+  # other config here
+  config.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, disabled: true
+  config.vm.synced_folder &quot;src/&quot;, &quot;/srv/website&quot;
+end</code></pre>
+</section>
+<section >
+<h3>Synced Folders Types</h3>
+<pre data-id="synced-folders-types"><code data-trim data-noescape class="ruby" data-line-numbers="2|3|4">Vagrant.configure(&quot;2&quot;) do |config|
+  config.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, type: &quot;nfs&quot;
+  config.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, type: &quot;rsync&quot;
+  config.vm.synced_folder &quot;.&quot;, &quot;/vagrant&quot;, type: &quot;smb&quot;
+end</code></pre>
+</section>
+<section >
+<h3>Plugins</h3>
+<pre data-id="plugins"><code data-trim data-noescape class="console">## Installing a plugin from a known gem source
+$ vagrant plugin install my-plugin
+## Installing a plugin from a local file source
+$ vagrant plugin install /path/to/my-plugin.gem</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Docker</h2>
+<a class="reference internal image-reference" href="_images/docker.svg"><img alt="_images/docker.svg" src="_images/docker.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Контейнерная виртуализация</h3>
+<ul class="simple">
+<li class="fragment"><p>Namespaces</p></li>
+<li class="fragment"><p>Control groups</p></li>
+<li class="fragment"><p>OverlayFS</p></li>
+</ul>
+</section>
+<section >
+<h3>Namespaces</h3>
+<ul class="simple">
+<li class="fragment"><p>Mount</p></li>
+<li class="fragment"><p>Network</p></li>
+<li class="fragment"><p>PID</p></li>
+<li class="fragment"><p>User</p></li>
+<li class="fragment"><p>IPC</p></li>
+<li class="fragment"><p>UTS</p></li>
+<li class="fragment"><p>Cgroup</p></li>
+</ul>
+</section>
+<section >
+<h3>Namespaces</h3>
+<pre data-id="id7"><code data-trim data-noescape class="console">$ ls -l /proc/$$/ns
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 cgroup -&gt; 'cgroup:[4026531835]'
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 ipc -&gt; 'ipc:[4026531839]'
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 mnt -&gt; 'mnt:[4026531841]'
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 net -&gt; 'net:[4026531840]'
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 pid -&gt; 'pid:[4026531836]'
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 user -&gt; 'user:[4026531837]'
+lrwxrwxrwx 1 root root 0 Sep 28 09:50 uts -&gt; 'uts:[4026531838]'</code></pre>
+</section>
+<section >
+<h3>Основные концепции</h3>
+<ul class="simple">
+<li class="fragment"><p>Image</p></li>
+<li class="fragment"><p>Container</p></li>
+<li class="fragment"><p>Docker Daemon</p></li>
+<li class="fragment"><p>Docker Client</p></li>
+<li class="fragment"><p>Registry</p></li>
+</ul>
+</section>
+<section >
+<h3>Архитектура</h3>
+<img alt="_images/docker-arch.png" src="_images/docker-arch.png" />
+</section>
+<section >
+<h3>Images</h3>
+<img alt="_images/docker-image.png" src="_images/docker-image.png" />
+</section>
+<section >
+<h3>Image manifest</h3>
+<pre data-id="image-manifest"><code data-trim data-noescape class="json" data-line-numbers="2|3|4-8|9-15">{
+ &quot;schemaVersion&quot;: 2,
+ &quot;mediaType&quot;: &quot;application/vnd.docker.distribution.manifest.v2+json&quot;,
+ &quot;config&quot;: {
+  &quot;mediaType&quot;: &quot;application/vnd.docker.container.image.v1+json&quot;,
+  &quot;size&quot;: 633,
+  &quot;digest&quot;: &quot;sha256:643d97e6291d22876100fff8e6edc90eccd8b045011cd8a4aa95524d8d5a711f&quot;
+ },
+ &quot;layers&quot;: [
+   {
+    &quot;mediaType&quot;: &quot;application/vnd.docker.image.rootfs.diff.tar.gzip&quot;,
+    &quot;size&quot;: 1113611,
+    &quot;digest&quot;: &quot;sha256:e00c2c33f044a4c9b2ce7fd84a33c63bb82fdf88dcc17994a14ecbf0dd0be01d&quot;
+   }
+ ]
+}</code></pre>
+</section>
+<section >
+<h3>Dockerfile</h3>
+<pre data-id="dockerfile"><code data-trim data-noescape class="dockerfile">FROM ubuntu:22.04
+COPY . /app
+RUN make /app
+CMD python /app/app.py</code></pre>
+</section>
+<section >
+<h3>Dockerfile multi-line</h3>
+<pre data-id="dockerfile-multi-line"><code data-trim data-noescape class="dockerfile">RUN apt-get update &amp;&amp; apt-get install -y \
+  bzr \
+  cvs \
+  git \
+  mercurial \
+  subversion \
+  &amp;&amp; rm -rf /var/lib/apt/lists/*</code></pre>
+</section>
+<section >
+<h3>Layers cache</h3>
+<img alt="_images/docker-cache1.png" src="_images/docker-cache1.png" />
+</section>
+<section >
+<h3>Layers cache</h3>
+<img alt="_images/docker-cache2.png" src="_images/docker-cache2.png" />
+</section>
+<section >
+<h3>Dockerfile multi-stage</h3>
+<pre data-id="dockerfile-multi-stage"><code data-trim data-noescape class="dockerfile" data-line-numbers="1-4|6-8">FROM golang:1.21 as build
+WORKDIR /src
+COPY main.go /src/main.go
+RUN go build -o /bin/hello ./main.go
+
+FROM scratch
+COPY --from=build /bin/hello /bin/hello
+CMD [&quot;/bin/hello&quot;]</code></pre>
+</section>
+<section >
+<h3>Container</h3>
+<pre data-id="container"><code data-trim data-noescape class="dockerfile">$ docker run &lt;image&gt;
+$ docker ps | head -1
+CONTAINER ID  IMAGE  COMMAND  CREATED  STATUS  PORTS  NAMES
+$ docker inspec &lt;container-id&gt;</code></pre>
+</section>
+<section >
+<h3>Container overlay</h3>
+<p>GraphDriver</p>
+<pre data-id="container-overlay"><code data-trim data-noescape class="dockerfile" data-line-numbers="8|3|5|4">{
+  &quot;Data&quot;: {
+    &quot;LowerDir&quot;: &quot;/var/lib/docker/overlay2/475958ea3aea4a3c7c95ef8744e440f483a94ec2abde19b9a06addda6a940327-init/diff:/var/lib/docker/overlay2/39l57zdl339geagnufkc0erq3/diff&quot;,
+    &quot;MergedDir&quot;: &quot;/var/lib/docker/overlay2/475958ea3aea4a3c7c95ef8744e440f483a94ec2abde19b9a06addda6a940327/merged&quot;,
+    &quot;UpperDir&quot;: &quot;/var/lib/docker/overlay2/475958ea3aea4a3c7c95ef8744e440f483a94ec2abde19b9a06addda6a940327/diff&quot;,
+    &quot;WorkDir&quot;: &quot;/var/lib/docker/overlay2/475958ea3aea4a3c7c95ef8744e440f483a94ec2abde19b9a06addda6a940327/work&quot;
+  },
+  &quot;Name&quot;: &quot;overlay2&quot;
+}</code></pre>
+</section>
+<section >
+<h3>Container config</h3>
+<pre data-id="container-config"><code data-trim data-noescape class="dockerfile" data-line-numbers="2|11-16">{
+  &quot;Hostname&quot;: &quot;0adf0bbbdf2b&quot;,
+  &quot;Domainname&quot;: &quot;&quot;,
+  &quot;User&quot;: &quot;&quot;,
+  &quot;AttachStdin&quot;: false,
+  &quot;AttachStdout&quot;: true,
+  &quot;AttachStderr&quot;: true,
+  &quot;Tty&quot;: false,
+  &quot;OpenStdin&quot;: false,
+  &quot;StdinOnce&quot;: false,
+  &quot;Env&quot;: [
+    &quot;PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;
+  ],
+  &quot;Cmd&quot;: [
+    &quot;/bin/hello&quot;
+  ],
+  &quot;Image&quot;: &quot;hello:latest&quot;,
+  &quot;Volumes&quot;: null,
+  &quot;WorkingDir&quot;: &quot;/&quot;,
+  &quot;Entrypoint&quot;: null,
+  &quot;OnBuild&quot;: null,
+  &quot;Labels&quot;: {}
+}</code></pre>
+</section>
+<section >
+<h3>Client/Server</h3>
+<ul class="simple">
+<li class="fragment"><p>Unix socket</p></li>
+<li class="fragment"><p>TCP</p></li>
+<li class="fragment"><p>SSH</p></li>
+<li class="fragment"><p>TLS(HTTPS)</p></li>
+</ul>
+</section>
+<section >
+<h3>Client context</h3>
+<pre data-id="client-context"><code data-trim data-noescape class="console" data-line-numbers="1-3|5-8">$ docker context ls
+NAME        DESCRIPTION           DOCKER ENDPOINT               ERROR
+default *   Current DOCKER_HOST   unix:///var/run/docker.sock
+
+$ export DOCKER_HOST=tcp://localhost:2375
+$ docker context ls
+NAME        DESCRIPTION           DOCKER ENDPOINT        ERROR
+default *   Current DOCKER_HOST   tcp://localhost:2375</code></pre>
+</section>
+<section >
+<h3>Registry</h3>
+<ul class="simple">
+<li class="fragment"><p>Repository</p></li>
+<li class="fragment"><p>Tag</p></li>
+<li class="fragment"><p>Manifest</p></li>
+<li class="fragment"><p>Blob</p></li>
+</ul>
+</section>
+<section >
+<h3>Repository</h3>
+<pre data-id="repository"><code data-trim data-noescape class="bash">/v2/_catalog
+</code></pre>
+<pre data-id="repository"><code data-trim data-noescape class="json">{&quot;repositories&quot;:[&quot;main&quot;,&quot;test/hello&quot;]}</code></pre>
+</section>
+<section >
+<h3>Tag</h3>
+<pre data-id="tag"><code data-trim data-noescape class="bash">/v2/test/hello/tags/list
+</code></pre>
+<pre data-id="tag"><code data-trim data-noescape class="json">{&quot;name&quot;:&quot;test/hello&quot;,&quot;tags&quot;:[&quot;0.1&quot;]}</code></pre>
+</section>
+<section >
+<h3>Manifest</h3>
+<pre data-id="manifest"><code data-trim data-noescape class="bash">/v2/test/hello/manifests/0.1
+</code></pre>
+<pre data-id="manifest"><code data-trim data-noescape class="json">{
+ &quot;schemaVersion&quot;: 2,
+ &quot;mediaType&quot;: &quot;application/vnd.docker.distribution.manifest.v2+json&quot;,
+ &quot;config&quot;: {
+  &quot;mediaType&quot;: &quot;application/vnd.docker.container.image.v1+json&quot;,
+  &quot;size&quot;: 633,
+  &quot;digest&quot;: &quot;sha256:643d97e6291d22876100fff8e6edc90eccd8b045011cd8a4aa95524d8d5a711f&quot;
+ },
+ &quot;layers&quot;: [
+   {
+    &quot;mediaType&quot;: &quot;application/vnd.docker.image.rootfs.diff.tar.gzip&quot;,
+    &quot;size&quot;: 1113611,
+    &quot;digest&quot;: &quot;sha256:e00c2c33f044a4c9b2ce7fd84a33c63bb82fdf88dcc17994a14ecbf0dd0be01d&quot;
+   }
+ ]
+}</code></pre>
+</section>
+<section >
+<h3>Blob</h3>
+<pre data-id="blob"><code data-trim data-noescape class="bash">/v2/test/hello/blobs/sha256:...
+</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Network/Volume + Compose</h2>
+<a class="reference internal image-reference" href="_images/compose.png"><img alt="_images/compose.png" src="_images/compose.png" style="width: 200px;" /></a>
+</section>
+<section >
+<h3>Network</h3>
+</section>
+<section >
+<h3>Publish ports</h3>
+<pre data-id="publish-ports"><code data-trim data-noescape class="console">## -p, --publish ip:[hostPort]:containerPort
+$ docker run -p 8080:80
+$ docker run -p 192.168.1.100:8080:80
+$ docker run -p 8080:80/udp
+$ docker run -p 8080:80/tcp -p 8080:80/udp
+</code></pre>
+</section>
+<section >
+<h3>Network resolve</h3>
+<pre data-id="network-resolve"><code data-trim data-noescape class="console">$ docker run --dns
+$ docker run --hostname
+$ docker run --add-host
+</code></pre>
+</section>
+<section >
+<h3>Network</h3>
+<img alt="_images/docker-net1.png" src="_images/docker-net1.png" />
+</section>
+<section >
+<h3>Network inspect</h3>
+<pre data-id="network-inspect"><code data-trim data-noescape class="console">$ docker network inspect bridge
+</code></pre>
+<pre data-id="network-inspect"><code data-trim data-noescape class="json" data-line-numbers="3-16|19-27|28-35">[
+  {
+   &quot;Name&quot;: &quot;bridge&quot;,
+   &quot;Id&quot;: &quot;f7ab26d71dbd6f557852c7156ae0574bbf62c42f539b50c8ebde0f728a253b6f&quot;,
+   &quot;Scope&quot;: &quot;local&quot;,
+   &quot;Driver&quot;: &quot;bridge&quot;,
+   &quot;EnableIPv6&quot;: false,
+   &quot;IPAM&quot;: {
+    &quot;Driver&quot;: &quot;default&quot;,
+    &quot;Options&quot;: null,
+    &quot;Config&quot;: [
+     {
+      &quot;Subnet&quot;: &quot;172.17.0.1/16&quot;,
+      &quot;Gateway&quot;: &quot;172.17.0.1&quot;
+     }
+    ]
+   },
+   &quot;Internal&quot;: false,
+   &quot;Containers&quot;: {
+    &quot;3386a527aa08b37ea9232cbcace2d2458d49f44bb05a6b775fba7ddd40d8f92c&quot;: {
+     &quot;Name&quot;: &quot;networktest&quot;,
+     &quot;EndpointID&quot;: &quot;647c12443e91faf0fd508b6edfe59c30b642abb60dfab890b4bdccee38750bc1&quot;,
+     &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;,
+     &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;,
+     &quot;IPv6Address&quot;: &quot;&quot;
+    }
+   },
+   &quot;Options&quot;: {
+    &quot;com.docker.network.bridge.default_bridge&quot;: &quot;true&quot;,
+    &quot;com.docker.network.bridge.enable_icc&quot;: &quot;true&quot;,
+    &quot;com.docker.network.bridge.enable_ip_masquerade&quot;: &quot;true&quot;,
+    &quot;com.docker.network.bridge.host_binding_ipv4&quot;: &quot;0.0.0.0&quot;,
+    &quot;com.docker.network.bridge.name&quot;: &quot;docker0&quot;,
+    &quot;com.docker.network.driver.mtu&quot;: &quot;9001&quot;
+   },
+   &quot;Labels&quot;: {}
+  }
+]</code></pre>
+</section>
+<section >
+<h3>Manage networks</h3>
+<pre data-id="manage-networks"><code data-trim data-noescape class="console">$ docker network create
+$ docker network rm
+$ docker network ls
+$ docker network prune
+</code></pre>
+</section>
+<section >
+<h3>Select network</h3>
+<pre data-id="select-network"><code data-trim data-noescape class="console">$ docker run --network
+$ docker network connect
+$ docker network disconnect
+</code></pre>
+</section>
+<section >
+<h3>Multiple networks</h3>
+<img alt="_images/docker-net2.png" src="_images/docker-net2.png" />
+</section>
+<section >
+<h3>Network drivers</h3>
+<ul class="simple">
+<li class="fragment"><p>bridge</p></li>
+<li class="fragment"><p>host</p></li>
+<li class="fragment"><p>overlay</p></li>
+<li class="fragment"><p>ipvlan</p></li>
+<li class="fragment"><p>macvlan</p></li>
+<li class="fragment"><p>none</p></li>
+</ul>
+</section>
+<section >
+<h3>Volume</h3>
+<img alt="_images/docker-volume1.png" src="_images/docker-volume1.png" />
+</section>
+<section >
+<h3>Volume</h3>
+<pre data-id="id12"><code data-trim data-noescape class="default">-v|--volume=[HOST-DIR:]CONTAINER-DIR[:OPTIONS]
+
+--mount type=TYPE,TYPE-SPECIFIC-OPTION[,...]
+
+  type=bind,source=/path/on/host,destination=/path/in/container
+
+  type=volume,source=my-volume,destination=/path/in/container
+
+  type=tmpfs,tmpfs-size=512M,destination=/path/in/container
+</code></pre>
+</section>
+<section >
+<h3>Volume manage</h3>
+<pre data-id="volume-manage"><code data-trim data-noescape class="console" data-line-numbers="1|2-3|4-14|15">$ docker volume create my-vol
+$ docker volume ls
+local               my-vol
+$ docker volume inspect my-vol
+[
+    {
+        &quot;Driver&quot;: &quot;local&quot;,
+        &quot;Labels&quot;: {},
+        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/my-vol/_data&quot;,
+        &quot;Name&quot;: &quot;my-vol&quot;,
+        &quot;Options&quot;: {},
+        &quot;Scope&quot;: &quot;local&quot;
+    }
+]
+$ docker volume rm my-vol</code></pre>
+</section>
+<section >
+<h3>Shared volume</h3>
+<img alt="_images/docker-volume2.svg" src="_images/docker-volume2.svg" /></section>
+<section >
+<h3>Volume driver</h3>
+<pre data-id="volume-driver"><code data-trim data-noescape class="console" data-line-numbers="1-6|8-12|13-17">$ docker volume create \
+	--driver local \
+	--opt type=cifs \
+	--opt device=//uxxxxx.your-server.de/backup \
+	--opt o=addr=uxxxxx.your-server.de,username=uxxxxxxx,password=*****,file_mode=0777,dir_mode=0777 \
+	--name cif-volume
+
+$ docker plugin install --grant-all-permissions vieux/sshfs
+$ docker volume create --driver vieux/sshfs \
+  -o sshcmd=test&#64;node2:/home/test \
+  -o password=testpassword \
+  sshvolume
+$ docker run -d \
+  --name sshfs-container \
+  --volume-driver vieux/sshfs \
+  --mount src=sshvolume,target=/app,volume-opt=sshcmd=test&#64;node2:/home/test,volume-opt=password=testpassword \
+  nginx:latest</code></pre>
+</section>
+<section >
+<h3>Compose</h3>
+<ul class="simple">
+<li class="fragment"><p>docker-compose standalone</p></li>
+<li class="fragment"><p>docker compose plugin</p></li>
+</ul>
+</section>
+<section >
+<h3>Compose</h3>
+<img alt="_images/compose1.png" src="_images/compose1.png" />
+</section>
+<section >
+<h3>Compose file</h3>
+<pre data-id="compose-file"><code data-trim data-noescape class="yaml" data-line-numbers="1|2|14|21|27|31|35|2-12|14-19">services:
+  frontend:
+    image: example/webapp
+    ports:
+      - &quot;443:8043&quot;
+    networks:
+      - front-tier
+      - back-tier
+    configs:
+      - httpd-config
+    secrets:
+      - server-certificate
+
+  backend:
+    image: example/database
+    volumes:
+      - db-data:/etc/data
+    networks:
+      - back-tier
+
+volumes:
+  db-data:
+    driver: flocker
+    driver_opts:
+      size: &quot;10GiB&quot;
+
+configs:
+  httpd-config:
+    external: true
+
+secrets:
+  server-certificate:
+    external: true
+
+networks:
+  # The presence of these objects is sufficient to define them
+  front-tier: {}
+  back-tier: {}</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Ansible</h2>
+<a class="reference internal image-reference" href="_images/ansible-icon.svg"><img alt="_images/ansible-icon.svg" src="_images/ansible-icon.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Basic</h3>
+<a class="reference internal image-reference" href="_images/ansible-basic.svg"><img alt="_images/ansible-basic.svg" src="_images/ansible-basic.svg" width="450px" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Control/Managed nodes</p></li>
+<li class="fragment"><p>Inventory</p></li>
+<li class="fragment"><p>Playbooks</p></li>
+<li class="fragment"><p>Modules</p></li>
+<li class="fragment"><p>Plugins</p></li>
+<li class="fragment"><p>Collections</p></li>
+</ul>
+</section>
+<section >
+<h3>Inventory</h3>
+<pre data-id="inventory"><code data-trim data-noescape class="ini">mail.example.com
+
+[webservers]
+foo.example.com
+bar.example.com
+
+[dbservers]
+one.example.com
+two.example.com
+three.example.com
+</code></pre>
+</section>
+<section >
+<h3>Inventory</h3>
+<pre data-id="id14"><code data-trim data-noescape class="yaml">ungrouped:
+  hosts:
+    mail.example.com:
+webservers:
+  hosts:
+    foo.example.com:
+    bar.example.com:
+dbservers:
+  hosts:
+    one.example.com:
+    two.example.com:
+    three.example.com:</code></pre>
+</section>
+<section >
+<h3>Inventory</h3>
+<pre data-id="id15"><code data-trim data-noescape class="default">inventory/
+  01-openstack.yml          # configure inventory plugin
+  02-dynamic-inventory.py   # dynamic inventory script
+  03-static-inventory       # add static hosts
+  group_vars/
+    all.yml                 # variables to all hosts
+</code></pre>
+</section>
+<section >
+<h3>Playbook</h3>
+<pre data-id="playbook"><code data-trim data-noescape class="console">$ ansible-playbook
+$ ansible-pull
+$ ansible-lint
+</code></pre>
+</section>
+<section >
+<h3>Plays and tasks</h3>
+<pre data-id="plays-and-tasks"><code data-trim data-noescape class="yaml" data-line-numbers="1|16|5-15">- name: Update web servers
+  hosts: webservers
+  remote_user: root
+
+  tasks:
+  - name: Ensure apache is at the latest version
+    ansible.builtin.yum:
+      name: httpd
+      state: latest
+
+  - name: Write the apache config file
+    ansible.builtin.template:
+      src: /srv/httpd.j2
+      dest: /etc/httpd.conf
+
+- name: Update db servers
+  hosts: databases
+  remote_user: root
+
+  tasks:
+  - name: Ensure postgresql is at the latest version
+    ansible.builtin.yum:
+      name: postgresql
+      state: latest
+
+  - name: Ensure that postgresql is started
+    ansible.builtin.service:
+      name: postgresql
+      state: started</code></pre>
+</section>
+<section >
+<h3>Handlers</h3>
+<pre data-id="handlers"><code data-trim data-noescape class="yaml" data-line-numbers="1-5|6-8|10-19|21-24|26-37">tasks:
+- name: Template configuration file
+  ansible.builtin.template:
+    src: template.j2
+    dest: /etc/foo.conf
+  notify:
+    - Restart apache
+    - Restart memcached
+
+handlers:
+  - name: Restart memcached
+    ansible.builtin.service:
+      name: memcached
+      state: restarted
+
+  - name: Restart apache
+    ansible.builtin.service:
+      name: apache
+      state: restarted
+---
+tasks:
+  - name: Restart everything
+    command: echo &quot;this task will restart the web services&quot;
+    notify: &quot;restart web services&quot;
+
+handlers:
+  - name: Restart memcached
+    service:
+      name: memcached
+      state: restarted
+    listen: &quot;restart web services&quot;
+
+  - name: Restart apache
+    service:
+      name: apache
+      state: restarted
+    listen: &quot;restart web services&quot;</code></pre>
+</section>
+<section >
+<h3>Variables</h3>
+<pre data-id="variables"><code data-trim data-noescape class="yaml" data-line-numbers="1-3|5-10|12-16|18-21">- hosts: app_servers
+  vars:
+      app_path: {{ base_path }}/22
+---
+- hosts: all
+  remote_user: root
+  vars:
+    favcolor: blue
+  vars_files:
+    - /vars/external_vars.yml
+---
+- hosts: web_servers
+  tasks:
+     - name: Run a shell command
+       ansible.builtin.shell: /usr/bin/foo
+       register: foo_result
+---
+- name: Setting host facts using complex arguments
+  ansible.builtin.set_fact:
+    one_fact: something
+    other_fact: &quot;{{ local_var * 2 }}&quot;</code></pre>
+</section>
+<section >
+<h3>Conditionals</h3>
+<pre data-id="conditionals"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|6-9">tasks:
+  - name: Shut down Debian flavored systems
+    ansible.builtin.command: /sbin/shutdown -t now
+    when: ansible_facts['os_family'] == &quot;Debian&quot;
+---
+tasks:
+  - ansible.builtin.shell: echo &quot;only on Red Hat 6&quot;
+    when: ansible_facts['os_family'] == &quot;RedHat&quot; and
+          ansible_facts['lsb']['major_release'] | int &gt;= 6</code></pre>
+</section>
+<section >
+<h3>Loops</h3>
+<pre data-id="loops"><code data-trim data-noescape class="yaml" data-line-numbers="1-8|10-17">- name: Add several users
+  ansible.builtin.user:
+    name: &quot;{{ item }}&quot;
+    state: present
+    groups: &quot;wheel&quot;
+  loop:
+     - testuser1
+     - testuser2
+---
+- name: Fail if return code is not 0
+  ansible.builtin.fail:
+    msg: &quot;The command ({{ it.cmd }}) did not have a 0 return code&quot;
+  when: it.rc != 0
+  loop: &quot;{{ echo.results }}&quot;
+  loop_control:
+    pause: 3
+    loop_var: it</code></pre>
+</section>
+<section >
+<h3>Tags</h3>
+<pre data-id="tags"><code data-trim data-noescape class="yaml">tasks:
+- name: Install the servers
+  ansible.builtin.yum:
+    name:
+    - httpd
+    state: present
+  tags:
+  - packages
+  - webservers</code></pre>
+<pre data-id="tags"><code data-trim data-noescape class="console">$ ansible-playbook --tags packages
+</code></pre>
+</section>
+<section >
+<h3>Tags</h3>
+<pre data-id="id16"><code data-trim data-noescape class="yaml">tasks:
+- name: Run the rarely-used debug task
+  ansible.builtin.debug:
+   msg: '{{ showmevar }}'
+  tags: [ never, debug ]
+
+- name: Configure the service
+  ansible.builtin.template:
+    src: templates/src.j2
+    dest: /etc/foo.conf
+  tags:
+  - always
+  - template</code></pre>
+<pre data-id="id16"><code data-trim data-noescape class="console">$ ansible-playbook --tags debug --skip-tags template
+</code></pre>
+</section>
+<section >
+<h3>Jinja2</h3>
+<pre data-id="jinja2"><code data-trim data-noescape class="yaml">---
+- name: Write hostname
+  hosts: all
+  tasks:
+  - name: &quot;write hostname {{ ansible_facts['hostname'] }}&quot;
+    ansible.builtin.template:
+       src: templates/test.j2
+       dest: /tmp/hostname
+</code></pre>
+<pre data-id="jinja2"><code data-trim data-noescape class="jinja">My name is {{ ansible_facts['hostname'] }}
+{% if True %}
+    yay
+{% endif %}
+{% for i in seq -%}
+    {{ i }}
+{%- endfor %}
+</code></pre>
+</section>
+<section >
+<h3>Filters</h3>
+<pre data-id="filters"><code data-trim data-noescape class="jinja">{{ some_variable | default(5) }}
+{{ dict | dict2items }}
+{{ some_variable | to_json }}
+</code></pre>
+</section>
+<section >
+<h3>Lookups</h3>
+<pre data-id="lookups"><code data-trim data-noescape class="yaml">vars:
+  motd_value: &quot;{{ lookup('file', '/etc/motd') }}&quot;
+tasks:
+  - debug:
+      msg: &quot;motd value is {{ motd_value }}&quot;
+</code></pre>
+</section>
+<section >
+<h3>Roles</h3>
+<pre data-id="roles"><code data-trim data-noescape class="default" data-line-numbers="1-2|3-4|5-6|7-8|9-11|12-13|14-15|16-17|18-20">roles/
+    common/
+        tasks/
+            main.yml
+        handlers/
+            main.yml
+        templates/
+            ntp.conf.j2
+        files/
+            bar.txt
+            foo.sh
+        vars/
+            main.yml
+        defaults/
+            main.yml
+        meta/
+            main.yml
+        library/
+        module_utils/
+        lookup_plugins/</code></pre>
+</section>
+<section >
+<h3>Roles</h3>
+<pre data-id="id17"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|6-10">- hosts: webservers
+  roles:
+    - common
+    - webservers
+---
+- hosts: webservers
+  tasks:
+    - name: Include the foo_app_instance role
+      include_role:
+        name: foo_app_instance</code></pre>
+</section>
+<section >
+<h3>Modules</h3>
+<pre data-id="modules"><code data-trim data-noescape class="console">$ ansible webservers -m service -a &quot;name=httpd state=started&quot;
+$ ansible webservers -m ping
+$ ansible webservers -m command -a &quot;/sbin/reboot -t now&quot;
+$ ansible-doc command
+$ ansible-doc -l
+</code></pre>
+<pre data-id="modules"><code data-trim data-noescape class="yaml" data-line-numbers="2,4-6">- name: reboot the servers
+  command: /sbin/reboot -t now
+- name: restart webserver
+  service:
+    name: httpd
+    state: restarted</code></pre>
+</section>
+<section >
+<h3>Plugins</h3>
+<pre data-id="id18"><code data-trim data-noescape class="yaml" data-line-numbers="2,6-8">- hosts: leaf01
+  connection: httpapi
+  gather_facts: false
+  tasks:
+  - name: type a simple arista command
+    eos_command:
+      commands:
+        - show version | json
+    register: command_output
+---
+vars:
+  kv: &quot;{{ lookup('consul_kv', 'key', host=localhost) }}&quot;</code></pre>
+</section>
+<section >
+<h3>Collections</h3>
+<pre data-id="collections"><code data-trim data-noescape class="default" data-line-numbers="2-9|10-17">namespace/
+├── collectionA/
+|   ├── docs/
+|   ├── galaxy.yml
+|   ├── plugins/
+|   │   ├── README.md
+|   │   └── modules/
+|   ├── README.md
+|   └── roles/
+└── collectionB/
+    ├── docs/
+    ├── galaxy.yml
+    ├── plugins/
+    │   ├── connection/
+    │   └── modules/
+    ├── README.md
+    └── roles/</code></pre>
+<pre data-id="collections"><code data-trim data-noescape class="console">$ ansible-galaxy collection
+</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Salt</h2>
+<a class="reference internal image-reference" href="_images/saltstack.svg"><img alt="_images/saltstack.svg" src="_images/saltstack.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Architecture</h3>
+<a class="reference internal image-reference" href="_images/salt-architecture.png"><img alt="_images/salt-architecture.png" src="_images/salt-architecture.png" style="width: 450px;" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Master/Minion</p></li>
+<li class="fragment"><p>Modules/States/Formulas</p></li>
+<li class="fragment"><p>Grains/Pillar</p></li>
+<li class="fragment"><p>Beacons/Reactors</p></li>
+</ul>
+</section>
+<section >
+<h3>Master/Minion</h3>
+<a class="reference internal image-reference" href="_images/salt-event-system.png"><img alt="_images/salt-event-system.png" src="_images/salt-event-system.png" style="width: 450px;" /></a>
+</section>
+<section >
+<h3>Modules</h3>
+<a class="reference internal image-reference" href="_images/salt-modules.png"><img alt="_images/salt-modules.png" src="_images/salt-modules.png" style="width: 450px;" /></a>
+</section>
+<section >
+<h3>States</h3>
+<a class="reference internal image-reference" href="_images/salt-states.png"><img alt="_images/salt-states.png" src="_images/salt-states.png" style="width: 300px;" /></a>
+</section>
+<section >
+<h3>States</h3>
+<a class="reference internal image-reference" href="_images/salt-states2.png"><img alt="_images/salt-states2.png" src="_images/salt-states2.png" style="width: 450px;" /></a>
+</section>
+<section >
+<h3>Jinja</h3>
+<pre data-id="jinja"><code data-trim data-noescape class="jinja"># Declare Jinja list
+{% set users = ['fred', 'bob', 'frank'] %}
+
+# Jinja `for` loop
+{% for user in users%}
+create_{{ user }}:
+  user.present:
+    - name: {{ user }}
+{% endfor %}
+</code></pre>
+</section>
+<section >
+<h3>Grains</h3>
+<a class="reference internal image-reference" href="_images/salt-grains.png"><img alt="_images/salt-grains.png" src="_images/salt-grains.png" style="width: 300px;" /></a>
+</section>
+<section >
+<h3>Grains</h3>
+<pre data-id="id22"><code data-trim data-noescape class="bash">salt -G 'os:CentOS' test.version
+</code></pre>
+<pre data-id="id22"><code data-trim data-noescape class="jinja">{{ grains['os'] }}
+</code></pre>
+</section>
+<section >
+<h3>Pillar</h3>
+<a class="reference internal image-reference" href="_images/salt-pillar.png"><img alt="_images/salt-pillar.png" src="_images/salt-pillar.png" style="width: 300px;" /></a>
+</section>
+<section >
+<h3>Pillar</h3>
+<pre data-id="id23"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|5-13">/srv/pillar/top.sls:
+  base:
+    '*':
+      - example
+/srv/pillar/example.sls:
+  pillar1: value
+  pillar2:
+    - value
+    - value
+  pillar3:
+    sub_key:
+      - value
+      - value</code></pre>
+<pre data-id="id23"><code data-trim data-noescape class="jinja">{{ pillar['foo']['bar']['baz'] }}
+</code></pre>
+</section>
+<section >
+<h3>Beacons</h3>
+<a class="reference internal image-reference" href="_images/salt-beacons.png"><img alt="_images/salt-beacons.png" src="_images/salt-beacons.png" style="width: 450px;" /></a>
+</section>
+<section >
+<h3>Beacons</h3>
+<pre data-id="id24"><code data-trim data-noescape class="yaml" data-line-numbers="1-10|13-17"> beacons:
+   inotify:
+     - files:
+         /etc/named.conf:
+            mask:
+              - close_write
+              - create
+              - delete
+              - modify
+     - disable_during_state_run: True
+
+
+salt/beacon/20190418-sosf-master/inotify//etc/named.conf {
+    &quot;_stamp&quot;: &quot;2019-05-06T19:30:35.397508&quot;,
+    &quot;change&quot;: &quot;IN_IGNORED&quot;,&quot;id&quot;: &quot;20190418-sosf-master&quot;,
+    &quot;path&quot;: &quot;/etc/named.conf&quot;
+}</code></pre>
+</section>
+<section >
+<h3>Reactors</h3>
+<a class="reference internal image-reference" href="_images/salt-reactors.jpg"><img alt="_images/salt-reactors.jpg" src="_images/salt-reactors.jpg" style="width: 450px;" /></a>
+</section>
+<section >
+<h3>Reactors</h3>
+<pre data-id="id25"><code data-trim data-noescape class="yaml" data-line-numbers="1-8|10-15">/etc/salt/master.d/reactor.conf:
+  reactor:
+    - 'salt/minion/*/start':
+      - /srv/reactor/start.sls
+    - 'mycustom/app/tag':
+      - /srv/reactor/mycustom.sls
+    - salt/beacon/*/inotify//etc/important_file:
+      - /srv/reactor/revert.sls
+---
+/srv/reactor/restart-web-farm.sls:
+  restart_service:
+    Local.service.restart:
+      - tgt: 'web*'
+      - arg:
+        - httpd</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Secret Management</h2>
+<a class="reference internal image-reference" href="_images/vault.svg"><img alt="_images/vault.svg" src="_images/vault.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Ansible Vault</h3>
+<ul class="simple">
+<li class="fragment"><p>create/view/edit</p></li>
+<li class="fragment"><p>decrypt/encrypt/encrypt_string</p></li>
+<li class="fragment"><p>rekey</p></li>
+</ul>
+</section>
+<section >
+<h3>Ansible Vault</h3>
+<pre data-id="id26"><code data-trim data-noescape class="default">$ANSIBLE_VAULT;1.2;AES256;dev
+37636561366636643464376336303466613062633537323632306566653533383833366462366662
+6565353063303065303831323539656138653863353230620a653638643639333133306331336365
+62373737623337616130386137373461306535383538373162316263386165376131623631323434
+3866363862363335620a376466656164383032633338306162326639643635663936623939666238
+3161
+</code></pre>
+</section>
+<section >
+<h3>Age</h3>
+<ul class="simple">
+<li class="fragment"><p>passphrase</p></li>
+<li class="fragment"><p>keys</p></li>
+</ul>
+</section>
+<section >
+<h3>Age</h3>
+<pre data-id="id27"><code data-trim data-noescape class="console">$ age -p secrets.txt &gt; secrets.txt.age
+Enter passphrase (leave empty to autogenerate a secure one):
+Using the autogenerated passphrase &quot;release-response-step-brand-wrap-ankle-pair-unusual-sword-train&quot;.
+$ age -d secrets.txt.age &gt; secrets.txt
+Enter passphrase:
+</code></pre>
+</section>
+<section >
+<h3>Age</h3>
+<pre data-id="id28"><code data-trim data-noescape class="console">$ cat recipients.txt
+# Alice
+age1ql3z7hjy54pw3hyww5ayyfg7zqgvc7w3j2elw8zmrj2kg5sfn9aqmcac8p
+# Bob
+age1lggyhqrw2nlhcxprm67z43rta597azn8gknawjehu9d9dl0jq3yqqvfafg
+$ age -R recipients.txt example.jpg &gt; example.jpg.age
+</code></pre>
+</section>
+<section >
+<h3>Sops</h3>
+<ul class="simple">
+<li class="fragment"><p>PGP/AGE</p></li>
+<li class="fragment"><p>KMS Azure/AWS/GCP</p></li>
+<li class="fragment"><p>Hashicorp Vault</p></li>
+</ul>
+</section>
+<section >
+<h3>Sops</h3>
+<p><code class="docutils literal notranslate"><span class="pre">command</span> <span class="pre">line</span></code></p>
+<pre data-id="id29"><code data-trim data-noescape class="console">$ sops --encrypt --age age1yt3tfqlfrwdwx... \
+    test.yaml &gt; test.enc.yaml
+</code></pre>
+<p><code class="docutils literal notranslate"><span class="pre">.sops.yaml</span></code></p>
+<pre data-id="id29"><code data-trim data-noescape class="yaml">creation_rules:
+- pgp: &gt;-
+    85D77543B3D624B63CEA9E6DBC17301B491B3F21,
+    FBC7B9E2A4F9289AC0C1D4843D16CEE4A27381B4
+</code></pre>
+</section>
+<section >
+<h3>Sops Types</h3>
+<ul class="simple">
+<li class="fragment"><p>YAML</p></li>
+<li class="fragment"><p>JSON</p></li>
+<li class="fragment"><p>ENV</p></li>
+<li class="fragment"><p>INI</p></li>
+</ul>
+</section>
+<section >
+<h3>Sops Types</h3>
+<pre data-id="id30"><code data-trim data-noescape class="console">$ sops -e myfile.json &gt; myfile.json.enc
+$ sops -d --input-type json myfile.json.enc
+</code></pre>
+</section>
+<section >
+<h3>Sops Exec</h3>
+<pre data-id="sops-exec"><code data-trim data-noescape class="console">$ sops exec-env out.json 'echo secret: $database_password; ./database-import'
+secret: jf48t9wfw094gf4nhdf023r
+$ sops exec-file --no-fifo out.json 'TMPFILE={} sh'
+sh-3.2$ echo $TMPFILE
+/tmp/.sops506055069/tmp-file291138648
+</code></pre>
+</section>
+<section >
+<h3>Hashicorp Vault</h3>
+<a class="reference internal image-reference" href="_images/vault1.jpg"><img alt="_images/vault1.jpg" src="_images/vault1.jpg" style="width: 650px;" /></a>
+</section>
+<section >
+<h3>Hashicorp Vault</h3>
+<a class="reference internal image-reference" href="_images/vault2.jpg"><img alt="_images/vault2.jpg" src="_images/vault2.jpg" style="width: 500px;" /></a>
+</section>
+<section >
+<h3>KV Engine</h3>
+<a class="reference internal image-reference" href="_images/vault-kv.jpg"><img alt="_images/vault-kv.jpg" src="_images/vault-kv.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>LDAP Engine</h3>
+<a class="reference internal image-reference" href="_images/vault-ldap.jpg"><img alt="_images/vault-ldap.jpg" src="_images/vault-ldap.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>PKI Engine</h3>
+<a class="reference internal image-reference" href="_images/vault-pki.jpg"><img alt="_images/vault-pki.jpg" src="_images/vault-pki.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Transit Engine</h3>
+<a class="reference internal image-reference" href="_images/vault-transit.jpg"><img alt="_images/vault-transit.jpg" src="_images/vault-transit.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>SSH OTP</h3>
+<a class="reference internal image-reference" href="_images/vault-ssh-otp.jpg"><img alt="_images/vault-ssh-otp.jpg" src="_images/vault-ssh-otp.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Vault Agent</h3>
+<a class="reference internal image-reference" href="_images/vault-agent.jpg"><img alt="_images/vault-agent.jpg" src="_images/vault-agent.jpg" style="width: 700px;" /></a>
+</section>
+</section>
+<section>
+<section >
+<h2>RabbitMQ</h2>
+<a class="reference internal image-reference" href="_images/rabbitmq.svg"><img alt="_images/rabbitmq.svg" src="_images/rabbitmq.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Publisher/Consumer</p></li>
+<li class="fragment"><p>Queue</p></li>
+<li class="fragment"><p>Exchange</p></li>
+<li class="fragment"><p>Binding</p></li>
+<li class="fragment"><p>Messages</p></li>
+</ul>
+</section>
+<section >
+<h3>AMQP</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-routing.png"><img alt="_images/rabbitmq-routing.png" src="_images/rabbitmq-routing.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Publisher</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-publisher.svg"><img alt="_images/rabbitmq-publisher.svg" src="_images/rabbitmq-publisher.svg" width="700px" /></a>
+<ul class="simple">
+<li class="fragment"><p>Open connection/channel</p></li>
+<li class="fragment"><p>Declare entities</p></li>
+<li class="fragment"><p>Write exchange</p></li>
+<li class="fragment"><p>Define delivery mode/routing key</p></li>
+</ul>
+</section>
+<section >
+<h3>Exchange/Bindings</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-exchange.svg"><img alt="_images/rabbitmq-exchange.svg" src="_images/rabbitmq-exchange.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Exchange Types</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-exchange.svg"><img alt="_images/rabbitmq-exchange.svg" src="_images/rabbitmq-exchange.svg" width="700px" /></a>
+<p><a class="reference download internal" download="" href="_downloads/bae14c648f404280c7825d5b3fdf8ec4/rabbitmq-exchange.svg"><span class="xref download myst"> </span></a></p>
+<ul class="simple">
+<li class="fragment"><p>Direct</p></li>
+<li class="fragment"><p>Fanout</p></li>
+<li class="fragment"><p>Topic</p></li>
+<li class="fragment"><p>Headers</p></li>
+</ul>
+</section>
+<section >
+<h3>Exchange Attributes</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-exchange.svg"><img alt="_images/rabbitmq-exchange.svg" src="_images/rabbitmq-exchange.svg" width="700px" /></a>
+<ul class="simple">
+<li class="fragment"><p>Name</p></li>
+<li class="fragment"><p>Durability</p></li>
+<li class="fragment"><p>Auto-delete</p></li>
+</ul>
+</section>
+<section >
+<h3>Queues</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-queue.svg"><img alt="_images/rabbitmq-queue.svg" src="_images/rabbitmq-queue.svg" width="700px" /></a>
+<p>Properties</p>
+<ul class="simple">
+<li class="fragment"><p>Name</p></li>
+<li class="fragment"><p>Durable</p></li>
+<li class="fragment"><p>Exclusive</p></li>
+<li class="fragment"><p>Auto-delete</p></li>
+</ul>
+</section>
+<section >
+<h3>Messages</h3>
+<ul class="simple">
+<li class="fragment"><p>Payload</p></li>
+<li class="fragment"><p>Routing Key</p></li>
+<li class="fragment"><p>Delivery Mode</p></li>
+<li class="fragment"><p>Headers</p></li>
+</ul>
+</section>
+<section >
+<h3>Consumer</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-consumer.svg"><img alt="_images/rabbitmq-consumer.svg" src="_images/rabbitmq-consumer.svg" width="700px" /></a>
+<ul class="simple">
+<li class="fragment"><p>Open connection/channel</p></li>
+<li class="fragment"><p>Declare entities</p></li>
+<li class="fragment"><p>Consume from queue</p></li>
+</ul>
+</section>
+<section >
+<h3>Consume Messages</h3>
+<a class="reference internal image-reference" href="_images/rabbitmq-consumer.svg"><img alt="_images/rabbitmq-consumer.svg" src="_images/rabbitmq-consumer.svg" width="700px" /></a>
+<ul class="simple">
+<li class="fragment"><p><strong>Push</strong>/Pull API</p></li>
+<li class="fragment"><p>Ack/Nack/AutoAck</p></li>
+<li class="fragment"><p>Prefetch</p></li>
+</ul>
+</section>
+</section>
+<section>
+<section >
+<h2>Kafka</h2>
+<a class="reference internal image-reference" href="_images/kafka.svg"><img alt="_images/kafka.svg" src="_images/kafka.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Producer/Consumer</p></li>
+<li class="fragment"><p>Cluster/Broker</p></li>
+<li class="fragment"><p>Topic/Partitions</p></li>
+<li class="fragment"><p>Consumer Groups</p></li>
+</ul>
+</section>
+<section >
+<h3>Concepts</h3>
+<a class="reference internal image-reference" href="_images/kafka-cluster.svg"><img alt="_images/kafka-cluster.svg" src="_images/kafka-cluster.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Cluster</h3>
+<p><img alt="" src="_images/kafka-cluster1.svg" /></p>
+<ul class="simple">
+<li class="fragment"><p>Broker</p></li>
+<li class="fragment"><p>Controller(w/o ZooKeeper)</p></li>
+</ul>
+</section>
+<section >
+<h3>Topic/Partitions</h3>
+<p><img alt="" src="_images/kafka-topic.svg" /></p>
+<p><a class="reference download internal" download="" href="_downloads/43661529b4e22f5f4222141e9233cfa9/kafka-topic.svg"><span class="xref download myst"> </span></a></p>
+<ul class="simple">
+<li class="fragment"><p>Retention</p></li>
+<li class="fragment"><p>Replication Factor</p></li>
+<li class="fragment"><p>Leader</p></li>
+<li class="fragment"><p>Follower</p></li>
+</ul>
+</section>
+<section >
+<h3>Message</h3>
+<ul class="simple">
+<li class="fragment"><p>Value</p></li>
+<li class="fragment"><p>Timestamp</p></li>
+<li class="fragment"><p>Key</p></li>
+<li class="fragment"><p>Headers</p></li>
+</ul>
+</section>
+<section >
+<h3>Producer</h3>
+<p><img alt="" src="_images/kafka-producer.svg" /></p>
+<ul class="simple">
+<li class="fragment"><p>acks settings</p></li>
+<li class="fragment"><p>partition assignment</p></li>
+</ul>
+</section>
+<section >
+<h3>Consumer</h3>
+<p><img alt="" src="_images/kafka-consumer.svg" /></p>
+<ul class="simple">
+<li class="fragment"><p>__consumer_offsets</p></li>
+</ul>
+</section>
+</section>
+<section>
+<section >
+<h2>Terraform</h2>
+<a class="reference internal image-reference" href="_images/terraform.svg"><img alt="_images/terraform.svg" src="_images/terraform.svg" width="200px" /></a>
+</section>
+<section >
+<h3></h3>
+<a class="reference internal image-reference" href="_images/terraform1.jpg"><img alt="_images/terraform1.jpg" src="_images/terraform1.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3></h3>
+<a class="reference internal image-reference" href="_images/terraform2.jpg"><img alt="_images/terraform2.jpg" src="_images/terraform2.jpg" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Configuration</p></li>
+<li class="fragment"><p>State</p></li>
+<li class="fragment"><p>Provider</p></li>
+</ul>
+</section>
+<section >
+<h3>Configuration</h3>
+<pre data-id="configuration"><code data-trim data-noescape class="tf">resource &quot;aws_vpc&quot; &quot;main&quot; {
+  cidr_block = var.base_cidr_block
+}
+
+&lt;BLOCK TYPE&gt; &quot;&lt;BLOCK LABEL&gt;&quot; &quot;&lt;BLOCK LABEL&gt;&quot; {
+  # Block body
+  &lt;IDENTIFIER&gt; = &lt;EXPRESSION&gt; # Argument
+}</code></pre>
+</section>
+<section >
+<h3>Terraform</h3>
+<pre data-id="id39"><code data-trim data-noescape class="tf">terraform {
+  required_providers {
+    aws = {
+      version = &quot;&gt;= 2.7.0&quot;
+      source = &quot;hashicorp/aws&quot;
+    }
+  }
+  experiments = [example]
+}</code></pre>
+</section>
+<section >
+<h3>Provider</h3>
+<pre data-id="id40"><code data-trim data-noescape class="tf">terraform {
+  required_providers {
+    mycloud = {
+      source  = &quot;mycorp/mycloud&quot;
+      version = &quot;~&gt; 1.0&quot;
+    }
+  }
+}
+
+provider &quot;mycloud&quot; {
+  # ...
+}</code></pre>
+</section>
+<section >
+<h3>Resource</h3>
+<pre data-id="resource"><code data-trim data-noescape class="tf">resource &quot;aws_instance&quot; &quot;web&quot; {
+  ami           = &quot;ami-a1b2c3d4&quot;
+  instance_type = &quot;t2.micro&quot;
+}</code></pre>
+</section>
+<section >
+<h3>Variables</h3>
+<pre data-id="id41"><code data-trim data-noescape class="tf" data-line-numbers="1-9|10-24|25-28">variable &quot;image_id&quot; {
+  type = string
+}
+
+variable &quot;availability_zone_names&quot; {
+  type    = list(string)
+  default = [&quot;us-west-1a&quot;]
+}
+
+variable &quot;docker_ports&quot; {
+  type = list(object({
+    internal = number
+    external = number
+    protocol = string
+  }))
+  default = [
+    {
+      internal = 8300
+      external = 8300
+      protocol = &quot;tcp&quot;
+    }
+  ]
+}
+
+resource &quot;aws_instance&quot; &quot;example&quot; {
+  instance_type = &quot;t2.micro&quot;
+  ami           = var.image_id
+}</code></pre>
+<pre data-id="id41"><code data-trim data-noescape class="console">$ terraform apply -var=&quot;image_id=ami-abc123&quot;
+$ terraform apply -var-file=&quot;testing.tfvars&quot;</code></pre>
+</section>
+<section >
+<h3>Data Sources</h3>
+<pre data-id="data-sources"><code data-trim data-noescape class="tf">data &quot;aws_ami&quot; &quot;example&quot; {
+  most_recent = true
+
+  owners = [&quot;self&quot;]
+  tags = {
+    Name   = &quot;app-server&quot;
+    Tested = &quot;true&quot;
+  }
+}</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>CI/CD</h2>
+<a class="reference internal image-reference" href="_images/cicd.svg"><img alt="_images/cicd.svg" src="_images/cicd.svg" width="200px" /></a>
+</section>
+<section >
+<h3>CI/CD</h3>
+<ul class="simple">
+<li class="fragment"><p>Plan</p></li>
+<li class="fragment"><p>Code</p></li>
+<li class="fragment"><p>Build</p></li>
+<li class="fragment"><p>Test</p></li>
+<li class="fragment"><p>Release</p></li>
+<li class="fragment"><p>Deploy</p></li>
+<li class="fragment"><p>Operate</p></li>
+<li class="fragment"><p>Monitor</p></li>
+</ul>
+</section>
+<section >
+<h3>Pipeline</h3>
+<img alt="_images/pipeline-flow.png" src="_images/pipeline-flow.png" />
+</section>
+<section >
+<h3>CI/CD Tools</h3>
+<a class="reference internal image-reference" href="_images/gitlab.svg"><img alt="_images/gitlab.svg" src="_images/gitlab.svg" width="200px" /></a>
+<a class="reference internal image-reference" href="_images/jenkins.svg"><img alt="_images/jenkins.svg" src="_images/jenkins.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Gitlab CI</h3>
+<ul class="simple">
+<li class="fragment"><p>Pipelines</p></li>
+<li class="fragment"><p>Runners</p></li>
+<li class="fragment"><p>Variables</p></li>
+<li class="fragment"><p>Components</p></li>
+</ul>
+</section>
+<section >
+<h3>Gitlab Pipeline</h3>
+<a class="reference internal image-reference" href="_images/gitlab-slides1.png"><img alt="_images/gitlab-slides1.png" src="_images/gitlab-slides1.png" style="width: 500px;" /></a>
+<pre data-id="gitlab-pipeline"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|6-7|9-17|19-29|31-43">stages:
+  - build
+  - test
+  - deploy
+
+default:
+  image: alpine
+
+build_a:
+  stage: build
+  script:
+    - echo &quot;This job builds something.&quot;
+
+build_b:
+  stage: build
+  script:
+    - echo &quot;This job builds something else.&quot;
+
+test_a:
+  stage: test
+  script:
+    - echo &quot;This job tests something. It will only run when all jobs in the&quot;
+    - echo &quot;build stage are complete.&quot;
+
+test_b:
+  stage: test
+  script:
+    - echo &quot;This job tests something else. It will only run when all jobs in the&quot;
+    - echo &quot;build stage are complete too. It will start at about the same time as test_a.&quot;
+
+deploy_a:
+  stage: deploy
+  script:
+    - echo &quot;This job deploys something. It will only run when all jobs in the&quot;
+    - echo &quot;test stage complete.&quot;
+  environment: production
+
+deploy_b:
+  stage: deploy
+  script:
+    - echo &quot;This job deploys something else. It will only run when all jobs in the&quot;
+    - echo &quot;test stage complete. It will start at about the same time as deploy_a.&quot;
+  environment: production</code></pre>
+</section>
+<section >
+<h3></h3>
+<a class="reference internal image-reference" href="_images/gitlab-slides2.png"><img alt="_images/gitlab-slides2.png" src="_images/gitlab-slides2.png" style="width: 200px;" /></a>
+<pre data-id="id43"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|9-17|19-31|33-46">stages:
+  - build
+  - test
+  - deploy
+
+default:
+  image: alpine
+
+build_a:
+  stage: build
+  script:
+    - echo &quot;This job builds something quickly.&quot;
+
+build_b:
+  stage: build
+  script:
+    - echo &quot;This job builds something else slowly.&quot;
+
+test_a:
+  stage: test
+  needs: [build_a]
+  script:
+    - echo &quot;This test job will start as soon as build_a finishes.&quot;
+    - echo &quot;It will not wait for build_b, or other jobs in the build stage, to finish.&quot;
+
+test_b:
+  stage: test
+  needs: [build_b]
+  script:
+    - echo &quot;This test job will start as soon as build_b finishes.&quot;
+    - echo &quot;It will not wait for other jobs in the build stage to finish.&quot;
+
+deploy_a:
+  stage: deploy
+  needs: [test_a]
+  script:
+    - echo &quot;Since build_a and test_a run quickly, this deploy job can run much earlier.&quot;
+    - echo &quot;It does not need to wait for build_b or test_b.&quot;
+  environment: production
+
+deploy_b:
+  stage: deploy
+  needs: [test_b]
+  script:
+    - echo &quot;Since build_b and test_b run slowly, this deploy job will run much later.&quot;
+  environment: production</code></pre>
+</section>
+<section >
+<h3></h3>
+<a class="reference internal image-reference" href="_images/gitlab-slides3.png"><img alt="_images/gitlab-slides3.png" src="_images/gitlab-slides3.png" style="width: 200px;" /></a>
+<pre data-id="id44"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|5-18|19-24|25-35"># parent: /.gitlab-ci.yml
+stages:
+  - triggers
+
+trigger_a:
+  stage: triggers
+  trigger:
+    include: a/.gitlab-ci.yml
+  rules:
+    - changes:
+        - a/*
+trigger_b:
+  stage: triggers
+  trigger:
+    include: b/.gitlab-ci.yml
+  rules:
+    - changes:
+        - b/*
+# child: /a/.gitlab-ci.yml
+stages:
+  - build
+  - test
+  - deploy
+
+build_a:
+  stage: build
+  script:
+    - echo &quot;This job builds something.&quot;
+
+test_a:
+  stage: test
+  needs: [build_a]
+  script:
+    - echo &quot;This job tests something.&quot;
+
+deploy_a:
+  stage: deploy
+  needs: [test_a]
+  script:
+    - echo &quot;This job deploys something.&quot;
+  environment: production</code></pre>
+</section>
+<section >
+<h3>Jenkins</h3>
+<ul class="simple">
+<li class="fragment"><p>Job/Pipeline</p></li>
+<li class="fragment"><p>Master(Controller)</p></li>
+<li class="fragment"><p>Node/Agent</p></li>
+</ul>
+</section>
+<section >
+<h3>Jenkins Pipeline</h3>
+<ul class="simple">
+<li class="fragment"><p>Scripted</p></li>
+<li class="fragment"><p>Declarative</p></li>
+</ul>
+</section>
+<section >
+<h3>Scripted Pipeline</h3>
+<pre data-id="scripted-pipeline"><code data-trim data-noescape class="groovy" data-line-numbers="1-2|3-11"># Jenkinsfile
+node {
+    stage('Build') {
+        //
+    }
+    stage('Test') {
+        //
+    }
+    stage('Deploy') {
+        //
+    }
+}</code></pre>
+</section>
+<section >
+<h3>Declarative Pipeline</h3>
+<pre data-id="declarative-pipeline"><code data-trim data-noescape class="groovy" data-line-numbers="1-2|3|4-9|6-8|10-18"># Jenkinsfile
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                //
+            }
+        }
+        stage('Test') {
+            steps {
+                //
+            }
+        }
+        stage('Deploy') {
+            steps {
+                //
+            }
+        }
+    }
+}</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Prometheus</h2>
+<a class="reference internal image-reference" href="_images/prometheus.svg"><img alt="_images/prometheus.svg" src="_images/prometheus.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Metrics</p></li>
+<li class="fragment"><p>TSDB</p></li>
+<li class="fragment"><p>Exporters</p></li>
+<li class="fragment"><p>Service Discovery</p></li>
+<li class="fragment"><p>PromQL</p></li>
+<li class="fragment"><p>Visualization</p></li>
+<li class="fragment"><p>Alerting</p></li>
+</ul>
+</section>
+<section >
+<h3>Architecture</h3>
+<a class="reference internal image-reference" href="_images/prometheus-arch.png"><img alt="_images/prometheus-arch.png" src="_images/prometheus-arch.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Metrics</h3>
+<ul class="simple">
+<li class="fragment"><p><code class="docutils literal notranslate"><span class="pre">&lt;metric_name&gt;{&lt;label&gt;=&lt;value&gt;,</span> <span class="pre">...}</span></code></p></li>
+<li class="fragment"><p>Samples: [float64 value, millisecond timestamp]</p></li>
+<li class="fragment"><p>Time Series</p></li>
+</ul>
+</section>
+<section >
+<h3>Metric Types</h3>
+<ul class="simple">
+<li class="fragment"><p>Counter</p></li>
+<li class="fragment"><p>Gauge</p></li>
+<li class="fragment"><p>Histogram</p></li>
+<li class="fragment"><p>Summary</p></li>
+</ul>
+</section>
+<section >
+<h3>PromQL</h3>
+<pre data-id="promql"><code data-trim data-noescape class="bash" data-line-numbers="1|2|3|4-6|7">http_requests_total
+http_requests_total{job=&quot;apiserver&quot;, handler=&quot;/api/comments&quot;}
+rate(http_requests_total[5m])
+sum by (job) (
+  rate(http_requests_total[5m])
+)
+(instance_memory_limit - instance_memory_usage) / 1024 / 1024</code></pre>
+</section>
+<section >
+<h3>Visualization</h3>
+<a class="reference internal image-reference" href="_images/grafana1.png"><img alt="_images/grafana1.png" src="_images/grafana1.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Visualization</h3>
+<a class="reference internal image-reference" href="_images/grafana2.png"><img alt="_images/grafana2.png" src="_images/grafana2.png" style="width: 650px;" /></a>
+</section>
+<section >
+<h3>Alerting</h3>
+<ul class="simple">
+<li class="fragment"><p>Rules</p></li>
+<li class="fragment"><p>Notifications</p></li>
+<li class="fragment"><p>Grouping</p></li>
+<li class="fragment"><p>Inhibition</p></li>
+<li class="fragment"><p>Silences</p></li>
+</ul>
+</section>
+<section >
+<h3>Alerting Rules</h3>
+<pre data-id="alerting-rules"><code data-trim data-noescape class="yaml">groups:
+- name: example
+  rules:
+  - alert: HighRequestLatency
+    expr: job:request_latency_seconds:mean5m{job=&quot;myjob&quot;} &gt; 0.5
+    for: 10m
+    labels:
+      severity: page
+    annotations:
+      summary: High request latency
+</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>ELK</h2>
+<a class="reference internal image-reference" href="_images/elk.svg"><img alt="_images/elk.svg" src="_images/elk.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Components</h3>
+<ul class="simple">
+<li class="fragment"><p>Elasticsearch</p></li>
+<li class="fragment"><p>Logstash</p></li>
+<li class="fragment"><p>Kibana</p></li>
+<li class="fragment"><p>*beats</p></li>
+</ul>
+</section>
+<section >
+<h3>Architecture</h3>
+<a class="reference internal image-reference" href="_images/elk-slides1.png"><img alt="_images/elk-slides1.png" src="_images/elk-slides1.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Architecture</h3>
+<a class="reference internal image-reference" href="_images/elk-slides2.png"><img alt="_images/elk-slides2.png" src="_images/elk-slides2.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Elasticsearch</h3>
+<ul class="simple">
+<li class="fragment"><p>Index</p></li>
+<li class="fragment"><p>Mapping</p></li>
+<li class="fragment"><p>Document</p></li>
+<li class="fragment"><p>Field</p></li>
+</ul>
+</section>
+<section >
+<h3>Search</h3>
+<pre data-id="search"><code data-trim data-noescape class="json">GET /_search
+{
+  &quot;query&quot;: {
+    &quot;query_string&quot;: {
+      &quot;query&quot;: &quot;(new york city) OR (big apple)&quot;,
+      &quot;default_field&quot;: &quot;content&quot;
+    }
+  }
+}
+</code></pre>
+</section>
+<section >
+<h3>Elastic Index Shards</h3>
+<a class="reference internal image-reference" href="_images/elk-slides3.png"><img alt="_images/elk-slides3.png" src="_images/elk-slides3.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Elastic Index Status</h3>
+<ul class="simple">
+<li><p>Green</p></li>
+<li><p>Yellow</p></li>
+<li><p>Red</p></li>
+</ul>
+</section>
+<section >
+<h3>Elastic ILM</h3>
+<a class="reference internal image-reference" href="_images/elk-slides4.png"><img alt="_images/elk-slides4.png" src="_images/elk-slides4.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Elastic Nodes</h3>
+<ul class="simple">
+<li class="fragment"><p>Master</p></li>
+<li class="fragment"><p>Data</p></li>
+<li class="fragment"><p>Ingest</p></li>
+</ul>
+</section>
+<section >
+<h3>Logstash</h3>
+<pre data-id="logstash"><code data-trim data-noescape class="nginx">input {
+  ...
+}
+
+filter {
+  ...
+}
+
+output {
+  ...
+}
+</code></pre>
+</section>
+<section >
+<h3>Kibana</h3>
+<ul class="simple">
+<li class="fragment"><p>Visualization</p></li>
+<li class="fragment"><p>Dashboards</p></li>
+<li class="fragment"><p>Search and Analytics</p></li>
+<li class="fragment"><p>Monitoring and Alerting</p></li>
+</ul>
+</section>
+</section>
+<section>
+<section >
+<h2>Jaeger</h2>
+<a class="reference internal image-reference" href="_images/jaeger.svg"><img alt="_images/jaeger.svg" src="_images/jaeger.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Trace</p></li>
+<li class="fragment"><p>Span</p></li>
+<li class="fragment"><p>Tags/Attributes</p></li>
+<li class="fragment"><p>Logs/Events</p></li>
+<li class="fragment"><p>Provider</p></li>
+<li class="fragment"><p>Exporter</p></li>
+<li class="fragment"><p>Resource</p></li>
+</ul>
+</section>
+<section >
+<h3>Traces/Spans</h3>
+<a class="reference internal image-reference" href="_images/spans-traces.png"><img alt="_images/spans-traces.png" src="_images/spans-traces.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>End-to-End Tracing</h3>
+<a class="reference internal image-reference" href="_images/jaeger-slide1.png"><img alt="_images/jaeger-slide1.png" src="_images/jaeger-slide1.png" style="width: 600px;" /></a>
+</section>
+<section >
+<h3>End-to-End Tracing</h3>
+<a class="reference internal image-reference" href="_images/jaeger-slide2.png"><img alt="_images/jaeger-slide2.png" src="_images/jaeger-slide2.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Components</h3>
+<ul class="simple">
+<li class="fragment"><p>Tracing SDK</p></li>
+<li class="fragment"><p>Collector</p></li>
+<li class="fragment"><p>Query</p></li>
+<li class="fragment"><p>Ingester</p></li>
+</ul>
+</section>
+<section >
+<h3>Components</h3>
+<a class="reference internal image-reference" href="_images/jaeger-slide3.png"><img alt="_images/jaeger-slide3.png" src="_images/jaeger-slide3.png" style="width: 700px;" /></a>
+</section>
+</section>
+<section>
+<section >
+<h2>Opentelemetry</h2>
+<a class="reference internal image-reference" href="_images/otel.svg"><img alt="_images/otel.svg" src="_images/otel.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Observability</h3>
+<a class="reference internal image-reference" href="_images/otel-slides1.svg"><img alt="_images/otel-slides1.svg" src="_images/otel-slides1.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Signals</h3>
+<ul class="simple">
+<li class="fragment"><p>Traces</p></li>
+<li class="fragment"><p>Metrics</p></li>
+<li class="fragment"><p>Logs</p></li>
+</ul>
+</section>
+<section >
+<h3>Components</h3>
+<ul class="simple">
+<li class="fragment"><p>Specification</p></li>
+<li class="fragment"><p>Instrumentation</p></li>
+<li class="fragment"><p>Collector</p></li>
+</ul>
+</section>
+<section >
+<h3>Instrumentation</h3>
+<ul class="simple">
+<li class="fragment"><p>Zero-code</p></li>
+<li class="fragment"><p>Code-based</p></li>
+</ul>
+</section>
+<section >
+<h3>Collector</h3>
+<a class="reference internal image-reference" href="_images/otel-slides2.svg"><img alt="_images/otel-slides2.svg" src="_images/otel-slides2.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Collector</h3>
+<pre data-id="id55"><code data-trim data-noescape class="yaml" data-line-numbers="1-7|11-13|8-9|15-28">receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+processors:
+  batch:
+
+exporters:
+  otlp:
+    endpoint: otelcol:4317
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp]</code></pre>
+</section>
+</section>
+<section>
+<section >
+<h2>Istio</h2>
+<a class="reference internal image-reference" href="_images/istio.svg"><img alt="_images/istio.svg" src="_images/istio.svg" width="200px" /></a>
+</section>
+<section >
+<h3>Service Mesh</h3>
+<a class="reference internal image-reference" href="_images/istio1-slides.svg"><img alt="_images/istio1-slides.svg" src="_images/istio1-slides.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Service Mesh</h3>
+<a class="reference internal image-reference" href="_images/istio2-slides.svg"><img alt="_images/istio2-slides.svg" src="_images/istio2-slides.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Traffic managment</p></li>
+<li class="fragment"><p>Observability</p></li>
+<li class="fragment"><p>Security</p></li>
+<li class="fragment"><p>Extensibility</p></li>
+</ul>
+</section>
+<section >
+<h3>Traffic managment</h3>
+<a class="reference internal image-reference" href="_images/istio3-slides.svg"><img alt="_images/istio3-slides.svg" src="_images/istio3-slides.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Traffic managment</h3>
+<ul class="simple">
+<li class="fragment"><p>VirtualService</p></li>
+<li class="fragment"><p>DestinationRule</p></li>
+<li class="fragment"><p>Gateway</p></li>
+<li class="fragment"><p>ServiceEntry</p></li>
+</ul>
+</section>
+<section >
+<h3>Traffic managment</h3>
+<ul class="simple">
+<li class="fragment"><p>Timeouts</p></li>
+<li class="fragment"><p>Retries</p></li>
+<li class="fragment"><p>Circuit breakers</p></li>
+<li class="fragment"><p>Fault injection</p></li>
+</ul>
+</section>
+<section >
+<h3>Security</h3>
+<a class="reference internal image-reference" href="_images/istio4-slides.svg"><img alt="_images/istio4-slides.svg" src="_images/istio4-slides.svg" width="700px" /></a>
+</section>
+<section >
+<h3>Observability</h3>
+<a class="reference internal image-reference" href="_images/istio5-slides.png"><img alt="_images/istio5-slides.png" src="_images/istio5-slides.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Metrics</h3>
+<pre data-id="id61"><code data-trim data-noescape class="bash">envoy_cluster_internal_upstream_rq{code=&quot;2xx&quot;,_name=&quot;xds-grpc&quot;} 7163
+envoy_cluster_upstream_rq_completed{cluster_name=&quot;xds-grpc&quot;} 7164
+envoy_cluster_ssl_connection_error{cluster_name=&quot;xds-grpc&quot;} 0
+envoy_cluster_lb_subsets_removed{cluster_name=&quot;xds-grpc&quot;} 0
+envoy_cluster_internal_upstream_rq_code=&quot;503&quot;,_name=&quot;xds-grpc&quot;} 1
+</code></pre>
+</section>
+<section >
+<h3>Logs</h3>
+<pre data-id="logs"><code data-trim data-noescape class="yaml">[2020-11-25T21:26:18.409Z] &quot;GET /status/418 HTTP/1.1&quot; 418 -
+via_upstream - &quot;-&quot; 0 135 4 4 &quot;-&quot; &quot;curl/7.73.0-DEV&quot; 
+&quot;84961386-6d84-929d-98bd-c5aee93b5c88&quot; &quot;httpbin:8000&quot; 
+&quot;10.44.1.27:80&quot; outbound|8000||httpbin.foo.svc.cluster.local 
+10.44.1.23:37652 10.0.45.184:8000 10.44.1.23:46520 - default
+</code></pre>
+</section>
+<section >
+<h3>Traces</h3>
+<a class="reference internal image-reference" href="_images/istio6-slides.png"><img alt="_images/istio6-slides.png" src="_images/istio6-slides.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Kiali</h3>
+<a class="reference internal image-reference" href="_images/istio7-slides.png"><img alt="_images/istio7-slides.png" src="_images/istio7-slides.png" style="width: 700px;" /></a>
+</section>
+<section >
+<h3>Kiali</h3>
+<a class="reference internal image-reference" href="_images/istio8-slides.png"><img alt="_images/istio8-slides.png" src="_images/istio8-slides.png" style="width: 700px;" /></a>
+</section>
+</section>
+<section>
+<section >
+<h2>ArgoCD</h2>
+<a class="reference internal image-reference" href="_images/argocd.png"><img alt="_images/argocd.png" src="_images/argocd.png" style="width: 200px;" /></a>
+</section>
+<section >
+<h3>Concepts</h3>
+<ul class="simple">
+<li class="fragment"><p>Application</p></li>
+<li class="fragment"><p>Target State</p></li>
+<li class="fragment"><p>Live State</p></li>
+<li class="fragment"><p>Sync</p></li>
+<li class="fragment"><p>Health</p></li>
+</ul>
+</section>
+<section >
+<h3>Architecture</h3>
+<a class="reference internal image-reference" href="_images/argocd-slides1.png"><img alt="_images/argocd-slides1.png" src="_images/argocd-slides1.png" style="width: 600px;" /></a>
+</section>
+<section >
+<h3>Application</h3>
+<pre data-id="application"><code data-trim data-noescape class="yaml">apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: guestbook
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/argoproj/argocd-example-apps.git
+    targetRevision: HEAD
+    path: guestbook
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: guestbook</code></pre>
+</section>
+<section >
+<h3>Tools</h3>
+<ul class="simple">
+<li class="fragment"><p>directory(yaml/json/jsonnet)</p></li>
+<li class="fragment"><p>kustomize</p></li>
+<li class="fragment"><p>helm</p></li>
+<li class="fragment"><p>custom plugin</p></li>
+</ul>
+</section>
+<section >
+<h3>ApplicationSet</h3>
+<pre data-id="applicationset"><code data-trim data-noescape class="yaml" data-line-numbers="1-4|5-16|17-28">apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook
+spec:
+  goTemplate: true
+  goTemplateOptions: [&quot;missingkey=error&quot;]
+  generators:
+  - list:
+      elements:
+      - cluster: engineering-dev
+        url: https://1.2.3.4
+      - cluster: engineering-prod
+        url: https://2.4.6.8
+      - cluster: finance-preprod
+        url: https://9.8.7.6
+  template:
+    metadata:
+      name: '{{.cluster}}-guestbook'
+    spec:
+      project: my-project
+      source:
+        repoURL: https://github.com/infra-team/cluster-deployments.git
+        targetRevision: HEAD
+        path: guestbook/{{.cluster}}
+      destination:
+        server: '{{.url}}'
+        namespace: guestbook</code></pre>
+</section>
+<section >
+<h3>UI</h3>
+<a class="reference internal image-reference" href="_images/argocd-ui.gif"><img alt="_images/argocd-ui.gif" src="_images/argocd-ui.gif" style="width: 700px;" /></a>
+<style type="text/css">
+    /* 1. Style header/footer <div> so they are positioned as desired. */
+    #header-left {
+        position: absolute;
+        top: 0%;
+        left: 0%;
+    }
+    #header-right {
+        position: absolute;
+        top: 0%;
+        right: 0%;
+    }
+    #footer-left {
+        position: absolute;
+        bottom: 0%;
+        left: 0%;
+    }
+</style>
+<div id="hidden" style="display:none;">
+    <div id="header">
+        <div id="header-left"></div>
+        <div id="header-right"></div>
+        <div id="footer-left"></div>
+    </div>
+</div>
+<script src="_static/jquery.js"></script>
+<script type="text/javascript">
+    var header = $('#header').html();
+    if ( window.location.search.match( /print-pdf/gi ) ) {
+        Reveal.addEventListener( 'ready', function( event ) {
+            $('.slide-background').append(header);
+        });
+    }
+    else {
+        $('div.reveal').append(header);
+   }
+</script></section>
+</section>
+
+        </div>
+    </div>
+    
+    <script src="_static/revealjs4/dist/reveal.js"></script>
+    
+    
+      <script src="_static/revealjs4/plugin/highlight/highlight.js"></script>
+      <script src="_static/revealjs4/plugin/mermaid/mermaid.js"></script>
+      
+    
+    <script>
+        var revealjsConfig = new Object();
+        Object.assign(revealjsConfig, JSON.parse('null'));
+        
+        
+        
+          revealjsConfig.plugins = [
+            RevealHighlight,mermaid,
+          ];
+        
+        // More info https://github.com/hakimel/reveal.js#configuration
+        Reveal.initialize(revealjsConfig);
+    </script>
+
+  </body>
+</html>

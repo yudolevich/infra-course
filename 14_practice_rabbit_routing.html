@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RabbitMQ Routing &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Apache Kafka" href="15_practice_kafka.html" />
+    <link rel="prev" title="RabbitMQ" href="13_practice_rabbit.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">RabbitMQ Routing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-exchange">Direct Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#topics">Topics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rpc">RPC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">RabbitMQ Routing</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/14_practice_rabbit_routing.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="rabbitmq-routing">
+<h1>RabbitMQ Routing<a class="headerlink" href="#rabbitmq-routing" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии различные способы маршрутизации сообщений в
+<a class="reference external" href="https://www.rabbitmq.com/">RabbitMQ</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://www.rabbitmq.com/">rabbitmq</a> воспользуемся следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;node&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">15672</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">15672</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq python3-pip rabbitmq-server</span>
+<span class="sh">      rabbitmq-plugins enable rabbitmq_management</span>
+<span class="sh">      rabbitmqctl add_user admin admin</span>
+<span class="sh">      rabbitmqctl set_user_tags admin administrator</span>
+<span class="sh">      rabbitmqctl set_permissions -p / admin &quot;.*&quot; &quot;.*&quot; &quot;.*&quot;</span>
+<span class="sh">      pip3 install pika --break-system-packages</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>После развертывания виртуальной машины на ней будет находиться сервер <a class="reference external" href="https://www.rabbitmq.com/">rabbitmq</a>,
+в нем создастся пользователь <code class="docutils literal notranslate"><span class="pre">admin</span></code> и наружу будет выставлен
+<a class="reference external" href="http://localhost:15672">веб интерфейс</a>, а также установится библиотека для
+взаимодействия из языка <code class="docutils literal notranslate"><span class="pre">python</span></code> - <a class="reference external" href="https://pika.readthedocs.io/en/stable/">pika</a>.</p>
+</section>
+<section id="direct-exchange">
+<h2>Direct Exchange<a class="headerlink" href="#direct-exchange" title="Permalink to this heading"></a></h2>
+<p><img alt="" src="_images/rabbit-practice1.png" /></p>
+<p>В прошлом практическом занятии использовался exchange типа <code class="docutils literal notranslate"><span class="pre">fanout</span></code>, который
+позволял отправлять сообщения сразу всем получателям. Теперь же попробуем
+определить для каждого получателя свои сообщения с помощью exchange типа <code class="docutils literal notranslate"><span class="pre">direct</span></code>.
+Реализуем на примере отправки логов разной важности - <code class="docutils literal notranslate"><span class="pre">info</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code> и <code class="docutils literal notranslate"><span class="pre">error</span></code>.
+Для этого создадим скрипт <code class="docutils literal notranslate"><span class="pre">send_log.py</span></code> для отправки сообщения, который будет
+использовать exchange типа <code class="docutils literal notranslate"><span class="pre">direct</span></code>, а в качестве <code class="docutils literal notranslate"><span class="pre">routing</span> <span class="pre">key</span></code> - важность
+сообщения.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+    <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">))</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;direct_logs&#39;</span><span class="p">,</span> <span class="n">exchange_type</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">)</span>
+
+<span class="n">severity</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;info&#39;</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="ow">or</span> <span class="s1">&#39;Hello World!&#39;</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span>
+    <span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;direct_logs&#39;</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="n">severity</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [x] Sent </span><span class="si">{</span><span class="n">severity</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Данный скрипт позволяет отправлять сообщения, указывая первым аргументом его
+важность.</p>
+<p>Для получения сообщений создадим еще один скрипт <code class="docutils literal notranslate"><span class="pre">receive_log.py</span></code>, который будет
+определять очереди и связывать их с exchange с помощью routing key.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+    <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">))</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;direct_logs&#39;</span><span class="p">,</span> <span class="n">exchange_type</span><span class="o">=</span><span class="s1">&#39;direct&#39;</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">exclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+
+<span class="n">severities</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">severities</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Usage: </span><span class="si">%s</span><span class="s2"> [info] [warning] [error]</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">severity</span> <span class="ow">in</span> <span class="n">severities</span><span class="p">:</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span>
+        <span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;direct_logs&#39;</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="n">severity</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; [*] Waiting for logs. To exit press CTRL+C&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [x] </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span>
+    <span class="n">queue</span><span class="o">=</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">on_message_callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span> <span class="n">auto_ack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Данный скрипт позволяет создать очередь и с помощью аргументов запуска связать
+ее с exchange по нескольким уровням важности сообщений, которые необходимо
+получать, а также регистрирует callback, который выводит сообщения на экран.</p>
+<p>Запустим в паре терминалов второй скрипт, который будет получать сообщения с
+разными уровнями важности, а в отдельном терминале скрипт с отправкой сообщений:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>receive_log.py<span class="w"> </span>info
+<span class="go"> [*] Waiting for logs. To exit press CTRL+C</span>
+<span class="go"> [x] info:b&#39;test info message&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>receive_log.py<span class="w"> </span>info<span class="w"> </span>error<span class="w"> </span>warning
+<span class="go"> [*] Waiting for logs. To exit press CTRL+C</span>
+<span class="go"> [x] info:b&#39;test info message&#39;</span>
+<span class="go"> [x] warning:b&#39;test warning message&#39;</span>
+<span class="go"> [x] error:b&#39;test error message&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>info<span class="w"> </span><span class="s1">&#39;test info message&#39;</span>
+<span class="go"> [x] Sent info:test info message</span>
+<span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>warning<span class="w"> </span><span class="s1">&#39;test warning message&#39;</span>
+<span class="go"> [x] Sent warning:test warning message</span>
+<span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>error<span class="w"> </span><span class="s1">&#39;test error message&#39;</span>
+<span class="go"> [x] Sent error:test error message</span>
+</pre></div>
+</div>
+<p>При запущенных скриптах <code class="docutils literal notranslate"><span class="pre">receive_log.py</span></code> посмотрим информацию с помощью
+<code class="docutils literal notranslate"><span class="pre">rabbitmqctl</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>rabbitmqctl<span class="w"> </span>list_exchanges<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>direct_logs
+<span class="go">direct_logs     direct</span>
+<span class="gp">$ </span>sudo<span class="w"> </span>rabbitmqctl<span class="w"> </span>list_queues<span class="w"> </span>--quiet
+<span class="go">name    messages</span>
+<span class="go">amq.gen-oT43COPoX7gTRkNJ2lNdZQ  0</span>
+<span class="go">amq.gen-bEcRRYMM1Tl-UOf06Gsk_Q  0</span>
+<span class="gp">$ </span>sudo<span class="w"> </span>rabbitmqctl<span class="w"> </span>list_bindings<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>direct_logs
+<span class="go">direct_logs     exchange        amq.gen-bEcRRYMM1Tl-UOf06Gsk_Q  queue   error   []</span>
+<span class="go">direct_logs     exchange        amq.gen-bEcRRYMM1Tl-UOf06Gsk_Q  queue   info    []</span>
+<span class="go">direct_logs     exchange        amq.gen-oT43COPoX7gTRkNJ2lNdZQ  queue   info    []</span>
+<span class="go">direct_logs     exchange        amq.gen-bEcRRYMM1Tl-UOf06Gsk_Q  queue   warning []</span>
+</pre></div>
+</div>
+<p>Как видно из вывода в <a class="reference external" href="https://www.rabbitmq.com/">rabbitmq</a> имеется exchange с именем <code class="docutils literal notranslate"><span class="pre">direct_logs</span></code> и типом
+<code class="docutils literal notranslate"><span class="pre">direct</span></code>, две очереди созданные запущенными скриптами <code class="docutils literal notranslate"><span class="pre">receive_log.py</span></code> и набор
+<code class="docutils literal notranslate"><span class="pre">bindings</span></code>, которые связывают exchange <code class="docutils literal notranslate"><span class="pre">direct_logs</span></code> с очередями с помощью
+<code class="docutils literal notranslate"><span class="pre">routing</span> <span class="pre">keys</span></code> с именами <code class="docutils literal notranslate"><span class="pre">info</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code> и <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p>
+</section>
+<section id="topics">
+<h2>Topics<a class="headerlink" href="#topics" title="Permalink to this heading"></a></h2>
+<p><img alt="" src="_images/rabbit-practice2.png" /></p>
+<p>Помимо связывания exchange с очередью с помощью простого routing key, в <a class="reference external" href="https://www.rabbitmq.com/">rabbitmq
+</a> имеется более гибкий exchange типа <code class="docutils literal notranslate"><span class="pre">topic</span></code>, который позволяет использовать в
+качестве ключа список слов разделенных точками. А также позволяет использовать
+специальные символы:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">*</span></code> - может заменить одно слово</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">#</span></code> - может заменить любое количество слов
+Таким образом в качестве routing key могут использоваться различные варианты:
+<code class="docutils literal notranslate"><span class="pre">*.orange.*</span></code>, <code class="docutils literal notranslate"><span class="pre">*.*.rabbit</span></code>, <code class="docutils literal notranslate"><span class="pre">lazy.#</span></code>.</p></li>
+</ul>
+<p>Изменим наш скрипт <code class="docutils literal notranslate"><span class="pre">send_log.py</span></code> для использования exchange типа <code class="docutils literal notranslate"><span class="pre">topic</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+    <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">))</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;topic_logs&#39;</span><span class="p">,</span> <span class="n">exchange_type</span><span class="o">=</span><span class="s1">&#39;topic&#39;</span><span class="p">)</span>
+
+<span class="n">routing_key</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="k">else</span> <span class="s1">&#39;anonymous.info&#39;</span>
+<span class="n">message</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">:])</span> <span class="ow">or</span> <span class="s1">&#39;Hello World!&#39;</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span>
+    <span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;topic_logs&#39;</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="n">routing_key</span><span class="p">,</span> <span class="n">body</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [x] Sent </span><span class="si">{</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">connection</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Логика остается такой же, только теперь мы можем указывать routing key состоящий
+из нескольких слов разделенных точкой.</p>
+<p>Также изменим скрипт <code class="docutils literal notranslate"><span class="pre">receive_log.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+    <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">))</span>
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">exchange_declare</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;topic_logs&#39;</span><span class="p">,</span> <span class="n">exchange_type</span><span class="o">=</span><span class="s1">&#39;topic&#39;</span><span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">exclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">queue_name</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+
+<span class="n">binding_keys</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">binding_keys</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Usage: </span><span class="si">%s</span><span class="s2"> [binding_key]...</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">binding_key</span> <span class="ow">in</span> <span class="n">binding_keys</span><span class="p">:</span>
+    <span class="n">channel</span><span class="o">.</span><span class="n">queue_bind</span><span class="p">(</span>
+        <span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;topic_logs&#39;</span><span class="p">,</span> <span class="n">queue</span><span class="o">=</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">routing_key</span><span class="o">=</span><span class="n">binding_key</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39; [*] Waiting for logs. To exit press CTRL+C&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">callback</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">properties</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [x] </span><span class="si">{</span><span class="n">method</span><span class="o">.</span><span class="n">routing_key</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">body</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span>
+    <span class="n">queue</span><span class="o">=</span><span class="n">queue_name</span><span class="p">,</span> <span class="n">on_message_callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span> <span class="n">auto_ack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Как и в предыдущем разделе запустим в двух терминала <code class="docutils literal notranslate"><span class="pre">receive_log.py</span></code> и в
+отдельном <code class="docutils literal notranslate"><span class="pre">send_log.py</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>receive_log.py<span class="w"> </span>*.info<span class="w"> </span>test.*
+<span class="go"> [*] Waiting for logs. To exit press CTRL+C</span>
+<span class="go"> [x] test.info:b&#39;test message&#39;</span>
+<span class="go"> [x] dev.info:b&#39;test message&#39;</span>
+<span class="go"> [x] test.one:b&#39;test message&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>receive_log.py<span class="w"> </span><span class="s1">&#39;test.#&#39;</span>
+<span class="go"> [*] Waiting for logs. To exit press CTRL+C</span>
+<span class="go"> [x] test.one:b&#39;test message&#39;</span>
+<span class="go"> [x] test.one.two:b&#39;test message&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>test.info<span class="w"> </span><span class="s1">&#39;test message&#39;</span>
+<span class="go"> [x] Sent test.info:test message</span>
+<span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>dev.info<span class="w"> </span><span class="s1">&#39;test message&#39;</span>
+<span class="go"> [x] Sent dev.info:test message</span>
+<span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>test.one<span class="w"> </span><span class="s1">&#39;test message&#39;</span>
+<span class="go"> [x] Sent test.one:test message</span>
+<span class="gp">$ </span>python3<span class="w"> </span>send_log.py<span class="w"> </span>test.one.two<span class="w"> </span><span class="s1">&#39;test message&#39;</span>
+<span class="go"> [x] Sent test.one.two:test message</span>
+</pre></div>
+</div>
+<p>При запущенных скриптах <code class="docutils literal notranslate"><span class="pre">receive_log.py</span></code> посмотрим информацию с помощью
+<code class="docutils literal notranslate"><span class="pre">rabbitmqctl</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>rabbitmqctl<span class="w"> </span>list_exchanges<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>topic_logs
+<span class="go">topic_logs      topic</span>
+<span class="gp">$ </span>sudo<span class="w"> </span>rabbitmqctl<span class="w"> </span>list_queues<span class="w"> </span>--quiet
+<span class="go">name    messages</span>
+<span class="go">amq.gen-HHnB6I713X9fiH8cyM_RCA  0</span>
+<span class="go">amq.gen-yryF4eJWFgBMSTpPPEmHOQ  0</span>
+<span class="gp">$ </span>sudo<span class="w"> </span>rabbitmqctl<span class="w"> </span>list_bindings<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>topic_logs
+<span class="go">topic_logs      exchange        amq.gen-HHnB6I713X9fiH8cyM_RCA  queue   *.info  []</span>
+<span class="go">topic_logs      exchange        amq.gen-yryF4eJWFgBMSTpPPEmHOQ  queue   test.#  []</span>
+<span class="go">topic_logs      exchange        amq.gen-HHnB6I713X9fiH8cyM_RCA  queue   test.*  []</span>
+</pre></div>
+</div>
+<p>Как видно вывод аналогичен exchange с типом <code class="docutils literal notranslate"><span class="pre">direct</span></code>, но в качестве routing key
+используются более гибкие варианты ключей.</p>
+</section>
+<section id="rpc">
+<h2>RPC<a class="headerlink" href="#rpc" title="Permalink to this heading"></a></h2>
+<p><img alt="" src="_images/rabbit-practice3.png" /></p>
+<p>С помощью <a class="reference external" href="https://www.rabbitmq.com/">rabbitmq</a> также возможно реализовать rpc(remote procedure call), это
+можно реализовать следующей последовательностью:</p>
+<ul class="simple">
+<li><p>Клиент при старте создает анонимную эксклюзивную очередь для ответов.</p></li>
+<li><p>Для rpc запросов клиент отправляет сообщение с двумя параметрами:
+<code class="docutils literal notranslate"><span class="pre">reply_to</span></code> с указанием очереди ответов и <code class="docutils literal notranslate"><span class="pre">correlation_id</span></code> с уникальным
+идентификатором запроса.</p></li>
+<li><p>Запрос отправляется в очередь <code class="docutils literal notranslate"><span class="pre">rpc_queue</span></code>.</p></li>
+<li><p>RPC сервер ожидает запросы в этой очереди, при получении выполняет обработку
+и возвращает обратно клиенту в очередь из параметра <code class="docutils literal notranslate"><span class="pre">reply_to</span></code>.</p></li>
+<li><p>Клиент ожидает сообщения в очереди для ответов, валидирует <code class="docutils literal notranslate"><span class="pre">correlation_id</span></code> и
+возвращает ответ в приложение.</p></li>
+</ul>
+<p>Создадим скрипт <code class="docutils literal notranslate"><span class="pre">rpc_server.py</span></code>, который будет получать число из очереди и
+вычислять для него значение в ряду Фибоначчи:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+    <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">))</span>
+
+<span class="n">channel</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s1">&#39;rpc_queue&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">elif</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">on_request</span><span class="p">(</span><span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [.] fib(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="n">ch</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span><span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                     <span class="n">routing_key</span><span class="o">=</span><span class="n">props</span><span class="o">.</span><span class="n">reply_to</span><span class="p">,</span>
+                     <span class="n">properties</span><span class="o">=</span><span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span><span class="n">correlation_id</span> <span class="o">=</span> \
+                                                         <span class="n">props</span><span class="o">.</span><span class="n">correlation_id</span><span class="p">),</span>
+                     <span class="n">body</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="p">))</span>
+    <span class="n">ch</span><span class="o">.</span><span class="n">basic_ack</span><span class="p">(</span><span class="n">delivery_tag</span><span class="o">=</span><span class="n">method</span><span class="o">.</span><span class="n">delivery_tag</span><span class="p">)</span>
+
+<span class="n">channel</span><span class="o">.</span><span class="n">basic_qos</span><span class="p">(</span><span class="n">prefetch_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s1">&#39;rpc_queue&#39;</span><span class="p">,</span> <span class="n">on_message_callback</span><span class="o">=</span><span class="n">on_request</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot; [x] Awaiting RPC requests&quot;</span><span class="p">)</span>
+<span class="n">channel</span><span class="o">.</span><span class="n">start_consuming</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>А также создадим клиента, который будет вызывать rpc на сервере:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">pika</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<span class="k">class</span> <span class="nc">FibonacciRpcClient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span> <span class="o">=</span> <span class="n">pika</span><span class="o">.</span><span class="n">BlockingConnection</span><span class="p">(</span>
+            <span class="n">pika</span><span class="o">.</span><span class="n">ConnectionParameters</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">channel</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">queue_declare</span><span class="p">(</span><span class="n">queue</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">exclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback_queue</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">method</span><span class="o">.</span><span class="n">queue</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">basic_consume</span><span class="p">(</span>
+            <span class="n">queue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback_queue</span><span class="p">,</span>
+            <span class="n">on_message_callback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">on_response</span><span class="p">,</span>
+            <span class="n">auto_ack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corr_id</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">on_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ch</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">props</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr_id</span> <span class="o">==</span> <span class="n">props</span><span class="o">.</span><span class="n">correlation_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="n">body</span>
+
+    <span class="k">def</span> <span class="nf">call</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corr_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">channel</span><span class="o">.</span><span class="n">basic_publish</span><span class="p">(</span>
+            <span class="n">exchange</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+            <span class="n">routing_key</span><span class="o">=</span><span class="s1">&#39;rpc_queue&#39;</span><span class="p">,</span>
+            <span class="n">properties</span><span class="o">=</span><span class="n">pika</span><span class="o">.</span><span class="n">BasicProperties</span><span class="p">(</span>
+                <span class="n">reply_to</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">callback_queue</span><span class="p">,</span>
+                <span class="n">correlation_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">corr_id</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">body</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">process_data_events</span><span class="p">(</span><span class="n">time_limit</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="n">fibonacci_rpc</span> <span class="o">=</span> <span class="n">FibonacciRpcClient</span><span class="p">()</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="mi">1</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [x] Requesting fib(</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">fibonacci_rpc</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; [.] Got </span><span class="si">{</span><span class="n">response</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Теперь запустим в разных терминалах сервер и клиент:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>rpc_server.py
+<span class="go"> [x] Awaiting RPC requests</span>
+<span class="go"> [.] fib(1)</span>
+<span class="go"> [.] fib(10)</span>
+<span class="go"> [.] fib(30)</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3<span class="w"> </span>rpc_client.py<span class="w"> </span><span class="m">1</span>
+<span class="go"> [x] Requesting fib(1)</span>
+<span class="go"> [.] Got 1</span>
+<span class="gp">$ </span>python3<span class="w"> </span>rpc_client.py<span class="w"> </span><span class="m">10</span>
+<span class="go"> [x] Requesting fib(10)</span>
+<span class="go"> [.] Got 55</span>
+<span class="gp">$ </span>python3<span class="w"> </span>rpc_client.py<span class="w"> </span><span class="m">30</span>
+<span class="go"> [x] Requesting fib(30)</span>
+<span class="go"> [.] Got 832040</span>
+</pre></div>
+</div>
+<p>Как видно, используя <a class="reference external" href="https://www.rabbitmq.com/">rabbitmq</a> нам удалось реализовать RPC.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="13_practice_rabbit.html" class="btn btn-neutral float-left" title="RabbitMQ" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="15_practice_kafka.html" class="btn btn-neutral float-right" title="Apache Kafka" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

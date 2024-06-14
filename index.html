@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Infrastructure &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Практика" href="practice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="practice.html">Практика</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Infrastructure</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="infrastructure">
+<h1>Infrastructure<a class="headerlink" href="#infrastructure" title="Permalink to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="practice.html">Практика</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01_practice_vagrant.html#install">Install</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="01_practice_vagrant.html#virtualbox">VirtualBox</a></li>
+<li class="toctree-l4"><a class="reference internal" href="01_practice_vagrant.html#id1">Vagrant</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="01_practice_vagrant.html#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_practice_vagrant.html#box">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_practice_vagrant.html#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="01_practice_vagrant.html#provision">Provision</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="02_practice_vagrant.html#package">Package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_practice_vagrant.html#front">Front</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_practice_vagrant.html#back">Back</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_practice_vagrant.html#db">DB</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="02_practice_vagrant.html#multi-node">Multi-Node</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="02_practice_vagrant.html#code">Code</a><ul>
+<li class="toctree-l5"><a class="reference internal" href="02_practice_vagrant.html#id1">Front</a></li>
+<li class="toctree-l5"><a class="reference internal" href="02_practice_vagrant.html#id2">Back</a></li>
+<li class="toctree-l5"><a class="reference internal" href="02_practice_vagrant.html#id3">DB</a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="02_practice_vagrant.html#vagrantfile">Vagrantfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02_practice_vagrant.html#up">UP</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="03_practice_docker.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03_practice_docker.html#container-lifecycle">Container lifecycle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#run">Run</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#exec">Exec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#stop">Stop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#run-options">Run Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#logs">Logs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#ports">Ports</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#stats">Stats</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="03_practice_docker.html#images">Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#pull">Pull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#push">Push</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#save-load">Save/Load</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03_practice_docker.html#build">Build</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="03_practice_docker.html#remote">Remote</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="04_practice_docker_images.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04_practice_docker_images.html#dockerfile">Dockerfile</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#hello">Hello</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#copy-add">Copy/Add</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#env-arg">Env/Arg</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#run">Run</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#cache">Cache</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#expose">Expose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#label">Label</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#cmd-entrypoint">Cmd/Entrypoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#multi-stage">Multi-Stage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="04_practice_docker_images.html#registry">Registry</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#id1">Run</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#push">Push</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#catalog">Catalog</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04_practice_docker_images.html#tags-manifests">Tags/Manifests</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="05_practice_docker_volume_network.html#volume">Volume</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="05_practice_docker_volume_network.html#local">Local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="05_practice_docker_volume_network.html#remote">Remote</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="05_practice_docker_volume_network.html#network">Network</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="05_practice_docker_volume_network.html#bridge">Bridge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="05_practice_docker_volume_network.html#host">Host</a></li>
+<li class="toctree-l4"><a class="reference internal" href="05_practice_docker_volume_network.html#ipvlan">IPVLAN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#project">Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#front">Front</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#db">DB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#back">Back</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#volume">Volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="06_practice_docker_compose.html#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="07_practice_ansible.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07_practice_ansible.html#inventory">Inventory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07_practice_ansible.html#basic-usage">Basic Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="07_practice_ansible.html#playbook">Playbook</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="07_practice_ansible.html#tasks">Tasks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="07_practice_ansible.html#handlers">Handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="07_practice_ansible.html#jinja2">Jinja2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="07_practice_ansible.html#conditionals">Conditionals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="07_practice_ansible.html#loops">Loops</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="08_practice_ansible_roles.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="08_practice_ansible_roles.html#roles">Roles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#init">Init</a></li>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#tasks">Tasks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#defaults">Defaults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#files-templates">Files/Templates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#handlers">Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="08_practice_ansible_roles.html#collections">Collections</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#install">Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="08_practice_ansible_roles.html#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="09_practice_saltstack.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="09_practice_saltstack.html#basic-usage">Basic Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#masterless">Masterless</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#documentation">Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#grains">Grains</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="09_practice_saltstack.html#minions">Minions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#keys">Keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#execution">Execution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#state">State</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#jinja2">Jinja2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="09_practice_saltstack.html#pillars">Pillars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#accept-keys">Accept Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#beacon">Beacon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#reactor">Reactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#gitfs">GitFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="10_practice_saltstack_reactor.html#schedule">Schedule</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="11_practice_secrets.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="11_practice_secrets.html#ansible-vault">Ansible Vault</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#create">Create</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#view">View</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#edit">Edit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#encrypt-decrypt">Encrypt/Decrypt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#playbook">Playbook</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#encrypt-string">Encrypt string</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="11_practice_secrets.html#age">Age</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#keygen">Keygen</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#encrypt">Encrypt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#decrypt">Decrypt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#ssh-key">SSH Key</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#multiple-keys">Multiple keys</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="11_practice_secrets.html#sops">Sops</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#gpg">GPG</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#id1">Encrypt</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#id2">Edit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#set-extract">Set/Extract</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#exec-file-env">Exec File/Env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="11_practice_secrets.html#update-keys">Update keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="12_practice_vault.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_practice_vault.html#kv">KV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_practice_vault.html#certs">Certs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_practice_vault.html#agent">Agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="12_practice_vault.html#transit">Transit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="13_practice_rabbit.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="13_practice_rabbit.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="13_practice_rabbit.html#send">Send</a></li>
+<li class="toctree-l3"><a class="reference internal" href="13_practice_rabbit.html#receive">Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="13_practice_rabbit.html#fifo">FIFO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="13_practice_rabbit.html#multiple-consumers">Multiple Consumers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="14_practice_rabbit_routing.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_practice_rabbit_routing.html#direct-exchange">Direct Exchange</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_practice_rabbit_routing.html#topics">Topics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="14_practice_rabbit_routing.html#rpc">RPC</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="15_practice_kafka.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="15_practice_kafka.html#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="15_practice_kafka.html#send">Send</a></li>
+<li class="toctree-l3"><a class="reference internal" href="15_practice_kafka.html#receive">Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="15_practice_kafka.html#multiple-consumers">Multiple Consumers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="16_practice_kafka_cluster.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="16_practice_kafka_cluster.html#consumer-groups">Consumer Groups</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="16_practice_kafka_cluster.html#single-consumer">Single Consumer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="16_practice_kafka_cluster.html#multiple-consumers">Multiple Consumers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="16_practice_kafka_cluster.html#consumer-offsets">Consumer Offsets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="16_practice_kafka_cluster.html#cluster">Cluster</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="16_practice_kafka_cluster.html#prepare">Prepare</a></li>
+<li class="toctree-l4"><a class="reference internal" href="16_practice_kafka_cluster.html#consume">Consume</a></li>
+<li class="toctree-l4"><a class="reference internal" href="16_practice_kafka_cluster.html#stop-broker">Stop Broker</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="17_practice_terraform.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17_practice_terraform.html#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17_practice_terraform.html#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17_practice_terraform.html#apply">Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17_practice_terraform.html#change">Change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="17_practice_terraform.html#destroy">Destroy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="18_practice_terraform_ansible.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18_practice_terraform_ansible.html#providers">Providers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18_practice_terraform_ansible.html#front">Front</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18_practice_terraform_ansible.html#db">DB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18_practice_terraform_ansible.html#back">Back</a></li>
+<li class="toctree-l3"><a class="reference internal" href="18_practice_terraform_ansible.html#result">Result</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="19_practice_gitlab.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="19_practice_gitlab.html#new-project">New Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="19_practice_gitlab.html#test-stage">Test Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="19_practice_gitlab.html#build-stage">Build Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="19_practice_gitlab.html#deploy-stage">Deploy Stage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="19_practice_gitlab.html#test">Test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="19_practice_gitlab.html#prod">Prod</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#new-project">New Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#pipeline-from-scm">Pipeline from SCM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#webhook">Webhook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#test-stage">Test Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#build-stage">Build Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="20_practice_jenkins.html#deploy-stage">Deploy stage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="21_practice_prometheus.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="21_practice_prometheus.html#id1">Prometheus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="21_practice_prometheus.html#grafana">Grafana</a></li>
+<li class="toctree-l3"><a class="reference internal" href="21_practice_prometheus.html#dashboard">Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="21_practice_prometheus.html#app-metrics">App metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="22_practice_alertmanager.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="22_practice_alertmanager.html#id1">Alertmanager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="22_practice_alertmanager.html#trigger-alert">Trigger Alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="22_practice_alertmanager.html#route-alert">Route Alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="22_practice_alertmanager.html#inhibit-alert">Inhibit Alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="22_practice_alertmanager.html#silence-alert">Silence Alert</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="23_practice_elasticsearch.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23_practice_elasticsearch.html#elasticsearch">Elasticsearch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23_practice_elasticsearch.html#logstash">Logstash</a></li>
+<li class="toctree-l3"><a class="reference internal" href="23_practice_elasticsearch.html#kibana">Kibana</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="24_practice_elk_app_logs.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24_practice_elk_app_logs.html#application">Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24_practice_elk_app_logs.html#compose">Compose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24_practice_elk_app_logs.html#visualization">Visualization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="24_practice_elk_app_logs.html#dashboard">Dashboard</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="25_practice_jaeger.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="25_practice_jaeger.html#id1">Jaeger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="25_practice_jaeger.html#simple-trace">Simple Trace</a></li>
+<li class="toctree-l3"><a class="reference internal" href="25_practice_jaeger.html#multiple-spans">Multiple Spans</a></li>
+<li class="toctree-l3"><a class="reference internal" href="25_practice_jaeger.html#error-span">Error Span</a></li>
+<li class="toctree-l3"><a class="reference internal" href="25_practice_jaeger.html#nested-spans">Nested Spans</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="26_practice_jaeger_e2e.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26_practice_jaeger_e2e.html#application">Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="26_practice_jaeger_e2e.html#distributed-tracing">Distributed tracing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="27_practice_opentelemetry.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27_practice_opentelemetry.html#collector">Collector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27_practice_opentelemetry.html#metrics">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27_practice_opentelemetry.html#logs">Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27_practice_opentelemetry.html#traces">Traces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="27_practice_opentelemetry.html#visualization">Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="27_practice_opentelemetry.html#prometheus">Prometheus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="27_practice_opentelemetry.html#elasticsearch">Elasticsearch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="27_practice_opentelemetry.html#jaeger">Jaeger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="27_practice_opentelemetry.html#dashboard">Dashboard</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="28_practice_otel_instrumentation.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="28_practice_otel_instrumentation.html#collector">Collector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="28_practice_otel_instrumentation.html#application">Application</a></li>
+<li class="toctree-l3"><a class="reference internal" href="28_practice_otel_instrumentation.html#visualization">Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="28_practice_otel_instrumentation.html#metrics">Metrics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="28_practice_otel_instrumentation.html#traces">Traces</a></li>
+<li class="toctree-l4"><a class="reference internal" href="28_practice_otel_instrumentation.html#dashboard">Dashboard</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="29_practice_istio.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29_practice_istio.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29_practice_istio.html#deploy-app">Deploy App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29_practice_istio.html#version-routing">Version Routing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="29_practice_istio.html#user-routing">User Routing</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="30_practice_istio_kiali.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30_practice_istio_kiali.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30_practice_istio_kiali.html#deploy-kiali">Deploy Kiali</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30_practice_istio_kiali.html#graph">Graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30_practice_istio_kiali.html#traffic-shifting">Traffic Shifting</a></li>
+<li class="toctree-l3"><a class="reference internal" href="30_practice_istio_kiali.html#fault-injection">Fault Injection</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="31_practice_argocd.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31_practice_argocd.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31_practice_argocd.html#argocd-cli">ArgoCD CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="31_practice_argocd.html#argocd-ui">ArgoCD UI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="32_practice_argocd_gitops.html#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="32_practice_argocd_gitops.html#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="32_practice_argocd_gitops.html#create-app">Create App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="32_practice_argocd_gitops.html#create-chart">Create Chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="32_practice_argocd_gitops.html#create-argo-app">Create Argo App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="32_practice_argocd_gitops.html#auto-sync">Auto-Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="33_practice_final.html#id2">Требования</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="practice.html" class="btn btn-neutral float-right" title="Практика" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ansible Roles and Collections &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Salt" href="09_practice_saltstack.html" />
+    <link rel="prev" title="Ansible" href="07_practice_ansible.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ansible Roles and Collections</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#roles">Roles</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#init">Init</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#defaults">Defaults</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#files-templates">Files/Templates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handlers">Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#collections">Collections</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Ansible Roles and Collections</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/08_practice_ansible_roles.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ansible-roles-and-collections">
+<h1>Ansible Roles and Collections<a class="headerlink" href="#ansible-roles-and-collections" title="Permalink to this heading"></a></h1>
+<p>Данное практическое занятие посвящено знакомству с ролями(roles)
+и коллекциями(collections) в ansible.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с ansible воспользуемся следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> c тремя машинами:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;bastion&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;bastion&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns ansible</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;node1&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;node1&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;node2&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;node2&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Все управление будем производить с машины <code class="docutils literal notranslate"><span class="pre">bastion</span></code>, для взаимодействия с другими машинами
+потребуется <code class="docutils literal notranslate"><span class="pre">ssh</span></code> ключ, путь до которого можно узнать в выводе команды <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">ssh-config</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh-config<span class="w"> </span>bastion<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>IdentityFile
+<span class="go">  IdentityFile ~/.vagrant.d/boxes/ubuntu-VAGRANTSLASH-lunar64/0/virtualbox/vagrant_insecure_key</span>
+</pre></div>
+</div>
+<p>Скопируем данный файл в директорию проекта с <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> с именем <code class="docutils literal notranslate"><span class="pre">key</span></code>.
+Все дальнейшие команды будем вводить находясь на машине <code class="docutils literal notranslate"><span class="pre">bastion</span></code>, в первую очередь добавив
+ключ пользователю <code class="docutils literal notranslate"><span class="pre">vagrant</span></code> и выставив переменную <code class="docutils literal notranslate"><span class="pre">ANSIBLE_HOST_KEY_CHECKING</span></code> в значение
+<code class="docutils literal notranslate"><span class="pre">False</span></code> для отключения проверки <code class="docutils literal notranslate"><span class="pre">ssh</span></code> ключей.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>install<span class="w"> </span>-m<span class="w"> </span><span class="m">600</span><span class="w"> </span>-o<span class="w"> </span>vagrant<span class="w"> </span>/vagrant/key<span class="w"> </span>/home/vagrant/.ssh/id_rsa
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">ANSIBLE_HOST_KEY_CHECKING</span><span class="o">=</span>False
+</pre></div>
+</div>
+<p>В качестве <code class="docutils literal notranslate"><span class="pre">inventory</span></code> можно использовать список хостов через запятую:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible<span class="w"> </span>-m<span class="w"> </span>ping<span class="w"> </span>-i<span class="w"> </span>node1.local,node2.local<span class="w"> </span>all
+<span class="go">node2.local | SUCCESS =&gt; {</span>
+<span class="go">    &quot;ansible_facts&quot;: {</span>
+<span class="go">        &quot;discovered_interpreter_python&quot;: &quot;/usr/bin/python3&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;changed&quot;: false,</span>
+<span class="go">    &quot;ping&quot;: &quot;pong&quot;</span>
+<span class="go">}</span>
+<span class="go">node1.local | SUCCESS =&gt; {</span>
+<span class="go">    &quot;ansible_facts&quot;: {</span>
+<span class="go">        &quot;discovered_interpreter_python&quot;: &quot;/usr/bin/python3&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;changed&quot;: false,</span>
+<span class="go">    &quot;ping&quot;: &quot;pong&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</section>
+<section id="roles">
+<h2>Roles<a class="headerlink" href="#roles" title="Permalink to this heading"></a></h2>
+<p>Для того чтобы не писать однотипные плейбуки для часто повторяемых операций,
+а также для логического разбиения и переиспользования в <code class="docutils literal notranslate"><span class="pre">ansible</span></code> существует
+<a class="reference external" href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">концепция ролей</a>.</p>
+<section id="init">
+<h3>Init<a class="headerlink" href="#init" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">Роль</a> имеет определенную структуру директорий,
+чтобы создать данную структуру можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-galaxy<span class="w"> </span>role<span class="w"> </span>init<span class="w"> </span>--init-path<span class="w"> </span>roles<span class="w"> </span>nginx
+<span class="gp">$ </span>ls<span class="w"> </span>-1<span class="w"> </span>roles/nginx/
+<span class="go">README.md  # описание роли в формате markdown</span>
+<span class="go">defaults   # переменные по-умолчанию с низким приоритетом</span>
+<span class="go">files      # файлы используемые в задачах, например для копирования</span>
+<span class="go">handlers   # хендлеры, выполняемы по событиям</span>
+<span class="go">meta       # мета информация о роли, например об авторе и лицензии</span>
+<span class="go">tasks      # основные задачи выполняемые ролью</span>
+<span class="go">templates  # jinja2 шаблоны используемые в задачах</span>
+<span class="go">tests      # тесты для проверки роли</span>
+<span class="go">vars       # переменные для этой роли</span>
+</pre></div>
+</div>
+<p>После выполнения команды создалась структура каталогов для роли с именем <code class="docutils literal notranslate"><span class="pre">nginx</span></code>.</p>
+</section>
+<section id="tasks">
+<h3>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h3>
+<p>Добавим в роль установку пакета, для это допишем в файл <code class="docutils literal notranslate"><span class="pre">roles/nginx/tasks/main.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># tasks file for nginx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx package</span>
+<span class="w">  </span><span class="nt">ansible.builtin.package</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">Роли</a> можно использовать в плейбуках также как задачи(tasks) с помощью
+директив <code class="docutils literal notranslate"><span class="pre">roles</span></code>, <code class="docutils literal notranslate"><span class="pre">include_role</span></code> и <code class="docutils literal notranslate"><span class="pre">import_role</span></code>. Создадим файл <code class="docutils literal notranslate"><span class="pre">playbook.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+</pre></div>
+</div>
+<p>И запустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>node1.local,node2.local<span class="w"> </span>playbook.yaml
+
+<span class="go">PLAY [all] ********************************************************************************</span>
+
+<span class="go">TASK [Gathering Facts] ********************************************************************</span>
+<span class="go">ok: [node2.local]</span>
+<span class="go">ok: [node1.local]</span>
+
+<span class="go">TASK [nginx : nginx package] **************************************************************</span>
+<span class="go">changed: [node1.local]</span>
+<span class="go">changed: [node2.local]</span>
+
+<span class="go">PLAY RECAP ********************************************************************************</span>
+<span class="go">node1.local                : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="go">node2.local                : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>node1.local<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>title
+<span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="defaults">
+<h3>Defaults<a class="headerlink" href="#defaults" title="Permalink to this heading"></a></h3>
+<p>Для задания значений по-умолчанию к переменным используемым в роли можно отредактировать
+файл <code class="docutils literal notranslate"><span class="pre">roles/nginx/defaults/main.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># defaults file for nginx</span>
+<span class="nt">nginx_html_dir</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/www/html</span>
+<span class="nt">nginx_config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">default</span>
+<span class="nt">nginx_template_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.html.j2</span>
+</pre></div>
+</div>
+<p>А также добавим соответствующие файлы
+<code class="docutils literal notranslate"><span class="pre">roles/nginx/files/default</span></code>:</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">       </span><span class="mi">80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">  </span><span class="s">[::]:80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w">  </span><span class="s">localhost</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w">   </span><span class="s">/var/www/html</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">index</span><span class="w">  </span><span class="s">index.html</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">roles/nginx/templates/index.html.j2</span></code>:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">hello from </span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+</section>
+<section id="files-templates">
+<h3>Files/Templates<a class="headerlink" href="#files-templates" title="Permalink to this heading"></a></h3>
+<p>Добавим задачи по копированию конфигурации и <code class="docutils literal notranslate"><span class="pre">index.html</span></code> в нашу роль
+в файл <code class="docutils literal notranslate"><span class="pre">roles/nginx/tasks/main.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># tasks file for nginx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx package</span>
+<span class="w">  </span><span class="nt">ansible.builtin.package</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx config</span>
+<span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nginx_config_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/nginx/sites-enabled/default&quot;</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;index.html</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">nginx_html_dir</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">ansible.builtin.template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nginx_template_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nginx_html_dir</span><span class="nv"> </span><span class="s">}}/index.html&quot;</span>
+</pre></div>
+</div>
+<p>И запустим плейбук:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>node1.local,node2.local<span class="w"> </span>playbook.yaml
+
+<span class="go">PLAY [all] ********************************************************************************</span>
+
+<span class="go">TASK [Gathering Facts] ********************************************************************</span>
+<span class="go">ok: [node2.local]</span>
+<span class="go">ok: [node1.local]</span>
+
+<span class="go">TASK [nginx : nginx package] **************************************************************</span>
+<span class="go">ok: [node2.local]</span>
+<span class="go">ok: [node1.local]</span>
+
+<span class="go">TASK [nginx : nginx config] ***************************************************************</span>
+<span class="go">changed: [node1.local]</span>
+<span class="go">changed: [node2.local]</span>
+
+<span class="go">TASK [nginx : index.html to /var/www/html] ************************************************</span>
+<span class="go">changed: [node1.local]</span>
+<span class="go">changed: [node2.local]</span>
+
+<span class="go">PLAY RECAP ********************************************************************************</span>
+<span class="go">node1.local                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="go">node2.local                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>node1.local
+<span class="go">hello from node1.local</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>node2.local
+<span class="go">hello from node2.local</span>
+</pre></div>
+</div>
+<p>Для переопределения значений по-умолчанию расположим в директориях <code class="docutils literal notranslate"><span class="pre">files</span></code> и <code class="docutils literal notranslate"><span class="pre">templates</span></code>
+рядом с плейбуком
+<code class="docutils literal notranslate"><span class="pre">templates/overrided.html.j2</span></code>:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">### hello from </span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span><span class="x"> !</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">files/overrided.conf</span></code>:</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">       </span><span class="mi">80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">  </span><span class="s">[::]:80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">     </span><span class="mi">8080</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w">  </span><span class="s">localhost</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w">   </span><span class="s">/var/www/html</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">index</span><span class="w">  </span><span class="s">index.html</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>И добавим переменные в плейбук:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">nginx_template_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overrided.html.j2</span>
+<span class="w">    </span><span class="nt">nginx_config_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">overrided.conf</span>
+</pre></div>
+</div>
+<p>Запустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>node1.local,node2.local<span class="w"> </span>playbook.yaml
+
+<span class="go">PLAY [all] ********************************************************************************</span>
+
+<span class="go">TASK [Gathering Facts] ********************************************************************</span>
+<span class="go">ok: [node2.local]</span>
+<span class="go">ok: [node1.local]</span>
+
+<span class="go">TASK [nginx : nginx package] **************************************************************</span>
+<span class="go">ok: [node2.local]</span>
+<span class="go">ok: [node1.local]</span>
+
+<span class="go">TASK [nginx : nginx config] ***************************************************************</span>
+<span class="go">changed: [node2.local]</span>
+<span class="go">changed: [node1.local]</span>
+
+<span class="go">TASK [nginx : index.html to /var/www/html] ************************************************</span>
+<span class="go">changed: [node2.local]</span>
+<span class="go">changed: [node1.local]</span>
+
+<span class="go">PLAY RECAP ********************************************************************************</span>
+<span class="go">node1.local                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="go">node2.local                : ok=4    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="gp">$ </span>curl<span class="w"> </span>node1.local
+<span class="gp">#</span><span class="c1">## hello from node1.local !</span>
+<span class="gp">$ </span>curl<span class="w"> </span>node2.local
+<span class="gp">#</span><span class="c1">## hello from node2.local !</span>
+<span class="gp">$ </span>curl<span class="w"> </span>node1.local:8080
+<span class="go">curl: (7) Failed to connect to node1.local port 8080 after 3 ms: Couldn&#39;t connect to server</span>
+</pre></div>
+</div>
+<p>Как видно мы переопределили значения из роли не меняя саму роль. Но измененная
+конфигурация <code class="docutils literal notranslate"><span class="pre">nginx</span></code> хоть и скопировалась, но не применилась.</p>
+</section>
+<section id="handlers">
+<h3>Handlers<a class="headerlink" href="#handlers" title="Permalink to this heading"></a></h3>
+<p>Для перезапуска <code class="docutils literal notranslate"><span class="pre">nginx</span></code> при изменении конфигурации добавим в файл
+<code class="docutils literal notranslate"><span class="pre">roles/nginx/handlers/main.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># handlers file for nginx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx restart</span>
+<span class="w">  </span><span class="nt">ansible.builtin.systemd</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">state</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">restarted</span>
+</pre></div>
+</div>
+<p>И соответственно в задачу по записи конфигурации отправку события в файле
+<code class="docutils literal notranslate"><span class="pre">roles/nginx/tasks/main.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="c1"># tasks file for nginx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx package</span>
+<span class="w">  </span><span class="nt">ansible.builtin.package</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx config</span>
+<span class="w">  </span><span class="nt">ansible.builtin.copy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nginx_config_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;/etc/nginx/sites-enabled/default&quot;</span>
+<span class="w">  </span><span class="nt">notify</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx restart</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;index.html</span><span class="nv"> </span><span class="s">to</span><span class="nv"> </span><span class="s">{{</span><span class="nv"> </span><span class="s">nginx_html_dir</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">  </span><span class="nt">ansible.builtin.template</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">src</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nginx_template_file</span><span class="nv"> </span><span class="s">}}&quot;</span>
+<span class="w">    </span><span class="nt">dest</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{{</span><span class="nv"> </span><span class="s">nginx_html_dir</span><span class="nv"> </span><span class="s">}}/index.html&quot;</span>
+</pre></div>
+</div>
+<p>Теперь можем изменить нашу конфигурацию в файле <code class="docutils literal notranslate"><span class="pre">files/overrided.conf</span></code>:</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">       </span><span class="mi">80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">     </span><span class="mi">8080</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w">  </span><span class="s">localhost</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w">   </span><span class="s">/var/www/html</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">index</span><span class="w">  </span><span class="s">index.html</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>И запустить плейбук:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">$ ansible-playbook -i node1.local,node2.local playbook.yaml</span>
+
+<span class="l l-Scalar l-Scalar-Plain">PLAY [all] ********************************************************************************</span>
+
+<span class="l l-Scalar l-Scalar-Plain">TASK [Gathering Facts] ********************************************************************</span>
+<span class="l l-Scalar l-Scalar-Plain">ok</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node1.local</span><span class="p p-Indicator">]</span>
+<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node2.local</span><span class="p p-Indicator">]</span>
+
+<span class="l l-Scalar l-Scalar-Plain">TASK [nginx</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx package] **************************************************************</span>
+<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node1.local</span><span class="p p-Indicator">]</span>
+<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node2.local</span><span class="p p-Indicator">]</span>
+
+<span class="l l-Scalar l-Scalar-Plain">TASK [nginx</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx config] ***************************************************************</span>
+<span class="nt">changed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node1.local</span><span class="p p-Indicator">]</span>
+<span class="nt">changed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node2.local</span><span class="p p-Indicator">]</span>
+
+<span class="l l-Scalar l-Scalar-Plain">TASK [nginx</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.html to /var/www/html] ************************************************</span>
+<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node1.local</span><span class="p p-Indicator">]</span>
+<span class="nt">ok</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node2.local</span><span class="p p-Indicator">]</span>
+
+<span class="l l-Scalar l-Scalar-Plain">RUNNING HANDLER [nginx</span><span class="w"> </span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx restart] ***************************************************</span>
+<span class="nt">changed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node2.local</span><span class="p p-Indicator">]</span>
+<span class="nt">changed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">node1.local</span><span class="p p-Indicator">]</span>
+
+<span class="l l-Scalar l-Scalar-Plain">PLAY RECAP ********************************************************************************</span>
+<span class="nt">node1.local                </span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok=5    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="nt">node2.local                </span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ok=5    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0</span>
+<span class="l l-Scalar l-Scalar-Plain">$ curl node1.local:8080</span>
+<span class="c1">### hello from node1.local !</span>
+<span class="l l-Scalar l-Scalar-Plain">$ curl node2.local:8080</span>
+<span class="c1">### hello from node2.local !</span>
+</pre></div>
+</div>
+<p>Таким образом мы получили роль, которую можно переиспользовать с другими значениями
+переменных.</p>
+</section>
+</section>
+<section id="collections">
+<h2>Collections<a class="headerlink" href="#collections" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://docs.ansible.com/ansible/latest/collections_guide/index.html">Коллекции</a> в <code class="docutils literal notranslate"><span class="pre">ansible</span></code> - это способ создания переносимых дистрибутивов,
+которые могут включать в себя плейбуки, роли, модули и плагины.</p>
+<p>Перед работой с коллекциями пересоздадим виртуальные машины командами <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">destroy</span> <span class="pre">-f</span></code>
+и <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">up</span></code>. Примеры для работы с коллекциями также будут созданы с нуля в пустой
+директории.</p>
+<section id="install">
+<h3>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://docs.ansible.com/ansible/latest/collections_guide/index.html">Коллекциями</a> как и <a class="reference external" href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">ролями</a> можно управлять с помощью утилиты
+<a class="reference external" href="https://docs.ansible.com/ansible/latest/collections_guide/collections_installing.html"><code class="docutils literal notranslate"><span class="pre">ansible-galaxy</span></code></a>. Данная утилита по-умолчанию использует публичный
+репозиторий <a class="reference external" href="https://galaxy.ansible.com">galaxy.ansible.com</a>, в котором можно найти
+готовые коллекции от комьюнити. Установим из данного репозитория коллекцию
+<a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/nginxinc/nginx_core/">nginxinx.nginx_core</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-galaxy<span class="w"> </span>collection<span class="w"> </span>install<span class="w"> </span>nginxinc.nginx_core
+<span class="go">Starting galaxy collection install process</span>
+<span class="go">Process install dependency map</span>
+<span class="go">Starting collection install process</span>
+<span class="go">Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/nginxinc-nginx_core-0.8.0.tar.gz to /home/vagrant/.ansible/tmp/ansible-local-31197c0gyeuh/tmpfiqc995o/nginxinc-nginx_core-0.8.0-o05zpo12</span>
+<span class="go">Installing &#39;nginxinc.nginx_core:0.8.0&#39; to &#39;/home/vagrant/.ansible/collections/ansible_collections/nginxinc/nginx_core&#39;</span>
+<span class="go">Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/ansible-posix-1.5.4.tar.gz to /home/vagrant/.ansible/tmp/ansible-local-31197c0gyeuh/tmpfiqc995o/ansible-posix-1.5.4-wvjd1tyo</span>
+<span class="go">nginxinc.nginx_core:0.8.0 was installed successfully</span>
+<span class="go">Installing &#39;ansible.posix:1.5.4&#39; to &#39;/home/vagrant/.ansible/collections/ansible_collections/ansible/posix&#39;</span>
+<span class="go">Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/community-crypto-2.15.1.tar.gz to /home/vagrant/.ansible/tmp/ansible-local-31197c0gyeuh/tmpfiqc995o/community-crypto-2.15.1-h5a72qdu</span>
+<span class="go">ansible.posix:1.5.4 was installed successfully</span>
+<span class="go">Installing &#39;community.crypto:2.15.1&#39; to &#39;/home/vagrant/.ansible/collections/ansible_collections/community/crypto&#39;</span>
+<span class="go">Downloading https://galaxy.ansible.com/api/v3/plugin/ansible/content/published/collections/artifacts/community-general-7.5.0.tar.gz to /home/vagrant/.ansible/tmp/ansible-local-31197c0gyeuh/tmpfiqc995o/community-general-7.5.0-3w9itazy</span>
+<span class="go">community.crypto:2.15.1 was installed successfully</span>
+<span class="go">Installing &#39;community.general:7.5.0&#39; to &#39;/home/vagrant/.ansible/collections/ansible_collections/community/general&#39;</span>
+<span class="go">community.general:7.5.0 was installed successfully</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h3>
+<p>Использовать коллекции в плейбуке можно объявив их в директиве <code class="docutils literal notranslate"><span class="pre">collections</span></code> в <code class="docutils literal notranslate"><span class="pre">play</span></code>,
+либо указывая полное имя непосредственно в месте использования:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">collections</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginxinc.nginx_core</span>
+<span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginxinc.nginx_core.nginx</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx_config</span>
+<span class="w">    </span><span class="nt">nginx_config_http_template_enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">nginx_config_http_template</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">servers</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">core</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">listen</span><span class="p">:</span>
+<span class="w">                </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="w">              </span><span class="nt">server_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">            </span><span class="nt">locations</span><span class="p">:</span>
+<span class="w">              </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">                </span><span class="nt">core</span><span class="p">:</span>
+<span class="w">                  </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/share/nginx/html</span>
+<span class="w">                  </span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.html</span>
+</pre></div>
+</div>
+<p>Здесь мы используем две роли из коллекции <code class="docutils literal notranslate"><span class="pre">nginxinc.nginx_core</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">nginx</span></code> - используя полное имя, данная роль установит сам <code class="docutils literal notranslate"><span class="pre">nginx</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nginx_config</span></code> - использую только имя роли, так как имя коллекции было объявлено
+ранее, данная роль позволяет сконфигурировать <code class="docutils literal notranslate"><span class="pre">nginx</span></code></p></li>
+</ul>
+<p>Запустим получившийся плейбук:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>node1.local,node2.local<span class="w"> </span>playbook.yaml
+
+<span class="go">PLAY [all] ********************************************************************************</span>
+
+<span class="go">TASK [Gathering Facts] ********************************************************************</span>
+<span class="go">ok: [node1.local]</span>
+<span class="go">ok: [node2.local]</span>
+
+<span class="go">TASK [nginxinc.nginx_core.nginx : Validate distribution and role variables] ***************</span>
+<span class="go">...</span>
+<span class="go">RUNNING HANDLER [nginxinc.nginx_core.nginx_config : (Handler - NGINX Config) Start/reload NGINX] ***</span>
+<span class="go">changed: [node1.local]</span>
+<span class="go">changed: [node2.local]</span>
+
+<span class="go">TASK [nginxinc.nginx_core.nginx_config : Debug output] ************************************</span>
+<span class="go">skipping: [node1.local]</span>
+<span class="go">skipping: [node2.local]</span>
+
+<span class="go">PLAY RECAP ********************************************************************************</span>
+<span class="go">node1.local                : ok=22   changed=2    unreachable=0    failed=0    skipped=37   rescued=0    ignored=1</span>
+<span class="go">node2.local                : ok=22   changed=2    unreachable=0    failed=0    skipped=37   rescued=0    ignored=1</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>node1.local<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>title
+<span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>node2.local<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>title
+<span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span>
+</pre></div>
+</div>
+<p>Также <a class="reference external" href="https://galaxy.ansible.com/ui/repo/published/nginxinc/nginx_core/content/role/nginx_config/">ознакомившись с документацией</a> к роли <code class="docutils literal notranslate"><span class="pre">nginx_config</span></code>, либо же
+посмотреть на <a class="reference external" href="https://github.com/nginxinc/ansible-role-nginx-config/blob/main/defaults/main/template.yml">список определенных переменных</a>, можно узнать что
+авторы данной роли позволяют параметризовать. Добавим также шаблон для <code class="docutils literal notranslate"><span class="pre">index.html</span></code>,
+как мы это делали в собственной роли в файле <code class="docutils literal notranslate"><span class="pre">templates/index.html.j2</span></code> рядом с плейбуком:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">hello from </span><span class="cp">{{</span> <span class="nv">ansible_host</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>И добавим переменные для роли в плейбук:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">all</span>
+<span class="w">  </span><span class="nt">become</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="nt">collections</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginxinc.nginx_core</span>
+<span class="w">  </span><span class="nt">roles</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginxinc.nginx_core.nginx</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx_config</span>
+<span class="w">    </span><span class="nt">nginx_config_http_template_enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">nginx_config_http_template</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">config</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">servers</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">core</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">listen</span><span class="p">:</span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">80</span>
+<span class="w">            </span><span class="nt">server_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">localhost</span>
+<span class="w">          </span><span class="nt">locations</span><span class="p">:</span>
+<span class="w">          </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">            </span><span class="nt">core</span><span class="p">:</span>
+<span class="w">              </span><span class="nt">root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/share/nginx/html</span>
+<span class="w">              </span><span class="nt">index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.html</span>
+<span class="w">    </span><span class="nt">nginx_config_html_demo_template_enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">nginx_config_html_demo_template</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">template_file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">index.html.j2</span>
+<span class="w">      </span><span class="nt">deployment_location</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/usr/share/nginx/html/index.html</span>
+</pre></div>
+</div>
+<p>Запустим плейбук:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ansible-playbook<span class="w"> </span>-i<span class="w"> </span>node1.local,node2.local<span class="w"> </span>playbook.yaml
+
+<span class="go">PLAY [all] ********************************************************************************</span>
+
+<span class="go">TASK [Gathering Facts] ********************************************************************</span>
+<span class="go">ok: [node2.local]</span>
+<span class="go">ok: [node1.local]</span>
+<span class="go">...</span>
+<span class="go">PLAY RECAP ********************************************************************************</span>
+<span class="go">node1.local                : ok=22   changed=1    unreachable=0    failed=0    skipped=34   rescued=0    ignored=1</span>
+<span class="go">node2.local                : ok=22   changed=1    unreachable=0    failed=0    skipped=34   rescued=0    ignored=1</span>
+
+<span class="gp">$ </span>curl<span class="w"> </span>node1.local
+<span class="go">hello from node1.local</span>
+<span class="gp">$ </span>curl<span class="w"> </span>node2.local
+<span class="go">hello from node2.local</span>
+</pre></div>
+</div>
+<p>Как видно используя роли и коллекции можно переиспользовать код (в том числе
+подготовленный комьюнити и загруженный в <a class="reference external" href="https://galaxy.ansible.com">ansible galaxy</a>)
+для автоматизации развертывания инфраструктурных приложений.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="07_practice_ansible.html" class="btn btn-neutral float-left" title="Ansible" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="09_practice_saltstack.html" class="btn btn-neutral float-right" title="Salt" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

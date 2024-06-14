@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Docker Images" href="04_practice_docker_images.html" />
+    <link rel="prev" title="Vagrant Multi-Node" href="02_practice_vagrant.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Docker</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#container-lifecycle">Container lifecycle</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#run">Run</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#exec">Exec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stop">Stop</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-options">Run Options</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#logs">Logs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ports">Ports</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stats">Stats</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#images">Images</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pull">Pull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#push">Push</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#save-load">Save/Load</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#build">Build</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#remote">Remote</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Docker</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/03_practice_docker.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="docker">
+<h1>Docker<a class="headerlink" href="#docker" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии вспомним основные возможности docker клиента.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с докером в независимости от платформы можно воспользоваться
+следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;docker&quot;</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</section>
+<section id="container-lifecycle">
+<h2>Container lifecycle<a class="headerlink" href="#container-lifecycle" title="Permalink to this heading"></a></h2>
+<section id="run">
+<h3>Run<a class="headerlink" href="#run" title="Permalink to this heading"></a></h3>
+<p>Для простого запуска команды в контейнере достаточно запустить команду <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>
+указав имя образа и команду. В данном примере используется образ <code class="docutils literal notranslate"><span class="pre">python:3.11.5</span></code> и
+команда для просмотра версии. В некоторых образах уже имеется команда для запуска
+по-умолчанию, так что нет необходимости ее указывать.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>python<span class="w"> </span>--version
+<span class="go">Unable to find image &#39;python:3.11.5-alpine&#39; locally</span>
+<span class="go">3.11.5-alpine: Pulling from library/python</span>
+<span class="go">7264a8db6415: Pull complete</span>
+<span class="go">66e1d5e70e42: Pull complete</span>
+<span class="go">0448660c92fc: Pull complete</span>
+<span class="go">3ce23f846e31: Pull complete</span>
+<span class="go">efebc2e683d2: Pull complete</span>
+<span class="go">Digest: sha256:5d769f990397afbb2aca24b0655e404c0f2806d268f454b052e81e39d87abf42</span>
+<span class="go">Status: Downloaded newer image for python:3.11.5-alpine</span>
+<span class="go">Python 3.11.5</span>
+</pre></div>
+</div>
+<p>Как видно при отсутствии образа docker скачает его.</p>
+<p>Список запущенных контейнеров можно увидеть командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">ps</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span>
+</pre></div>
+</div>
+<p>Так как наш контейнер после вывода строки с информацией о версии завершил
+свою работу, то мы не увидим запущенных контейнеров. Чтобы увидеть
+список остановленных контейнеров нужно добавить опцию <code class="docutils literal notranslate"><span class="pre">-a</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+<span class="go">CONTAINER ID   IMAGE                  COMMAND              CREATED          STATUS                      PORTS     NAMES</span>
+<span class="go">6df80e8b97b3   python:3.11.5-alpine   &quot;python --version&quot;   12 seconds ago   Exited (0) 12 seconds ago             modest_spence</span>
+</pre></div>
+</div>
+<p>Чтобы очистить завершенные контейнеры можно выполнить команду <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">container</span> <span class="pre">prune</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>container<span class="w"> </span>prune
+<span class="go">WARNING! This will remove all stopped containers.</span>
+<span class="go">Are you sure you want to continue? [y/N] y</span>
+<span class="go">Deleted Containers:</span>
+<span class="go">6df80e8b97b3bd430f588337dd06cddd2550b82519c8f5c67ecd47fe85913134</span>
+
+<span class="go">Total reclaimed space: 0B</span>
+</pre></div>
+</div>
+<p>Для того, чтобы высвобождать ресурсы контейнера сразу после его завершения можно добавить
+опцию <code class="docutils literal notranslate"><span class="pre">--rm</span></code> в команде <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>python<span class="w"> </span>--version
+<span class="go">Python 3.11.5</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+<span class="go">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span>
+</pre></div>
+</div>
+<p>Для работы в интерактивном режиме с командой, запускаемой в контейнере, необходимо
+использовать две опции - <code class="docutils literal notranslate"><span class="pre">-i(interactive)</span></code> и <code class="docutils literal notranslate"><span class="pre">-t(tty)</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>-it<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>python
+<span class="go">Python 3.11.5 (main, Aug 26 2023, 00:26:34) [GCC 12.2.1 20220924] on linux</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="go">&gt;&gt;&gt; import os</span>
+<span class="go">&gt;&gt;&gt; os.name</span>
+<span class="go">&#39;posix&#39;</span>
+<span class="go">&gt;&gt;&gt; exit()</span>
+</pre></div>
+</div>
+<p>С помощью опции <code class="docutils literal notranslate"><span class="pre">-d</span></code> можно запустить контейнер в фоновом режиме, а с помощью
+опции <code class="docutils literal notranslate"><span class="pre">--name</span></code> задать имя с которым в дальнейшем удобно будет работать:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>--name<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-d<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">8888</span>
+<span class="go">1a3e73023693d79e0ea13a54d3825887e52dcafdf09a7e91a336e590ccce5462</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS          PORTS     NAMES</span>
+<span class="go">1a3e73023693   python:3.11.5-alpine   &quot;python -m http.serv…&quot;   26 seconds ago   Up 26 seconds             test</span>
+</pre></div>
+</div>
+<p>В ответ мы получим <code class="docutils literal notranslate"><span class="pre">id</span></code> контейнера, а сам контейнер продолжит работу в фоновом режиме.
+Данная команда в контейнере запустит http сервер, который работает на порту <code class="docutils literal notranslate"><span class="pre">8888</span></code>.</p>
+</section>
+<section id="exec">
+<h3>Exec<a class="headerlink" href="#exec" title="Permalink to this heading"></a></h3>
+<p>С помощью команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span></code> мы можем выполнить команду внутри контейнера, запустим
+утилиту <code class="docutils literal notranslate"><span class="pre">wget</span></code>, которая выполнит http запрос внутри контейнера:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="nb">test</span><span class="w"> </span>wget<span class="w"> </span>-qO-<span class="w"> </span>localhost:8888
+<span class="go">&lt;!DOCTYPE HTML&gt;</span>
+<span class="go">&lt;html lang=&quot;en&quot;&gt;</span>
+<span class="go">&lt;head&gt;</span>
+<span class="go">&lt;meta charset=&quot;utf-8&quot;&gt;</span>
+<span class="go">&lt;title&gt;Directory listing for /&lt;/title&gt;</span>
+<span class="go">&lt;/head&gt;</span>
+<span class="go">&lt;body&gt;</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+</section>
+<section id="stop">
+<h3>Stop<a class="headerlink" href="#stop" title="Permalink to this heading"></a></h3>
+<p>Остановим контейнер командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">stop</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>stop<span class="w"> </span><span class="nb">test</span>
+<span class="go">test</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+<span class="go">CONTAINER ID   IMAGE                  COMMAND                  CREATED          STATUS                       PORTS     NAMES</span>
+<span class="go">4504eaafb180   python:3.11.5-alpine   &quot;python -m http.serv…&quot;   46 seconds ago   Exited (137) 3 seconds ago             test</span>
+</pre></div>
+</div>
+<p>Но после остановки данные контейнера все еще остаются в системе, для их удаления можно
+воспользоваться командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">rm</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>rm<span class="w"> </span><span class="nb">test</span>
+<span class="go">test</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps<span class="w"> </span>-a
+<span class="go">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span>
+</pre></div>
+</div>
+</section>
+<section id="run-options">
+<h3>Run Options<a class="headerlink" href="#run-options" title="Permalink to this heading"></a></h3>
+<p>Опишем простой http сервер на python, расположим его в директории с <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>, так
+что внутри виртуальной машины он будет располагаться по пути <code class="docutils literal notranslate"><span class="pre">/vagrant/test.py</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">http.server</span> <span class="kn">import</span> <span class="n">HTTPServer</span><span class="p">,</span> <span class="n">BaseHTTPRequestHandler</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">getenv</span>
+
+<span class="k">class</span> <span class="nc">Handler</span><span class="p">(</span><span class="n">BaseHTTPRequestHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">do_GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_headers</span><span class="p">()</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;FILE&quot;</span><span class="p">,</span> <span class="s2">&quot;none&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;file: </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">file</span> <span class="o">!=</span> <span class="s2">&quot;none&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+<span class="n">HTTPServer</span><span class="p">((</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">8888</span><span class="p">),</span> <span class="n">Handler</span><span class="p">)</span><span class="o">.</span><span class="n">serve_forever</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Данный http сервер будет слушать порт <code class="docutils literal notranslate"><span class="pre">8888</span></code> и при наличии переменной среды <code class="docutils literal notranslate"><span class="pre">FILE</span></code> выводить
+содержимое файла в ответе на <code class="docutils literal notranslate"><span class="pre">GET</span></code> запрос.</p>
+<p>С помощью опции <code class="docutils literal notranslate"><span class="pre">-v</span></code> команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code> можно смонтировать директорию внутрь контейнера:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-v<span class="w"> </span>/vagrant:/vagrant<span class="w"> </span>-d<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>python<span class="w"> </span>/vagrant/test.py
+<span class="go">b1b891ee04ca0556acbbd7fd6a2669176f4d5920fbb3633f6bbde7eda2322258</span>
+</pre></div>
+</div>
+<p>Запустить команду внутри работающего контейнера также можно в интерактивном режиме
+с опциями <code class="docutils literal notranslate"><span class="pre">-it</span></code> команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">exec</span></code>, например можно запустить командную оболочку:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span><span class="nb">test</span><span class="w"> </span>/bin/sh
+<span class="go">/ # wget -qO- localhost:8888</span>
+<span class="go">file: none</span>
+<span class="go">/ # ls /vagrant/</span>
+<span class="go">Vagrantfile  test.py</span>
+<span class="go">/ # env</span>
+<span class="go">HOSTNAME=8dcddea20192</span>
+<span class="go">PYTHON_PIP_VERSION=23.2.1</span>
+<span class="go">SHLVL=1</span>
+<span class="go">HOME=/root</span>
+<span class="go">GPG_KEY=A035C8C19219BA821ECEA86B64E628F8D684696D</span>
+<span class="go">PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/9af82b715db434abb94a0a6f3569f43e72157346/public/get-pip.py</span>
+<span class="go">TERM=xterm</span>
+<span class="go">PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin</span>
+<span class="go">LANG=C.UTF-8</span>
+<span class="go">PYTHON_VERSION=3.11.5</span>
+<span class="go">PYTHON_SETUPTOOLS_VERSION=65.5.1</span>
+<span class="go">PWD=/</span>
+<span class="go">PYTHON_GET_PIP_SHA256=45a2bb8bf2bb5eff16fdd00faef6f29731831c7c59bd9fc2bf1f3bed511ff1fe</span>
+<span class="go">/ # exit</span>
+</pre></div>
+</div>
+<p>Работающий контейнер также можно принудительно завершить(используя сигнал <code class="docutils literal notranslate"><span class="pre">SIGKILL</span></code>) и
+высвободить ресурсы командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">rm</span> <span class="pre">-f</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="nb">test</span>
+<span class="go">test</span>
+</pre></div>
+</div>
+<p>Указать переменные среды для контейнера можно с помощью опции <code class="docutils literal notranslate"><span class="pre">-e</span></code> команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>,
+а также есть возможность проброса портов опцией <code class="docutils literal notranslate"><span class="pre">-p</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>-v<span class="w"> </span>/vagrant:/vagrant<span class="w"> </span>-e<span class="w"> </span><span class="nv">FILE</span><span class="o">=</span>/vagrant/Vagrantfile<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span><span class="nb">test</span><span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>python<span class="w"> </span>/vagrant/test.py
+<span class="go">3868ed2ca1d4dde97cdac888cf595bf76293f5e81693192db8a6eb4ffda9228f</span>
+</pre></div>
+</div>
+<p>Убедимся, что все настройки сработали сделав запрос к приложению в контейнере с хоста:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">file: /vagrant/Vagrantfile</span>
+<span class="go">Vagrant.configure(&quot;2&quot;) do |config|</span>
+<span class="go">  config.vm.box = &quot;ubuntu/lunar64&quot;</span>
+<span class="go">  config.vm.provision &quot;docker&quot;</span>
+<span class="go">end</span>
+</pre></div>
+</div>
+</section>
+<section id="logs">
+<h3>Logs<a class="headerlink" href="#logs" title="Permalink to this heading"></a></h3>
+<p>Логи самого приложения можно посмотреть с помощью команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">logs</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>logs<span class="w"> </span><span class="nb">test</span>
+<span class="go">172.17.0.1 - - [19/Sep/2023 21:59:56] &quot;GET / HTTP/1.1&quot; 200 -</span>
+</pre></div>
+</div>
+</section>
+<section id="ports">
+<h3>Ports<a class="headerlink" href="#ports" title="Permalink to this heading"></a></h3>
+<p>А конфигурацию портов с помощью <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">port</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>port<span class="w"> </span><span class="nb">test</span>
+<span class="go">8888/tcp -&gt; 0.0.0.0:8888</span>
+<span class="go">8888/tcp -&gt; [::]:8888</span>
+</pre></div>
+</div>
+</section>
+<section id="stats">
+<h3>Stats<a class="headerlink" href="#stats" title="Permalink to this heading"></a></h3>
+<p>Посмотреть запущенные процессы в контейнере позволяет команда <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">top</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>top<span class="w"> </span><span class="nb">test</span>
+<span class="go">UID   PID    PPID   C  STIME  TTY  TIME      CMD</span>
+<span class="go">root  11609  11587  0  21:59  ?    00:00:00  python  /vagrant/test.py</span>
+</pre></div>
+</div>
+<p>А статистику потребления всех контейнеров можно наблюдать командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">stats</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">CONTAINER ID NAME CPU % MEM USAGE / LIMIT   MEM % NET I/O       BLOCK I/O   PIDS</span>
+<span class="go">3868ed2ca1d4 test 0.01% 11.07MiB / 952.6MiB 1.16% 1.79kB / 778B 0B / 1.98MB 1</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="images">
+<h2>Images<a class="headerlink" href="#images" title="Permalink to this heading"></a></h2>
+<p>При указании образов контейнеров в командах <code class="docutils literal notranslate"><span class="pre">docker</span></code> используются локально загруженные,
+а при их отсутствии загружаются из общедоступного реджестри <a class="reference external" href="https://hub.docker.com/">hub.docker.com</a>.
+Список загруженных образов можно увидеть командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">images</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG             IMAGE ID       CREATED       SIZE</span>
+<span class="go">python       3.11.5-alpine   b9b301ab01c2   3 weeks ago   52.1MB</span>
+</pre></div>
+</div>
+<section id="pull">
+<h3>Pull<a class="headerlink" href="#pull" title="Permalink to this heading"></a></h3>
+<p>Скачивать образа в локальное хранилище можно командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">pull</span></code>, скачаем образ
+<code class="docutils literal notranslate"><span class="pre">registry</span></code> с помощью которого можно развернуть свой локальный реджестри в докере:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>pull<span class="w"> </span>registry:2
+<span class="go">2: Pulling from library/registry</span>
+<span class="go">7264a8db6415: Already exists</span>
+<span class="go">c4d48a809fc2: Pull complete</span>
+<span class="go">88b450dec42e: Pull complete</span>
+<span class="go">121f958bea53: Pull complete</span>
+<span class="go">7417fa3c6d92: Pull complete</span>
+<span class="go">Digest: sha256:d5f2fb0940fe9371b6b026b9b66ad08d8ab7b0d56b6ee8d5c71cb9b45a374307</span>
+<span class="go">Status: Downloaded newer image for registry:2</span>
+<span class="go">docker.io/library/registry:2</span>
+<span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG             IMAGE ID       CREATED       SIZE</span>
+<span class="go">python       3.11.5-alpine   b9b301ab01c2   3 weeks ago   52.1MB</span>
+<span class="go">registry     2               0030ba3d620c   6 weeks ago   24.1MB</span>
+</pre></div>
+</div>
+<p>Запустим собственный реджестри:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-p<span class="w"> </span><span class="m">5000</span>:5000<span class="w"> </span>--name<span class="w"> </span>registry<span class="w"> </span>registry:2
+<span class="go">83abcb32fb48828890d5f89b6bd8eb18bdcca95928e3cebf83310a182ca83d2f</span>
+</pre></div>
+</div>
+</section>
+<section id="push">
+<h3>Push<a class="headerlink" href="#push" title="Permalink to this heading"></a></h3>
+<p>Для того чтобы отправить образ в наш реджестри необходимо, чтобы в имени образа было
+указание на конкретный реджестри. Задать имя и тег можно командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">tag</span></code>,
+после чего отправить командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">push</span></code>. Так как наш реджестри запущен локально на
+порту <code class="docutils literal notranslate"><span class="pre">5000</span></code>, то в качестве имени может использоваться <code class="docutils literal notranslate"><span class="pre">localhost:5000</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>tag<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>localhost:5000/python:3.11.5-alpine
+<span class="gp">$ </span>docker<span class="w"> </span>push<span class="w"> </span>localhost:5000/python:3.11.5-alpine
+<span class="go">The push refers to repository [localhost:5000/python]</span>
+<span class="go">08928985481f: Pushed</span>
+<span class="go">7acf52b2a13c: Pushed</span>
+<span class="go">ce0f4c80e9b7: Pushed</span>
+<span class="go">9ad60c84bfbe: Pushed</span>
+<span class="go">4693057ce236: Pushed</span>
+<span class="go">3.11.5-alpine: digest: sha256:e5d592c422d6e527cb946ae6abb1886c511a5e163d3543865f5a5b9b61c01584 size: 1368</span>
+</pre></div>
+</div>
+</section>
+<section id="save-load">
+<h3>Save/Load<a class="headerlink" href="#save-load" title="Permalink to this heading"></a></h3>
+<p>Образ можно выгрузить из локального хранилища в файл командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">save</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>save<span class="w"> </span>python:3.11.5-alpine<span class="w"> </span>-o<span class="w"> </span>python.tar
+<span class="gp">$ </span>ls
+<span class="go">python.tar</span>
+</pre></div>
+</div>
+<p>И если потребуется, то можно перенести на другую машину и загрузить в локальное хранилище
+командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">load</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>load<span class="w"> </span>-i<span class="w"> </span>python.tar
+<span class="go">Loaded image: python:3.11.5-alpine</span>
+</pre></div>
+</div>
+</section>
+<section id="build">
+<h3>Build<a class="headerlink" href="#build" title="Permalink to this heading"></a></h3>
+<p>Сборка же самих образов производится командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span></code>. Для сборки образа
+опишем простой <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>, который добавит файл <code class="docutils literal notranslate"><span class="pre">test.py</span></code> и укажет команду запуска:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">python:3.11.5-alpine</span>
+
+<span class="k">ADD</span><span class="w"> </span>test.py<span class="w"> </span>/test.py
+
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;python&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;test.py&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Расположим его рядом с <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>, чтобы внутри виртуальной машины он находился по
+пути <code class="docutils literal notranslate"><span class="pre">/vagrant/Dockerfile</span></code>. В команде <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">build</span></code> передадим опцию <code class="docutils literal notranslate"><span class="pre">-t</span></code> для указания
+имени образа(если не указать тег будет использоваться latest), а также путь до
+директории с контекстом(там где будет производиться сборка):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span><span class="nb">test</span><span class="w"> </span>/vagrant/
+<span class="go">[+] Building 0.1s (7/7) FINISHED                                                docker:default</span>
+<span class="go"> =&gt; [internal] load .dockerignore                                                         0.0s</span>
+<span class="go"> =&gt; =&gt; transferring context: 2B                                                           0.0s</span>
+<span class="go"> =&gt; [internal] load build definition from Dockerfile                                      0.0s</span>
+<span class="go"> =&gt; =&gt; transferring dockerfile: 112B                                                      0.0s</span>
+<span class="go"> =&gt; [internal] load metadata for docker.io/library/python:3.11.5-alpine                   0.0s</span>
+<span class="go"> =&gt; [internal] load build context                                                         0.0s</span>
+<span class="go"> =&gt; =&gt; transferring context: 459B                                                         0.0s</span>
+<span class="go"> =&gt; [1/2] FROM docker.io/library/python:3.11.5-alpine                                     0.0s</span>
+<span class="go"> =&gt; [2/2] ADD test.py /test.py                                                            0.0s</span>
+<span class="go"> =&gt; exporting to image                                                                    0.0s</span>
+<span class="go"> =&gt; =&gt; exporting layers                                                                   0.0s</span>
+<span class="go"> =&gt; =&gt; writing image sha256:41a4beea6cab781be7403620f5edd2f35f242c471dc22f4a2d7820f5235b  0.0s</span>
+<span class="go"> =&gt; =&gt; naming to docker.io/library/test                                                   0.0s</span>
+<span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY              TAG             IMAGE ID       CREATED          SIZE</span>
+<span class="go">test                    latest          41a4beea6cab   15 seconds ago   52.1MB</span>
+<span class="go">localhost:5000/python   3.11.5-alpine   b9b301ab01c2   3 weeks ago      52.1MB</span>
+<span class="go">python                  3.11.5-alpine   b9b301ab01c2   3 weeks ago      52.1MB</span>
+<span class="go">registry                2               0030ba3d620c   6 weeks ago      24.1MB</span>
+</pre></div>
+</div>
+<p>Запустим контейнер из нашего образа, предварительно завершив контейнер <code class="docutils literal notranslate"><span class="pre">test</span></code>, если он
+запущен, и заодно проверим его работу:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="nb">test</span>
+<span class="go">test</span>
+<span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:8888<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="nb">test</span>
+<span class="go">90f3da847ba319893fa5906b9ca7ab3988dfe04824da029f1c935bdef095aa18</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">file: none</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="remote">
+<h2>Remote<a class="headerlink" href="#remote" title="Permalink to this heading"></a></h2>
+<p>Docker имеет клиент-серверную архитектуру, утилита <code class="docutils literal notranslate"><span class="pre">docker</span></code> является клиентом, который
+по умолчанию общается с docker демоном используя unix socket. Взаимодействие может
+осуществляться и по другим протоколам, самый простой - это tcp. С помощью него вы можете
+взаимодействовать с удаленным docker демоном точно также как и локально утилитой <code class="docutils literal notranslate"><span class="pre">docker</span></code>.
+Подготовим новую виртуальную машину в vagrant изменив конфигурацию docker демона для
+взаимодействия по сети через tcp, для этого можно воспользоваться <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">2375</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">2375</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;docker&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">d</span><span class="o">|</span>
+<span class="w">    </span><span class="n">d</span><span class="o">.</span><span class="n">post_install_provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      systemctl cat docker.service &gt; /etc/systemd/system/docker.service</span>
+<span class="sh">      sed -i &#39;/ExecStart/s#$# -H tcp://0.0.0.0:2375#&#39; /etc/systemd/system/docker.service</span>
+<span class="sh">      systemctl daemon-reload</span>
+<span class="sh">      systemctl restart docker.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>После запуска вм с данной конфигурацией на хост будет проброшен tcp порт 2375, через
+который можно подключиться не заходя в виртуальную машину с помощью <code class="docutils literal notranslate"><span class="pre">docker</span></code> клиента.
+Для этого достаточно установить переменную среды <code class="docutils literal notranslate"><span class="pre">DOCKER_HOST</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">DOCKER_HOST</span><span class="o">=</span>localhost:2375
+<span class="gp">$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>registry:2
+<span class="go">Unable to find image &#39;registry:2&#39; locally</span>
+<span class="go">2: Pulling from library/registry</span>
+<span class="go">7264a8db6415: Pull complete</span>
+<span class="go">c4d48a809fc2: Pull complete</span>
+<span class="go">88b450dec42e: Pull complete</span>
+<span class="go">121f958bea53: Pull complete</span>
+<span class="go">7417fa3c6d92: Pull complete</span>
+<span class="go">Digest: sha256:d5f2fb0940fe9371b6b026b9b66ad08d8ab7b0d56b6ee8d5c71cb9b45a374307</span>
+<span class="go">Status: Downloaded newer image for registry:2</span>
+<span class="go">12e58496092d71819605aef4fb8d0ebf9cf251e5ff78bb6fd43fcb18cf77e967</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE        COMMAND                  CREATED         STATUS         PORTS      NAMES</span>
+<span class="go">12e58496092d   registry:2   &quot;/entrypoint.sh /etc…&quot;   6 seconds ago   Up 5 seconds   5000/tcp   fervent_varahamihira</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="02_practice_vagrant.html" class="btn btn-neutral float-left" title="Vagrant Multi-Node" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="04_practice_docker_images.html" class="btn btn-neutral float-right" title="Docker Images" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

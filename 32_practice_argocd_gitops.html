@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArgoCD GitOps &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Самостоятельная работа" href="33_practice_final.html" />
+    <link rel="prev" title="ArgoCD" href="31_practice_argocd.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ArgoCD GitOps</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-app">Create App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-chart">Create Chart</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#create-argo-app">Create Argo App</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#auto-sync">Auto-Sync</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">ArgoCD GitOps</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/32_practice_argocd_gitops.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="argocd-gitops">
+<h1>ArgoCD GitOps<a class="headerlink" href="#argocd-gitops" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии рассмотрим возможности <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a> в качестве
+GitOps инструмента.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;argocd&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="s2">&quot;virtualbox&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">v</span><span class="o">|</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;argocd&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io docker-compose-v2</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      echo &#39;{&quot;registry-mirrors&quot;:[&quot;https:\\/\\/mirror.gcr.io&quot;]}&#39; &gt; /etc/docker/daemon.json</span>
+<span class="sh">      systemctl restart docker</span>
+<span class="sh">      curl -LO https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl</span>
+<span class="sh">      curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64</span>
+<span class="sh">      curl -Lo ./argocd https://github.com/argoproj/argo-cd/releases/download/v2.11.2/argocd-linux-amd64</span>
+<span class="sh">      curl -L https://get.helm.sh/helm-v3.15.1-linux-amd64.tar.gz | tar xvzf - --strip-components 1 linux-amd64/helm</span>
+<span class="sh">      install -m 755 kubectl kind argocd helm /usr/local/bin/</span>
+<span class="sh">      rm ./*</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация установит на виртуальную машину <a class="reference external" href="https://docs.docker.com/engine/">docker</a>, <a class="reference external" href="https://kubernetes.io/ru/docs/reference/kubectl/kubectl/">kubectl</a>,
+<a class="reference external" href="https://kind.sigs.k8s.io/">kind</a>, <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a> и <a class="reference external" href="https://helm.sh/">helm</a>.</p>
+</section>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<p>Для развертывания кластера с помощью <a class="reference external" href="https://kind.sigs.k8s.io/">kind</a> с возможностью использования
+локального registry воспользуемся <a class="reference external" href="https://kind.sigs.k8s.io/docs/user/local-registry/">скриптом</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/sh</span>
+<span class="nb">set</span><span class="w"> </span>-o<span class="w"> </span>errexit
+
+<span class="c1"># 1. Create registry container unless it already exists</span>
+<span class="nv">reg_name</span><span class="o">=</span><span class="s1">&#39;kind-registry&#39;</span>
+<span class="nv">reg_port</span><span class="o">=</span><span class="s1">&#39;5000&#39;</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;{{.State.Running}}&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">reg_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">true</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>!<span class="o">=</span><span class="w"> </span><span class="s1">&#39;true&#39;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span>--restart<span class="o">=</span>always<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;127.0.0.1:</span><span class="si">${</span><span class="nv">reg_port</span><span class="si">}</span><span class="s2">:5000&quot;</span><span class="w"> </span>--network<span class="w"> </span>bridge<span class="w"> </span>--name<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">reg_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>registry:2
+<span class="k">fi</span>
+
+<span class="c1"># 2. Create kind cluster with containerd registry config dir enabled</span>
+<span class="c1"># TODO: kind will eventually enable this by default and this patch will</span>
+<span class="c1"># be unnecessary.</span>
+<span class="c1">#</span>
+<span class="c1"># See:</span>
+<span class="c1"># https://github.com/kubernetes-sigs/kind/issues/2875</span>
+<span class="c1"># https://github.com/containerd/containerd/blob/main/docs/cri/config.md#registry-configuration</span>
+<span class="c1"># See: https://github.com/containerd/containerd/blob/main/docs/hosts.md</span>
+cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kind create cluster --config=-</span>
+<span class="s">kind: Cluster</span>
+<span class="s">apiVersion: kind.x-k8s.io/v1alpha4</span>
+<span class="s">nodes:</span>
+<span class="s">- role: control-plane</span>
+<span class="s">  kubeadmConfigPatches:</span>
+<span class="s">  - |</span>
+<span class="s">    kind: InitConfiguration</span>
+<span class="s">    nodeRegistration:</span>
+<span class="s">      kubeletExtraArgs:</span>
+<span class="s">        node-labels: &quot;ingress-ready=true&quot;</span>
+<span class="s">  extraPortMappings:</span>
+<span class="s">  - containerPort: 80</span>
+<span class="s">    hostPort: 8888</span>
+<span class="s">    protocol: TCP</span>
+<span class="s">  - containerPort: 443</span>
+<span class="s">    hostPort: 443</span>
+<span class="s">    protocol: TCP</span>
+<span class="s">containerdConfigPatches:</span>
+<span class="s">- |-</span>
+<span class="s">  [plugins.&quot;io.containerd.grpc.v1.cri&quot;.registry]</span>
+<span class="s">    config_path = &quot;/etc/containerd/certs.d&quot;</span>
+<span class="s">EOF</span>
+
+<span class="c1"># 3. Add the registry config to the nodes</span>
+<span class="c1">#</span>
+<span class="c1"># This is necessary because localhost resolves to loopback addresses that are</span>
+<span class="c1"># network-namespace local.</span>
+<span class="c1"># In other words: localhost in the container is not localhost on the host.</span>
+<span class="c1">#</span>
+<span class="c1"># We want a consistent name that works from both ends, so we tell containerd to</span>
+<span class="c1"># alias localhost:${reg_port} to the registry container when pulling images</span>
+<span class="nv">REGISTRY_DIR</span><span class="o">=</span><span class="s2">&quot;/etc/containerd/certs.d/registry.traefik.me:</span><span class="si">${</span><span class="nv">reg_port</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">for</span><span class="w"> </span>node<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="k">$(</span>kind<span class="w"> </span>get<span class="w"> </span>nodes<span class="k">)</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">node</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">REGISTRY_DIR</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="w">  </span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | docker exec -i &quot;${node}&quot; cp /dev/stdin &quot;${REGISTRY_DIR}/hosts.toml&quot;</span>
+<span class="s">[host.&quot;http://${reg_name}:5000&quot;]</span>
+<span class="s">EOF</span>
+<span class="k">done</span>
+
+<span class="c1"># 4. Connect the registry to the cluster network if not already connected</span>
+<span class="c1"># This allows kind to bootstrap the network but ensures they&#39;re on the same network</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>docker<span class="w"> </span>inspect<span class="w"> </span>-f<span class="o">=</span><span class="s1">&#39;{{json .NetworkSettings.Networks.kind}}&#39;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">reg_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;null&#39;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span>docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span><span class="s2">&quot;kind&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">reg_name</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="k">fi</span>
+
+<span class="c1"># 5. Document the local registry</span>
+<span class="c1"># https://github.com/kubernetes/enhancements/tree/master/keps/sig-cluster-lifecycle/generic/1755-communicating-a-local-registry</span>
+cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kubectl apply -f -</span>
+<span class="s">apiVersion: v1</span>
+<span class="s">kind: ConfigMap</span>
+<span class="s">metadata:</span>
+<span class="s">  name: local-registry-hosting</span>
+<span class="s">  namespace: kube-public</span>
+<span class="s">data:</span>
+<span class="s">  localRegistryHosting.v1: |</span>
+<span class="s">    host: &quot;registry.traefik.me:${reg_port}&quot;</span>
+<span class="s">    help: &quot;https://kind.sigs.k8s.io/docs/user/local-registry/&quot;</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>Сохраним в файл и запустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./kind.sh
+<span class="go">Unable to find image &#39;registry:2&#39; locally</span>
+<span class="go">2: Pulling from library/registry</span>
+<span class="go">619be1103602: Pull complete</span>
+<span class="go">862815ae87dc: Pull complete</span>
+<span class="go">74e12953df95: Pull complete</span>
+<span class="go">6f0ce73649a0: Pull complete</span>
+<span class="go">ef4f267ce8ed: Pull complete</span>
+<span class="go">Digest: sha256:4fac7a8257b1d7a86599043fcc181dfbdf9c8f57e337db763ac94b0e67c6cfb5</span>
+<span class="go">Status: Downloaded newer image for registry:2</span>
+<span class="go">9f5d46586f8b64579e5acd891fd6eef51cd2dcd67ef4ee3a36ec3e3bae7aac45</span>
+<span class="go">Creating cluster &quot;kind&quot; ...</span>
+<span class="go"> ✓ Ensuring node image (kindest/node:v1.29.2) 🖼</span>
+<span class="go"> ✓ Preparing nodes 📦</span>
+<span class="go"> ✓ Writing configuration 📜</span>
+<span class="go"> ✓ Starting control-plane 🕹️</span>
+<span class="go"> ✓ Installing CNI 🔌</span>
+<span class="go"> ✓ Installing StorageClass 💾</span>
+<span class="go">Set kubectl context to &quot;kind-kind&quot;</span>
+<span class="go">You can now use your cluster with:</span>
+
+<span class="go">kubectl cluster-info --context kind-kind</span>
+
+<span class="go">Thanks for using kind! 😊</span>
+<span class="go">configmap/local-registry-hosting created</span>
+</pre></div>
+</div>
+<p>Установим <code class="docutils literal notranslate"><span class="pre">ingress-nginx</span></code>, а также добавим <code class="docutils literal notranslate"><span class="pre">helm</span></code> репозитории gitea и argocd:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+<span class="go">namespace/ingress-nginx created</span>
+<span class="go">serviceaccount/ingress-nginx created</span>
+<span class="go">serviceaccount/ingress-nginx-admission created</span>
+<span class="go">role.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">role.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">configmap/ingress-nginx-controller created</span>
+<span class="go">service/ingress-nginx-controller created</span>
+<span class="go">service/ingress-nginx-controller-admission created</span>
+<span class="go">deployment.apps/ingress-nginx-controller created</span>
+<span class="go">job.batch/ingress-nginx-admission-create created</span>
+<span class="go">job.batch/ingress-nginx-admission-patch created</span>
+<span class="go">ingressclass.networking.k8s.io/nginx created</span>
+<span class="go">validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created</span>
+<span class="gp">$ </span>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>gitea-charts<span class="w"> </span>https://dl.gitea.com/charts/
+<span class="go">&quot;gitea-charts&quot; has been added to your repositories</span>
+<span class="gp">$ </span>helm<span class="w"> </span>repo<span class="w"> </span>add<span class="w"> </span>argo<span class="w"> </span>https://argoproj.github.io/argo-helm
+<span class="go">&quot;argo&quot; has been added to your repositories</span>
+<span class="gp">$ </span>helm<span class="w"> </span>repo<span class="w"> </span>update
+<span class="go">Hang tight while we grab the latest from your chart repositories...</span>
+<span class="go">...Successfully got an update from the &quot;gitea-charts&quot; chart repository</span>
+<span class="go">...Successfully got an update from the &quot;argo&quot; chart repository</span>
+<span class="go">Update Complete. ⎈Happy Helming!⎈</span>
+</pre></div>
+</div>
+<p>После чего установим <a class="reference external" href="https://docs.gitea.com/">gitea</a> с помощью утилиты <a class="reference external" href="https://helm.sh/">helm</a> и убедимся, что
+контейнеры запущены:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm<span class="w"> </span>upgrade<span class="w"> </span>-i<span class="w"> </span>gitea<span class="w"> </span>gitea-charts/gitea<span class="w"> </span>--namespace<span class="w"> </span>git<span class="w"> </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>global.imageRegistry<span class="o">=</span>mirror.gcr.io<span class="w"> </span>--set<span class="w"> </span>persistence.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>redis-cluster.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span>--set<span class="w"> </span>postgresql-ha.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>postgresql.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--set<span class="w"> </span>ingress.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set-json<span class="w"> </span><span class="s1">&#39;ingress.hosts[0]={&quot;host&quot;:&quot;git.traefik.me&quot;,&quot;paths&quot;:[{&quot;path&quot;:&quot;/&quot;,&quot;pathType&quot;:&quot;Prefix&quot;}]}&#39;</span>
+<span class="go">Release &quot;gitea&quot; does not exist. Installing it now.</span>
+<span class="go">NAME: gitea</span>
+<span class="go">LAST DEPLOYED: Mon Jun  3 20:37:25 2024</span>
+<span class="go">NAMESPACE: git</span>
+<span class="go">STATUS: deployed</span>
+<span class="go">REVISION: 1</span>
+<span class="go">NOTES:</span>
+<span class="go">1. Get the application URL by running these commands:</span>
+<span class="go">  http://git.traefik.me/</span>
+<span class="go">2. Review these warnings:</span>
+<span class="go">  - Gitea uses &#39;memory&#39; for caching which is not recommended for production use. See https://docs.gitea.com/next/administration/config-cheat-sheet#cache-cache for available options.</span>
+<span class="go">  - Gitea uses &#39;leveldb&#39; for queue actions which is not recommended for production use. See https://docs.gitea.com/next/administration/config-cheat-sheet#queue-queue-and-queue for available options.</span>
+<span class="go">  - Gitea uses &#39;memory&#39; for sessions which is not recommended for production use. See https://docs.gitea.com/next/administration/config-cheat-sheet#session-session for available options.</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-n<span class="w"> </span>git
+<span class="go">NAME                     READY   STATUS    RESTARTS   AGE</span>
+<span class="go">gitea-7f66d84fc7-7sfqn   1/1     Running   0          76s</span>
+<span class="go">gitea-postgresql-0       1/1     Running   0          76s</span>
+</pre></div>
+</div>
+<p>После чего интерфейс будет доступен по адресу
+<a class="reference external" href="http://git.traefik.me:8888/">git.traefik.me:8888</a>:</p>
+<p><img alt="" src="_images/argo-gitops1.png" /></p>
+<p>Установим также <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a> с помощью <a class="reference external" href="https://helm.sh/">helm</a> и дождемся пока поды запустятся:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm<span class="w"> </span>upgrade<span class="w"> </span>-i<span class="w"> </span>argo<span class="w"> </span>argo/argo-cd<span class="w"> </span>--namespace<span class="w"> </span>argo<span class="w"> </span>--create-namespace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>dex.enabled<span class="o">=</span><span class="nb">false</span><span class="w"> </span>--set<span class="w"> </span><span class="s1">&#39;server.extraArgs={--insecure}&#39;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--set<span class="w"> </span>server.ingress.enabled<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--set<span class="w"> </span>server.ingress.hostname<span class="o">=</span>argo.traefik.me
+<span class="go">Release &quot;argo&quot; does not exist. Installing it now.</span>
+<span class="go">NAME: argo</span>
+<span class="go">LAST DEPLOYED: Mon Jun  3 20:50:10 2024</span>
+<span class="go">NAMESPACE: argo</span>
+<span class="go">STATUS: deployed</span>
+<span class="go">REVISION: 1</span>
+<span class="go">TEST SUITE: None</span>
+<span class="go">NOTES:</span>
+<span class="go">In order to access the server UI you have the following options:</span>
+
+<span class="go">1. kubectl port-forward service/argo-argocd-server -n argo 8080:443</span>
+
+<span class="go">    and then open the browser on http://localhost:8080 and accept the certificate</span>
+
+<span class="go">2. enable ingress in the values file `server.ingress.enabled` and either</span>
+<span class="go">      - Add the annotation for ssl passthrough: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-1-ssl-passthrough</span>
+<span class="go">      - Set the `configs.params.&quot;server.insecure&quot;` in the values file and terminate SSL at your ingress: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-2-multiple-ingress-objects-and-hosts</span>
+
+
+<span class="go">After reaching the UI the first time you can login with username: admin and the random password generated during the installation. You can find the password by running:</span>
+
+<span class="go">kubectl -n argo get secret argocd-initial-admin-secret -o jsonpath=&quot;{.data.password}&quot; | base64 -d</span>
+
+<span class="gp gp-VirtualEnv">(You should delete the initial secret afterwards as suggested by the Getting Started Guide: https://argo-cd.readthedocs.io/en/stable/getting_started/#4-login-using-the-cli)</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>po<span class="w"> </span>-n<span class="w"> </span>argo
+<span class="go">NAME                                                     READY   STATUS      RESTARTS   AGE</span>
+<span class="go">argo-argocd-application-controller-0                     1/1     Running     0          114s</span>
+<span class="go">argo-argocd-applicationset-controller-79945d9cc8-6r865   1/1     Running     0          114s</span>
+<span class="go">argo-argocd-notifications-controller-64dcf79f6c-s8lrj    1/1     Running     0          114s</span>
+<span class="go">argo-argocd-redis-59789c768d-tpn7s                       1/1     Running     0          114s</span>
+<span class="go">argo-argocd-redis-secret-init-zpxtb                      0/1     Completed   0          2m17s</span>
+<span class="go">argo-argocd-repo-server-57b8c49d95-b9wt8                 1/1     Running     0          114s</span>
+<span class="go">argo-argocd-server-786c44855d-w9gn6                      1/1     Running     0          114s</span>
+</pre></div>
+</div>
+<p>После чего интерфейс будет доступен по адресу
+<a class="reference external" href="http://argo.traefik.me:8888">argo.traefik.me:8888</a>:</p>
+<p><img alt="" src="_images/argo-gitops2.png" /></p>
+</section>
+<section id="create-app">
+<h2>Create App<a class="headerlink" href="#create-app" title="Permalink to this heading"></a></h2>
+<p>Создадим репозиторий <code class="docutils literal notranslate"><span class="pre">app</span></code> в <a class="reference external" href="http://git.traefik.me:8888">gitea</a>:</p>
+<p><img alt="" src="_images/argo-gitops3.png" /></p>
+<p>Склонируем репозиторий и создадим простое приложение и <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> к нему:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>http://git.traefik.me:8888/alex/app.git
+<span class="go">Cloning into &#39;app&#39;...</span>
+<span class="go">warning: You appear to have cloned an empty repository.</span>
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>app
+<span class="gp">$ </span>cat<span class="w"> </span>&lt;&lt;EOF&gt;main.go
+<span class="go">package main</span>
+
+<span class="go">import (</span>
+<span class="go">        &quot;net/http&quot;</span>
+<span class="go">)</span>
+
+<span class="go">func main() {</span>
+<span class="go">        http.ListenAndServe(&quot;:8080&quot;, http.HandlerFunc(</span>
+<span class="go">                func(w http.ResponseWriter, _ *http.Request) {</span>
+<span class="go">                        w.WriteHeader(http.StatusOK)</span>
+<span class="go">                        w.Write([]byte(&quot;hello\n&quot;))</span>
+<span class="go">        }))</span>
+<span class="go">}</span>
+<span class="go">EOF</span>
+<span class="gp">$ </span>cat<span class="w"> </span>&lt;&lt;EOF&gt;Dockerfile
+<span class="go">FROM mirror.gcr.io/golang:1.21 as build</span>
+
+<span class="go">WORKDIR /src</span>
+
+<span class="go">COPY main.go /src/</span>
+<span class="go">RUN CGO_ENABLED=0 go build -o /bin/app ./main.go</span>
+
+<span class="go">FROM scratch</span>
+<span class="go">COPY --from=build /bin/app /app</span>
+<span class="go">CMD [&quot;/app&quot;]</span>
+<span class="go">EOF</span>
+</pre></div>
+</div>
+<p>После чего соберем и запушим в локальный реджестри <code class="docutils literal notranslate"><span class="pre">registry.traefik.me:5000</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>registry.traefik.me:5000/app:v1<span class="w"> </span>.
+<span class="go">Sending build context to Docker daemon  45.57kB</span>
+<span class="go">Step 1/7 : FROM mirror.gcr.io/golang:1.21 as build</span>
+<span class="go"> ---&gt; 0a5922bb6e20</span>
+<span class="go">Step 2/7 : WORKDIR /src</span>
+<span class="go"> ---&gt; Running in e76b21970668</span>
+<span class="go">Removing intermediate container e76b21970668</span>
+<span class="go"> ---&gt; 137ecccbe70b</span>
+<span class="go">Step 3/7 : COPY main.go /src/</span>
+<span class="go"> ---&gt; e9da6a17b049</span>
+<span class="go">Step 4/7 : RUN CGO_ENABLED=0 go build -o /bin/app ./main.go</span>
+<span class="go"> ---&gt; Running in 73edb1a2166d</span>
+<span class="go">Removing intermediate container 73edb1a2166d</span>
+<span class="go"> ---&gt; 67701db7cb58</span>
+<span class="go">Step 5/7 : FROM scratch</span>
+<span class="go"> ---&gt;</span>
+<span class="go">Step 6/7 : COPY --from=build /bin/app /app</span>
+<span class="go"> ---&gt; 69ba82a41903</span>
+<span class="go">Step 7/7 : CMD [&quot;/app&quot;]</span>
+<span class="go"> ---&gt; Running in b1ff3579ccbe</span>
+<span class="go">Removing intermediate container b1ff3579ccbe</span>
+<span class="go"> ---&gt; c8c5d0269885</span>
+<span class="go">Successfully built c8c5d0269885</span>
+<span class="go">Successfully tagged registry.traefik.me:5000/app:v1</span>
+<span class="gp">$ </span>docker<span class="w"> </span>push<span class="w"> </span>registry.traefik.me:5000/app:v1
+<span class="go">The push refers to repository [registry.traefik.me:5000/app]</span>
+<span class="go">fda33218fe64: Pushed</span>
+<span class="go">v1: digest: sha256:b6ec73fecc842f529e590bae6c4b6b176d0f4add5997c8e9aa46bd2e5f398466 size: 528</span>
+</pre></div>
+</div>
+</section>
+<section id="create-chart">
+<h2>Create Chart<a class="headerlink" href="#create-chart" title="Permalink to this heading"></a></h2>
+<p>Создадим также <code class="docutils literal notranslate"><span class="pre">helm</span></code> чарт в репозитории:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>helm<span class="w"> </span>create<span class="w"> </span>chart
+<span class="go">Creating chart</span>
+<span class="gp">$ </span>rm<span class="w"> </span>-r<span class="w"> </span>chart/templates/tests
+</pre></div>
+</div>
+<p>И отредактируем <code class="docutils literal notranslate"><span class="pre">chart/values.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">image</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.traefik.me:5000/app</span>
+<span class="w">  </span><span class="nt">pullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v1&quot;</span>
+
+<span class="nt">serviceAccount</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">autoscaling</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.traefik.me</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+</pre></div>
+</div>
+<p>После чего отправим в удаленный репозиторий:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>.
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span>init
+<span class="go">[main (root-commit) 469db78] init</span>
+<span class="go"> 13 files changed, 363 insertions(+)</span>
+<span class="go"> create mode 100644 Dockerfile</span>
+<span class="go"> create mode 100644 chart/.helmignore</span>
+<span class="go"> create mode 100644 chart/.values.yaml.swp</span>
+<span class="go"> create mode 100644 chart/Chart.yaml</span>
+<span class="go"> create mode 100644 chart/templates/NOTES.txt</span>
+<span class="go"> create mode 100644 chart/templates/_helpers.tpl</span>
+<span class="go"> create mode 100644 chart/templates/deployment.yaml</span>
+<span class="go"> create mode 100644 chart/templates/hpa.yaml</span>
+<span class="go"> create mode 100644 chart/templates/ingress.yaml</span>
+<span class="go"> create mode 100644 chart/templates/service.yaml</span>
+<span class="go"> create mode 100644 chart/templates/serviceaccount.yaml</span>
+<span class="go"> create mode 100644 chart/values.yaml</span>
+<span class="go"> create mode 100644 main.go</span>
+<span class="gp">$ </span>git<span class="w"> </span>push
+<span class="go">Enumerating objects: 17, done.</span>
+<span class="go">Counting objects: 100% (17/17), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (17/17), done.</span>
+<span class="go">Writing objects: 100% (17/17), 5.76 KiB | 1.44 MiB/s, done.</span>
+<span class="go">Total 17 (delta 1), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">remote: . Processing 1 references</span>
+<span class="go">remote: Processed 1 references in total</span>
+<span class="go">To http://git.traefik.me:8888/alex/app.git</span>
+<span class="go"> * [new branch]      main -&gt; main</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/argo-gitops4.png" /></p>
+</section>
+<section id="create-argo-app">
+<h2>Create Argo App<a class="headerlink" href="#create-argo-app" title="Permalink to this heading"></a></h2>
+<p>Создадим приложение в <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a>, указав внутренний git адрес:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>kubectl<span class="w"> </span>create<span class="w"> </span>-f<span class="w"> </span>-<span class="w"> </span><span class="s">&lt;&lt;EOF</span>
+<span class="s">apiVersion: argoproj.io/v1alpha1</span>
+<span class="s">kind: Application</span>
+<span class="s">metadata:</span>
+<span class="s">  name: app</span>
+<span class="s">  namespace: argo</span>
+<span class="s">spec:</span>
+<span class="s">  project: default</span>
+<span class="s">  source:</span>
+<span class="s">    repoURL: http://gitea-http.git.svc:3000/alex/app.git</span>
+<span class="s">    targetRevision: main</span>
+<span class="s">    path: chart</span>
+<span class="s">  destination:</span>
+<span class="s">    server: https://kubernetes.default.svc</span>
+<span class="s">    namespace: default</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>После чего получим пароль и авторизуемся в
+<a class="reference external" href="http://argo.traefik.me:8888">веб интерфейсе</a> под пользователем <code class="docutils literal notranslate"><span class="pre">admin</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>-n<span class="w"> </span>argo<span class="w"> </span>get<span class="w"> </span>secret<span class="w"> </span>argocd-initial-admin-secret<span class="w"> </span>-o<span class="w"> </span><span class="nv">jsonpath</span><span class="o">=</span><span class="s2">&quot;{.data.password}&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>base64<span class="w"> </span>-d
+<span class="go">UStarYkPA3nh25w0</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/argo-gitops5.png" /></p>
+<p><img alt="" src="_images/argo-gitops6.png" /></p>
+<p>Как видно <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a> отображает ресурсы, описанные в <code class="docutils literal notranslate"><span class="pre">helm</span></code> чарте. Нажмем кнопку
+<code class="docutils literal notranslate"><span class="pre">Sync</span></code> для создания ресурсов в кластере, после чего приложение перейдет в статус
+<code class="docutils literal notranslate"><span class="pre">Healthy</span></code>:</p>
+<p><img alt="" src="_images/argo-gitops7.png" /></p>
+<p>А по адресу <a class="reference external" href="http://app.traefik.me:8888/">app.traefik.me:8888</a> будет доступно
+само приложение:</p>
+<p><img alt="" src="_images/argo-gitops8.png" /></p>
+</section>
+<section id="auto-sync">
+<h2>Auto-Sync<a class="headerlink" href="#auto-sync" title="Permalink to this heading"></a></h2>
+<p>Также в интерфейсе argocd в нашем приложении по кнопке <code class="docutils literal notranslate"><span class="pre">Details</span></code> можно включить
+автоматическую синхронизацию ресурсов кластера с git репозиторием</p>
+<p><img alt="" src="_images/argo-gitops9.png" /></p>
+<p>Включим ее для того, чтобы при любых изменениях в репозитории ресурсы сразу
+попадали в кластер.</p>
+<p>Изменим строку в коде приложения, чтобы по выводу была понятна версия:</p>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span>
+<span class="w">                </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">_</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">)</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;hello v2\n&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="p">}))</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Соберем и запушим новую версию:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>registry.traefik.me:5000/app:v2<span class="w"> </span>.
+<span class="go">Sending build context to Docker daemon    107kB</span>
+<span class="go">Step 1/7 : FROM mirror.gcr.io/golang:1.21 as build</span>
+<span class="go"> ---&gt; 0a5922bb6e20</span>
+<span class="go">Step 2/7 : WORKDIR /src</span>
+<span class="go"> ---&gt; Using cache</span>
+<span class="go"> ---&gt; 137ecccbe70b</span>
+<span class="go">Step 3/7 : COPY main.go /src/</span>
+<span class="go"> ---&gt; e8d44019610a</span>
+<span class="go">Step 4/7 : RUN CGO_ENABLED=0 go build -o /bin/app ./main.go</span>
+<span class="go"> ---&gt; Running in 4e680dcb9a7c</span>
+<span class="go">Removing intermediate container 4e680dcb9a7c</span>
+<span class="go"> ---&gt; 6a8312d3000d</span>
+<span class="go">Step 5/7 : FROM scratch</span>
+<span class="go"> ---&gt;</span>
+<span class="go">Step 6/7 : COPY --from=build /bin/app /app</span>
+<span class="go"> ---&gt; de7646146ed1</span>
+<span class="go">Step 7/7 : CMD [&quot;/app&quot;]</span>
+<span class="go"> ---&gt; Running in b9f6a2586cba</span>
+<span class="go">Removing intermediate container b9f6a2586cba</span>
+<span class="go"> ---&gt; fbd62922d125</span>
+<span class="go">Successfully built fbd62922d125</span>
+<span class="go">Successfully tagged registry.traefik.me:5000/app:v2</span>
+<span class="gp">$ </span>docker<span class="w"> </span>push<span class="w"> </span>registry.traefik.me:5000/app:v2
+<span class="go">The push refers to repository [registry.traefik.me:5000/app]</span>
+<span class="go">f9ea5c2db5d8: Pushed</span>
+<span class="go">v2: digest: sha256:d33a410af15be7f43416ff61ee3cb2aa947297aeaadfef3a043973ba6caaa0fc size: 528</span>
+</pre></div>
+</div>
+<p>А в файле <code class="docutils literal notranslate"><span class="pre">chart/values.yaml</span></code> укажем новую версию:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">replicaCount</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">image</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">repository</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">registry.traefik.me:5000/app</span>
+<span class="w">  </span><span class="nt">pullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">IfNotPresent</span>
+<span class="w">  </span><span class="nt">tag</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;v2&quot;</span>
+
+<span class="nt">serviceAccount</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">create</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">autoscaling</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">false</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ClusterIP</span>
+<span class="w">  </span><span class="nt">port</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080</span>
+
+<span class="nt">ingress</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">host</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app.traefik.me</span>
+<span class="w">      </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/</span>
+<span class="w">          </span><span class="nt">pathType</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Prefix</span>
+</pre></div>
+</div>
+<p>После чего отправим изменения в удаленный репозиторий:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>.
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s1">&#39;update version&#39;</span>
+<span class="go">[main 7fca3bf] update version</span>
+<span class="go"> 3 files changed, 2 insertions(+), 2 deletions(-)</span>
+<span class="go"> delete mode 100644 chart/.values.yaml.swp</span>
+<span class="gp">$ </span>git<span class="w"> </span>push
+<span class="go">Enumerating objects: 9, done.</span>
+<span class="go">Counting objects: 100% (9/9), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (5/5), done.</span>
+<span class="go">Writing objects: 100% (5/5), 446 bytes | 446.00 KiB/s, done.</span>
+<span class="go">Total 5 (delta 3), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">remote: . Processing 1 references</span>
+<span class="go">remote: Processed 1 references in total</span>
+<span class="go">To http://git.traefik.me:8888/alex/app.git</span>
+<span class="go">   469db78..7fca3bf  main -&gt; main</span>
+</pre></div>
+</div>
+<p>Спустя некоторое время argocd получит информацию об изменениях в репозитории и
+создаст новую ревизию с версией <code class="docutils literal notranslate"><span class="pre">v2</span></code>:</p>
+<p><img alt="" src="_images/argo-gitops10.png" /></p>
+<p>А по адресу <a class="reference external" href="http://app.traefik.me:8888/">app.traefik.me:8888</a> начнет отвечать
+новая версия:</p>
+<p><img alt="" src="_images/argo-gitops11.png" /></p>
+<p>Параметры чарта можно определять не только через git репозиторий, но и
+переназначать во вкладке <code class="docutils literal notranslate"><span class="pre">Parameters</span></code> в <code class="docutils literal notranslate"><span class="pre">Details</span></code> приложения argocd:</p>
+<p><img alt="" src="_images/argo-gitops12.png" /></p>
+<p>Может отредактировать, нажав кнопку <code class="docutils literal notranslate"><span class="pre">Edit</span></code> и вернуть параметр <code class="docutils literal notranslate"><span class="pre">image.tag</span></code> в
+значение <code class="docutils literal notranslate"><span class="pre">v1</span></code>:</p>
+<p><img alt="" src="_images/argo-gitops13.png" /></p>
+<p>Таким образом развернется приложение со старой версией:</p>
+<p><img alt="" src="_images/argo-gitops14.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="31_practice_argocd.html" class="btn btn-neutral float-left" title="ArgoCD" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="33_practice_final.html" class="btn btn-neutral float-right" title="Самостоятельная работа" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

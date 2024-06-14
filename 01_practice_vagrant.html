@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vagrant &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Vagrant Multi-Node" href="02_practice_vagrant.html" />
+    <link rel="prev" title="Практика" href="practice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vagrant</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install">Install</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#virtualbox">VirtualBox</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Vagrant</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#box">Box</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#provision">Provision</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Vagrant</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/01_practice_vagrant.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vagrant">
+<h1>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h1>
+<p>В данной практике рассмотрим базовое взаимодействие с <a class="reference external" href="https://www.vagrantup.com/">vagrant</a>.</p>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<section id="virtualbox">
+<h3>VirtualBox<a class="headerlink" href="#virtualbox" title="Permalink to this heading"></a></h3>
+<p>Для работы с <a class="reference external" href="https://www.vagrantup.com/">vagrant</a> нам понадобится провайдер, использующийся по-умолчанию -
+<a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a>.
+Скачать его можно со <a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">страницы загрузок на официальном сайте</a> или
+воспользовавшись пакетным менеджером для своей ОС:</p>
+<p><a class="reference external" href="https://community.chocolatey.org/packages/virtualbox">Windows</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>choco<span class="w"> </span>install<span class="w"> </span>virtualbox
+</pre></div>
+</div>
+<p><a class="reference external" href="https://formulae.brew.sh/cask/virtualbox">MacOS</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>virtualbox
+</pre></div>
+</div>
+<p><a class="reference external" href="https://help.ubuntu.ru/wiki/virtualbox">Ubuntu</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>apt<span class="w"> </span>install<span class="w"> </span>virtualbox
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>Vagrant<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<p>Сам <a class="reference external" href="https://www.vagrantup.com/">vagrant</a> можно <a class="reference external" href="https://developer.hashicorp.com/vagrant/downloads">скачать и установить с официального сайта</a>,
+где указаны инструкции для разных платформ.</p>
+<p><a class="reference external" href="https://developer.hashicorp.com/vagrant/downloads">Windows</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>choco<span class="w"> </span>install<span class="w"> </span>vagrant
+</pre></div>
+</div>
+<p><a class="reference external" href="https://developer.hashicorp.com/vagrant/downloads">MacOS</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>brew<span class="w"> </span>install<span class="w"> </span>hashicorp/tap/hashicorp-vagrant
+</pre></div>
+</div>
+<p><a class="reference external" href="https://developer.hashicorp.com/vagrant/downloads">Ubuntu</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>wget<span class="w"> </span>-O-<span class="w"> </span>https://apt.releases.hashicorp.com/gpg<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/hashicorp-archive-keyring.gpg
+<span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com </span><span class="k">$(</span>lsb_release<span class="w"> </span>-cs<span class="k">)</span><span class="s2"> main&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/hashicorp.list
+<span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>vagrant
+</pre></div>
+</div>
+<p>После установки можно убедиться, что <a class="reference external" href="https://www.vagrantup.com/">vagrant</a> установлен:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>-v
+<span class="go">Vagrant 2.3.7</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="init">
+<h2>Init<a class="headerlink" href="#init" title="Permalink to this heading"></a></h2>
+<p>Для инициализации проекта воспользуемся командой <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">init</span></code>, которая создаст
+в текущей директории <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> с конфигурацией и комментариями к ней. Данная
+команда также позволяет задать имя бокса(образа виртуальной машины):</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>vagrant
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>vagrant
+<span class="gp">$ </span>vagrant<span class="w"> </span>init<span class="w"> </span>ubuntu/lunar64
+<span class="go">A `Vagrantfile` has been placed in this directory. You are now</span>
+<span class="go">ready to `vagrant up` your first virtual environment! Please read</span>
+<span class="go">the comments in the Vagrantfile as well as documentation on</span>
+<span class="go">`vagrantup.com` for more information on using Vagrant.</span>
+<span class="gp">$ </span>ls
+<span class="go">Vagrantfile</span>
+</pre></div>
+</div>
+<p>После этого в директории появится <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>, в котором довольно подробно
+описаны в виде комментариев базовые возможности конфигурации. Если же посмотреть
+содержимое убрав комментарии и пустые строки, то получим следующее:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span>-Ev<span class="w"> </span><span class="s1">&#39;^\s*#|^$&#39;</span><span class="w"> </span>Vagrantfile<span class="w"> </span><span class="c1"># посмотрим текущее содержимое без комментариев</span>
+<span class="go">Vagrant.configure(&quot;2&quot;) do |config|</span>
+<span class="go">  config.vm.box = &quot;ubuntu/lunar64&quot;</span>
+<span class="go">end</span>
+</pre></div>
+</div>
+</section>
+<section id="box">
+<h2>Box<a class="headerlink" href="#box" title="Permalink to this heading"></a></h2>
+<p>К сожалению <a class="reference external" href="https://www.hashicorp.com/">HashiCorp</a> на текущий момент ограничила доступ к своим ресурсам
+из России и автоматическое скачивание бокса при запуске не будет работать.
+Для установки бокса его <a class="reference external" href="https://app.vagrantup.com/boxes/search">можно найти и вручную скачать с сайта</a>.
+В данной практике будет использоваться <a class="reference external" href="https://app.vagrantup.com/ubuntu/boxes/lunar64">ubuntu/lunar64</a>, возьмем
+последнюю версию для <a class="reference external" href="https://www.virtualbox.org/">virtualbox</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-LO<span class="w"> </span>https://app.vagrantup.com/ubuntu/boxes/lunar64/versions/20230829.0.0/providers/virtualbox.box
+<span class="gp">  % </span>Total<span class="w">    </span>%<span class="w"> </span>Received<span class="w"> </span>%<span class="w"> </span>Xferd<span class="w">  </span>Average<span class="w"> </span>Speed<span class="w">   </span>Time<span class="w">    </span>Time<span class="w">     </span>Time<span class="w">  </span>Current
+<span class="go">                                 Dload  Upload   Total   Spent    Left  Speed</span>
+<span class="go">100   165    0   165    0     0    204      0 --:--:-- --:--:-- --:--:--   204</span>
+<span class="go">100   151    0   151    0     0    124      0 --:--:--  0:00:01 --:--:--     0</span>
+<span class="go">100  704M  100  704M    0     0  11.0M      0  0:01:03  0:01:03 --:--:-- 11.3M</span>
+<span class="gp">$ </span>ls
+<span class="go">Vagrantfile  virtualbox.box</span>
+</pre></div>
+</div>
+<p>После скачивания добавим бокс в локальную базу <a class="reference external" href="https://www.vagrantup.com/">vagrant</a>, указав путь до файла
+в команде <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">box</span> <span class="pre">add</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>add<span class="w"> </span>--name<span class="w"> </span>ubuntu/lunar64<span class="w"> </span>virtualbox.box
+<span class="go">==&gt; box: Box file was not detected as metadata. Adding it directly...</span>
+<span class="go">==&gt; box: Adding box &#39;ubuntu/lunar64&#39; (v0) for provider:</span>
+<span class="go">    box: Unpacking necessary files from: file:///home/alex/infra-course/example/vagrant/virtualbox.box</span>
+<span class="go">==&gt; box: Successfully added box &#39;ubuntu/lunar64&#39; (v0) for &#39;virtualbox&#39;!</span>
+<span class="gp">$ </span>rm<span class="w"> </span>virtualbox.box
+<span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>list
+<span class="go">ubuntu/lunar64 (virtualbox, 0)</span>
+</pre></div>
+</div>
+<p>Другой вариант - это указать ссылку на бокс в команде <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">box</span> <span class="pre">add</span></code>, но
+так как ссылка, указанная на сайте <a class="reference external" href="https://app.vagrantup.com/boxes/search">app.vagrantup.com</a> не прямая,
+а перенаправляет на другой ресурс, то необходимо получить прямую ссылку.
+Для этого можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">curl</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-ILso<span class="w"> </span>/dev/null<span class="w"> </span>https://app.vagrantup.com/ubuntu/boxes/lunar64/versions/20230829.0.0/providers/virtualbox.box<span class="w"> </span>-w<span class="w"> </span><span class="s1">&#39;%{url_effective}&#39;</span>
+<span class="go">https://cloud-images.ubuntu.com/lunar/current/lunar-server-cloudimg-amd64-vagrant.box</span>
+</pre></div>
+</div>
+<p>И использовать данную ссылку непосредственно в команде <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">box</span> <span class="pre">add</span></code>, либо сделать
+подстановку команды <code class="docutils literal notranslate"><span class="pre">curl</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>add<span class="w"> </span>--name<span class="w"> </span>ubuntu/lunar64<span class="w"> </span><span class="k">$(</span>curl<span class="w"> </span>-ILso<span class="w"> </span>/dev/null<span class="w"> </span>https://app.vagrantup.com/ubuntu/boxes/lunar64/versions/20230829.0.0/providers/virtualbox.box<span class="w"> </span>-w<span class="w"> </span><span class="s1">&#39;%{url_effective}&#39;</span><span class="k">)</span>
+<span class="go">==&gt; box: Box file was not detected as metadata. Adding it directly...</span>
+<span class="go">==&gt; box: Adding box &#39;ubuntu/lunar64&#39; (v0) for provider:</span>
+<span class="go">    box: Downloading: https://cloud-images.ubuntu.com/lunar/current/lunar-server-cloudimg-amd64-vagrant.box</span>
+<span class="go">==&gt; box: Box download is resuming from prior download progress</span>
+<span class="go">==&gt; box: Successfully added box &#39;ubuntu/lunar64&#39; (v0) for &#39;virtualbox&#39;!</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>box<span class="w"> </span>list
+<span class="go">ubuntu/lunar64 (virtualbox, 0)</span>
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<p>Для управления виртуальной машиной есть ряд команд:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">up</span></code> - создает виртуальную машину согласно описанию в <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">halt</span></code> - останавливает виртуальную машину</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">suspend</span></code> - отправляет в сон виртуальную машину</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">resume</span></code> - пробуждает от сна виртуальную машину</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">destroy</span></code> - полностью уничтожает виртуальную машину</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">reload</span></code> - перезапускает виртуальную машину перечитывая <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">status</span></code> - отображает статус виртуальной машины</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">global-status</span></code> - отображает глобальный статус по всем виртуальным машинам</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">port</span></code> - отображает проброшенные порты виртуальной машины</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">ssh</span></code> - подключение к терминалу виртуальной машины через ssh</p></li>
+</ul>
+<p>Поднимем виртуальную машину из созданного <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span>-Ev<span class="w"> </span><span class="s1">&#39;^\s*#|^$&#39;</span><span class="w"> </span>Vagrantfile<span class="w"> </span><span class="c1"># посмотрим текущее содержимое без комментариев</span>
+<span class="go">Vagrant.configure(&quot;2&quot;) do |config|</span>
+<span class="go">  config.vm.box = &quot;ubuntu/lunar64&quot;</span>
+<span class="go">end</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>up
+<span class="go">Bringing machine &#39;default&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">==&gt; default: Importing base box &#39;ubuntu/lunar64&#39;...</span>
+<span class="go">==&gt; default: Matching MAC address for NAT networking...</span>
+<span class="go">==&gt; default: Setting the name of the VM: vagrant_default_1693755245554_44068</span>
+<span class="go">==&gt; default: Clearing any previously set network interfaces...</span>
+<span class="go">==&gt; default: Preparing network interfaces based on configuration...</span>
+<span class="go">    default: Adapter 1: nat</span>
+<span class="go">==&gt; default: Forwarding ports...</span>
+<span class="go">    default: 22 (guest) =&gt; 2222 (host) (adapter 1)</span>
+<span class="go">==&gt; default: Running &#39;pre-boot&#39; VM customizations...</span>
+<span class="go">==&gt; default: Booting VM...</span>
+<span class="go">==&gt; default: Waiting for machine to boot. This may take a few minutes...</span>
+<span class="go">    default: SSH address: 127.0.0.1:2222</span>
+<span class="go">    default: SSH username: vagrant</span>
+<span class="go">    default: SSH auth method: private key</span>
+<span class="go">==&gt; default: Machine booted and ready!</span>
+<span class="go">==&gt; default: Checking for guest additions in VM...</span>
+<span class="go">    default: The guest additions on this VM do not match the installed version of</span>
+<span class="go">    default: VirtualBox! In most cases this is fine, but in rare cases it can</span>
+<span class="go">    default: prevent things such as shared folders from working properly. If you see</span>
+<span class="go">    default: shared folder errors, please make sure the guest additions within the</span>
+<span class="go">    default: virtual machine match the version of VirtualBox you have installed on</span>
+<span class="go">    default: your host and reload your VM.</span>
+<span class="go">    default:</span>
+<span class="go">    default: Guest Additions Version: 6.0.0 r127566</span>
+<span class="go">    default: VirtualBox Version: 7.0</span>
+<span class="go">==&gt; default: Mounting shared folders...</span>
+<span class="go">    default: /vagrant =&gt; /home/alex/infra-course/example/vagrant</span>
+</pre></div>
+</div>
+<p>Попробуем подключиться:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh
+<span class="go">Welcome to Ubuntu 23.04 (GNU/Linux 6.2.0-31-generic x86_64)</span>
+
+<span class="go"> * Documentation:  https://help.ubuntu.com</span>
+<span class="go"> * Management:     https://landscape.canonical.com</span>
+<span class="go"> * Support:        https://ubuntu.com/advantage</span>
+
+<span class="go">  System information as of Sun Sep  3 17:42:36 UTC 2023</span>
+
+<span class="go">  System load:  0.0               Processes:               100</span>
+<span class="go">  Usage of /:   4.0% of 38.70GB   Users logged in:         0</span>
+<span class="go">  Memory usage: 20%               IPv4 address for enp0s3: 10.0.2.15</span>
+<span class="go">  Swap usage:   0%</span>
+
+
+<span class="go">0 updates can be applied immediately.</span>
+
+<span class="gp">vagrant@ubuntu-lunar:~$ </span>uname<span class="w"> </span>-a
+<span class="go">Linux ubuntu-lunar 6.2.0-31-generic #31-Ubuntu SMP PREEMPT_DYNAMIC Mon Aug 14 13:42:26 UTC 2023 x86_64 x86_64 x86_64 GNU/Linux</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>По умолчанию vagrant синхронизирует ваш текущий каталог с каталогом <code class="docutils literal notranslate"><span class="pre">/vagrant</span></code> внутри
+виртуальной машины.</p>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@ubuntu-lunar:~$ </span>ls<span class="w"> </span>/vagrant/
+<span class="go">Vagrantfile</span>
+<span class="gp">vagrant@ubuntu-lunar:~$ </span><span class="nb">exit</span>
+</pre></div>
+</div>
+<p>Проверим статус:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>status
+<span class="go">Current machine states:</span>
+
+<span class="go">default                   running (virtualbox)</span>
+
+<span class="go">The VM is running. To stop this VM, you can run `vagrant halt` to</span>
+<span class="go">shut it down forcefully, or you can run `vagrant suspend` to simply</span>
+<span class="go">suspend the virtual machine. In either case, to restart it again,</span>
+<span class="go">simply run `vagrant up`.</span>
+
+<span class="gp">$ </span>vagrant<span class="w"> </span>global-status
+<span class="go">id       name    provider   state   directory</span>
+<span class="go">----------------------------------------------------------------------------</span>
+<span class="go">8a72feb  default virtualbox running /home/alex/infra-course/example/vagrant</span>
+
+<span class="go">The above shows information about all known Vagrant environments</span>
+<span class="go">on this machine. This data is cached and may not be completely</span>
+<span class="go">up-to-date (use &quot;vagrant global-status --prune&quot; to prune invalid</span>
+<span class="go">entries). To interact with any of the machines, you can go to that</span>
+<span class="go">directory and run Vagrant, or you can use the ID directly with</span>
+<span class="go">Vagrant commands from any directory. For example:</span>
+<span class="go">&quot;vagrant destroy 1a2b3c4d&quot;</span>
+
+<span class="gp">$ </span>vagrant<span class="w"> </span>port
+<span class="go">The forwarded ports for the machine are listed below. Please note that</span>
+<span class="go">these values may differ from values configured in the Vagrantfile if the</span>
+<span class="go">provider supports automatic port collision detection and resolution.</span>
+
+<span class="go">    22 (guest) =&gt; 2222 (host)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>По-умолчанию проброшен 22 порт с виртуальной машины на 2222 порт хоста,
+через который мы подключаемся по ssh.</p>
+</div>
+<p>Пробросим дополнительно порт 80 из виртуальной машины на 8080 порт хоста, для
+этого добавим в <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> строку:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8080</span>
+</pre></div>
+</div>
+<p>Данная строка уже есть в качестве примера в комментариях, если файл создавался
+через команду <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">init</span></code>, так что достаточно раскомментировать данную строку.</p>
+<p>Перезапустим машину с новой конфигурацией:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span>-Ev<span class="w"> </span><span class="s1">&#39;^\s*#|^$&#39;</span><span class="w"> </span>Vagrantfile<span class="w"> </span><span class="c1"># посмотрим текущее содержимое без комментариев</span>
+<span class="go">Vagrant.configure(&quot;2&quot;) do |config|</span>
+<span class="go">  config.vm.box = &quot;ubuntu/lunar64&quot;</span>
+<span class="go">  config.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8080</span>
+<span class="go">end</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>reload
+<span class="go">==&gt; default: Attempting graceful shutdown of VM...</span>
+<span class="go">==&gt; default: Clearing any previously set forwarded ports...</span>
+<span class="go">==&gt; default: Clearing any previously set network interfaces...</span>
+<span class="go">==&gt; default: Preparing network interfaces based on configuration...</span>
+<span class="go">    default: Adapter 1: nat</span>
+<span class="go">==&gt; default: Forwarding ports...</span>
+<span class="go">    default: 80 (guest) =&gt; 8080 (host) (adapter 1)</span>
+<span class="go">    default: 22 (guest) =&gt; 2222 (host) (adapter 1)</span>
+<span class="go">==&gt; default: Running &#39;pre-boot&#39; VM customizations...</span>
+<span class="go">==&gt; default: Booting VM...</span>
+<span class="go">==&gt; default: Waiting for machine to boot. This may take a few minutes...</span>
+<span class="go">    default: SSH address: 127.0.0.1:2222</span>
+<span class="go">    default: SSH username: vagrant</span>
+<span class="go">    default: SSH auth method: private key</span>
+<span class="go">==&gt; default: Machine booted and ready!</span>
+<span class="go">==&gt; default: Checking for guest additions in VM...</span>
+<span class="go">    default: The guest additions on this VM do not match the installed version of</span>
+<span class="go">    default: VirtualBox! In most cases this is fine, but in rare cases it can</span>
+<span class="go">    default: prevent things such as shared folders from working properly. If you see</span>
+<span class="go">    default: shared folder errors, please make sure the guest additions within the</span>
+<span class="go">    default: virtual machine match the version of VirtualBox you have installed on</span>
+<span class="go">    default: your host and reload your VM.</span>
+<span class="go">    default:</span>
+<span class="go">    default: Guest Additions Version: 6.0.0 r127566</span>
+<span class="go">    default: VirtualBox Version: 7.0</span>
+<span class="go">==&gt; default: Mounting shared folders...</span>
+<span class="go">    default: /vagrant =&gt; /home/alex/infra-course/example/vagrant</span>
+<span class="go">==&gt; default: Machine already provisioned. Run `vagrant provision` or use the `--provision`</span>
+<span class="go">==&gt; default: flag to force provisioning. Provisioners marked to run always will still run.</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>port
+<span class="go">The forwarded ports for the machine are listed below. Please note that</span>
+<span class="go">these values may differ from values configured in the Vagrantfile if the</span>
+<span class="go">provider supports automatic port collision detection and resolution.</span>
+
+<span class="go">    22 (guest) =&gt; 2222 (host)</span>
+<span class="go">    80 (guest) =&gt; 8080 (host)</span>
+</pre></div>
+</div>
+<p>Как видно после команды <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">reload</span></code> подхватилась новая конфигурация из <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>.</p>
+<p>После работы с виртуальной машиной, чтобы она не потребляла ресурсы, нужно не забыть
+выключить ее командой <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">halt</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>halt
+<span class="go">==&gt; default: Attempting graceful shutdown of VM...</span>
+</pre></div>
+</div>
+<p>Если виртуальная машина и ее данные более не требуется, то можно уничтожить ее командой
+<code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">destroy</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>destroy
+<span class="go">    default: Are you sure you want to destroy the &#39;default&#39; VM? [y/N] y</span>
+<span class="go">==&gt; default: Destroying VM and associated drives...</span>
+</pre></div>
+</div>
+</section>
+<section id="provision">
+<h2>Provision<a class="headerlink" href="#provision" title="Permalink to this heading"></a></h2>
+<p>Через конфигурацию в <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> есть возможность подготовить виртуальную машину после
+запуска. Подготовим нашу машину для запуска нашего приложения. Создадим простое
+приложение, которое будет отвечать на HTTP запросы. Можете использовать свой любимый язык.</p>
+<p>Пример на <code class="docutils literal notranslate"><span class="pre">golang</span></code>:</p>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;0.0.0.0:80&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span>
+<span class="w">                </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;Hello!\n&quot;</span><span class="p">))</span>
+<span class="w">                </span><span class="p">}),</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Сохраним его рядом с <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> в <code class="docutils literal notranslate"><span class="pre">main.go</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">cat&lt;&lt;EOF&gt;main.go</span>
+<span class="go">package main</span>
+
+<span class="go">import (</span>
+<span class="go">        &quot;net/http&quot;</span>
+<span class="go">)</span>
+
+<span class="go">func main() {</span>
+<span class="go">        http.ListenAndServe(&quot;0.0.0.0:80&quot;, http.HandlerFunc(</span>
+<span class="go">                func(w http.ResponseWriter, r *http.Request) {</span>
+<span class="go">                        w.Write([]byte(&quot;Hello!\n&quot;))</span>
+<span class="go">                }),</span>
+<span class="go">        )</span>
+<span class="go">}</span>
+<span class="go">EOF</span>
+</pre></div>
+</div>
+<p>Теперь после <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">up</span></code> произойдет синхронизация файлов нашей директории с
+директорией <code class="docutils literal notranslate"><span class="pre">/vagrant</span></code> на виртуальной машине.</p>
+<p>Добавим <code class="docutils literal notranslate"><span class="pre">shell</span></code> provisioner в <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>, который установит пакет <code class="docutils literal notranslate"><span class="pre">golang</span></code>, а также
+запустит наше приложение в фоновом режиме:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">  apt-get update</span>
+<span class="sh">  apt-get install -y golang-go</span>
+<span class="sh">  go run /vagrant/main.go &amp;</span>
+<span class="dl">SHELL</span>
+</pre></div>
+</div>
+<p>Запустим виртуальную машину с новой конфигурацией:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>grep<span class="w"> </span>-Ev<span class="w"> </span><span class="s1">&#39;^\s*#|^$&#39;</span><span class="w"> </span>Vagrantfile<span class="w"> </span><span class="c1"># посмотрим текущее содержимое без комментариев</span>
+<span class="go">Vagrant.configure(&quot;2&quot;) do |config|</span>
+<span class="go">  config.vm.box = &quot;ubuntu/lunar64&quot;</span>
+<span class="go">  config.vm.network &quot;forwarded_port&quot;, guest: 80, host: 8080</span>
+<span class="go">  config.vm.provision &quot;shell&quot;, inline: &lt;&lt;-SHELL</span>
+<span class="go">    apt-get update</span>
+<span class="go">    apt-get install -y golang-go</span>
+<span class="go">    go run /vagrant/main.go &amp;</span>
+<span class="go">  SHELL</span>
+<span class="go">end</span>
+
+<span class="gp">$ </span>vagrant<span class="w"> </span>up
+<span class="go">Bringing machine &#39;default&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">==&gt; default: Importing base box &#39;ubuntu/lunar64&#39;...</span>
+<span class="go">==&gt; default: Matching MAC address for NAT networking...</span>
+<span class="go">==&gt; default: Setting the name of the VM: vagrant_default_1693769872988_45712</span>
+<span class="go">==&gt; default: Clearing any previously set network interfaces...</span>
+<span class="go">==&gt; default: Preparing network interfaces based on configuration...</span>
+<span class="go">==&gt; default: Forwarding ports...</span>
+<span class="go">    default: 80 (guest) =&gt; 8080 (host) (adapter 1)</span>
+<span class="go">    default: 22 (guest) =&gt; 2222 (host) (adapter 1)</span>
+<span class="go">==&gt; default: Running &#39;pre-boot&#39; VM customizations...</span>
+<span class="go">==&gt; default: Booting VM...</span>
+<span class="go">==&gt; default: Waiting for machine to boot. This may take a few minutes...</span>
+<span class="go">==&gt; default: Machine booted and ready!</span>
+<span class="go">==&gt; default: Checking for guest additions in VM...</span>
+<span class="go">==&gt; default: Mounting shared folders...</span>
+<span class="go">==&gt; default: Running provisioner: shell...</span>
+<span class="go">    default: Running: inline script</span>
+<span class="go">...</span>
+<span class="go">    default: 0 upgraded, 49 newly installed, 0 to remove and 0 not upgraded.</span>
+<span class="go">    default: Need to get 109 MB of archives.</span>
+<span class="go">    default: After this operation, 454 MB of additional disk space will be used.</span>
+<span class="go">    default:</span>
+<span class="go">    default: Running kernel seems to be up-to-date.</span>
+<span class="go">    default:</span>
+<span class="go">    default: No services need to be restarted.</span>
+<span class="go">    default:</span>
+<span class="go">    default: No containers need to be restarted.</span>
+<span class="go">    default:</span>
+<span class="go">    default: No user sessions are running outdated binaries.</span>
+</pre></div>
+</div>
+<p>Как видно из вывода после запуска виртуальной машины запустился скрипт, который
+был задан в <code class="docutils literal notranslate"><span class="pre">config.vm.provision</span></code>. Так как в нашей конфигурации задан проброс порта
+80 на порт 8080 хоста, то мы можем проверить работу приложения не заходя в виртуальную
+машину:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>localhost:8080
+<span class="go">Hello!</span>
+</pre></div>
+</div>
+<p>После того, как надобность в виртуальной машине отпала можно ее уничтожить:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>destroy
+<span class="go">    default: Are you sure you want to destroy the &#39;default&#39; VM? [y/N] y</span>
+<span class="go">==&gt; default: Destroying VM and associated drives...</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="practice.html" class="btn btn-neutral float-left" title="Практика" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="02_practice_vagrant.html" class="btn btn-neutral float-right" title="Vagrant Multi-Node" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

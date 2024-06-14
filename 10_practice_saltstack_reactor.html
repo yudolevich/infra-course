@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salt Beacons/Reactors and IaC &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Secret Management" href="11_practice_secrets.html" />
+    <link rel="prev" title="Salt" href="09_practice_saltstack.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Salt Beacons/Reactors and IaC</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#accept-keys">Accept Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#state">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#beacon">Beacon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reactor">Reactor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gitfs">GitFS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#schedule">Schedule</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Salt Beacons/Reactors and IaC</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/10_practice_saltstack_reactor.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="salt-beacons-reactors-and-iac">
+<h1>Salt Beacons/Reactors and IaC<a class="headerlink" href="#salt-beacons-reactors-and-iac" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии опробуем механизмы обратной связи в <a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">saltstack</a>
+такие как <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/beacons.html">beacons</a> и <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/reactors.html">reactors</a>. А также попробуем реализовать подход
+<a class="reference external" href="https://en.wikipedia.org/wiki/Infrastructure_as_code">IaC(Infrastructure as Code)</a>, развернув собственный git репозиторий и
+настроив <a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">salt</a> на автоматическое применение конфигурации из него.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">salt</a> будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;master&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;master&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">3000</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg \</span>
+<span class="sh">        https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg</span>
+<span class="sh">      echo &quot;deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main&quot; \</span>
+<span class="sh">        | tee /etc/apt/sources.list.d/salt.list</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns salt-master salt-minion</span>
+<span class="sh">      echo &#39;master: master.local&#39; &gt; /etc/salt/minion.d/master.conf</span>
+<span class="sh">      systemctl enable --now salt-master.service</span>
+<span class="sh">      systemctl restart salt-minion.service</span>
+<span class="sh">      systemctl enable salt-minion.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;minion1&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minion1&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg \</span>
+<span class="sh">        https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg</span>
+<span class="sh">      echo &quot;deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main&quot; \</span>
+<span class="sh">        | tee /etc/apt/sources.list.d/salt.list</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns salt-minion</span>
+<span class="sh">      echo &#39;master: master.local&#39; &gt; /etc/salt/minion.d/master.conf</span>
+<span class="sh">      systemctl restart salt-minion.service</span>
+<span class="sh">      systemctl enable salt-minion.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;minion2&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minion2&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg \</span>
+<span class="sh">        https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg</span>
+<span class="sh">      echo &quot;deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main&quot; \</span>
+<span class="sh">        | tee /etc/apt/sources.list.d/salt.list</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns salt-minion</span>
+<span class="sh">      echo &#39;master: master.local&#39; &gt; /etc/salt/minion.d/master.conf</span>
+<span class="sh">      systemctl restart salt-minion.service</span>
+<span class="sh">      systemctl enable salt-minion.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Команды будут выполняться на машине <code class="docutils literal notranslate"><span class="pre">master</span></code> из под пользователя <code class="docutils literal notranslate"><span class="pre">root</span></code>.
+Для этого после команды <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">ssh</span></code> можно выполнить команду <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-i</span></code>.</p>
+</section>
+<section id="accept-keys">
+<h2>Accept Keys<a class="headerlink" href="#accept-keys" title="Permalink to this heading"></a></h2>
+<p>После того как машины загрузятся необходимо принять ключи от миньонов:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-key<span class="w"> </span>-A
+<span class="go">The following keys are going to be accepted:</span>
+<span class="go">Unaccepted Keys:</span>
+<span class="go">master</span>
+<span class="go">minion1</span>
+<span class="go">minion2</span>
+<span class="go">Proceed? [n/Y]</span>
+<span class="go">Key for minion master accepted.</span>
+<span class="go">Key for minion minion1 accepted.</span>
+<span class="go">Key for minion minion2 accepted.</span>
+</pre></div>
+</div>
+</section>
+<section id="state">
+<h2>State<a class="headerlink" href="#state" title="Permalink to this heading"></a></h2>
+<p>Опишем простое состояние с пакетом <code class="docutils literal notranslate"><span class="pre">nginx</span></code> и файлом <code class="docutils literal notranslate"><span class="pre">index.html</span></code>, для этого
+создадим файл <code class="docutils literal notranslate"><span class="pre">/srv/salt/top.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">base</span><span class="p">:</span>
+<span class="w">  </span><span class="s">&#39;minion*&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+</pre></div>
+</div>
+<p>А также сам файл <code class="docutils literal notranslate"><span class="pre">/srv/salt/nginx.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">hello from {{ grains[&#39;id&#39;] }}</span>
+</pre></div>
+</div>
+<p>После чего применим состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;minion*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 2 (changed=2)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     2</span>
+<span class="go">Total run time:  11.861 s</span>
+
+<span class="gp"># </span>curl<span class="w"> </span>minion1.local
+<span class="go">hello from minion1</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion2.local
+<span class="go">hello from minion2</span>
+</pre></div>
+</div>
+</section>
+<section id="beacon">
+<h2>Beacon<a class="headerlink" href="#beacon" title="Permalink to this heading"></a></h2>
+<p>Добавим на миньоны <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/beacons.html"><code class="docutils literal notranslate"><span class="pre">beacon</span></code></a>, который будет отслеживать изменения
+файла <code class="docutils literal notranslate"><span class="pre">index.hml</span></code> и отправлять информацию об этом на мастер. Для этого добавим
+в файл состояния <code class="docutils literal notranslate"><span class="pre">/srv/salt/nginx.sls</span></code> описание <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/beacons.html"><code class="docutils literal notranslate"><span class="pre">beacon</span></code></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">pyinotify</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pip.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">hello from {{ grains[&#39;id&#39;] }}</span>
+
+<span class="nt">beacon_index</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">beacon.present</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mask</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">modify</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">disable_during_state_run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">beacon_module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inotify</span>
+</pre></div>
+</div>
+<p>После чего применим состояние на миньонах:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;minion*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+
+<span class="go">Summary for minion1</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 4 (changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     4</span>
+<span class="go">Total run time:   7.135 s</span>
+</pre></div>
+</div>
+<p>Для проверки работы <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/beacons.html"><code class="docutils literal notranslate"><span class="pre">beacon</span></code></a> можно на мастере запустить команду</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-run<span class="w"> </span>state.event<span class="w"> </span><span class="nv">pretty</span><span class="o">=</span>True
+</pre></div>
+</div>
+<p>И в отдельном окне терминала зайти на миньон и изменить файл <code class="docutils literal notranslate"><span class="pre">index.html</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="nb">echo</span><span class="w"> </span><span class="m">123</span><span class="w"> </span>&gt;<span class="w"> </span>/var/www/html/index.html
+</pre></div>
+</div>
+<p>После чего в терминале мастера в выводе команды <code class="docutils literal notranslate"><span class="pre">salt-run</span> <span class="pre">state.event</span></code> получим
+событие:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-run<span class="w"> </span>state.event<span class="w"> </span><span class="nv">pretty</span><span class="o">=</span>True
+<span class="go">salt/beacon/minion1/beacon_index//var/www/html/index.html       {</span>
+<span class="go">    &quot;_stamp&quot;: &quot;2023-11-05T12:51:23.283037&quot;,</span>
+<span class="go">    &quot;change&quot;: &quot;IN_MODIFY&quot;,</span>
+<span class="go">    &quot;id&quot;: &quot;minion1&quot;,</span>
+<span class="go">    &quot;path&quot;: &quot;/var/www/html/index.html&quot;</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Таким образом мы убедились, что мастер получает требуемые нам события от миньонов.</p>
+</section>
+<section id="reactor">
+<h2>Reactor<a class="headerlink" href="#reactor" title="Permalink to this heading"></a></h2>
+<p>С помощью механизма <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/reactors.html">reactors</a> можно вызывать функции при получении событий.
+Опишем реакцию на получения событий от миньонов таким образом, что при получении
+события применялось текущее состояние, описанное в наших <code class="docutils literal notranslate"><span class="pre">sls</span></code> файлах. Для этого
+дополним конфигурацию мастера параметром <code class="docutils literal notranslate"><span class="pre">reactor</span></code>, создав файл
+<code class="docutils literal notranslate"><span class="pre">/etc/salt/master.d/reactor.conf</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">reactor</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">salt/beacon/*</span><span class="p">:</span><span class="w">            </span><span class="c1"># события</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/srv/reactor/apply.sls</span><span class="w">  </span><span class="c1"># reactor файл</span>
+</pre></div>
+</div>
+<p>Здесь мы описываем при каких события какой <code class="docutils literal notranslate"><span class="pre">reactor</span></code> файл <code class="docutils literal notranslate"><span class="pre">sls</span></code> будет вызван.
+Создадим сам файл <code class="docutils literal notranslate"><span class="pre">/srv/reactor/apply.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">apply</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">local.state.apply</span><span class="p">:</span><span class="w">        </span><span class="c1"># функция, local - исполняется на мастере</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">tgt</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;{{</span><span class="nv"> </span><span class="s">data[&#39;</span><span class="l l-Scalar l-Scalar-Plain">id&#39;] }}&#39;</span><span class="w"> </span><span class="c1"># на каких миньонах выполнять</span>
+</pre></div>
+</div>
+<p>В котором мы описываем функцию на исполнение, а также указываем на каких миньонах
+как в команде <code class="docutils literal notranslate"><span class="pre">salt</span></code>. Здесь используется шаблон <code class="docutils literal notranslate"><span class="pre">jinja2</span></code>, который берет информацию
+из полученного события в переменной <code class="docutils literal notranslate"><span class="pre">data</span></code>, где <code class="docutils literal notranslate"><span class="pre">id</span></code> будет имя миньона. Таким
+образом при получении события по изменению файла <code class="docutils literal notranslate"><span class="pre">index.html</span></code> будет принудительно
+применено состояние, которое нами было описано ранее.</p>
+<p>Для применения новой конфигурации мастера необходимо перезапустить сервис:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>systemctl<span class="w"> </span>restart<span class="w"> </span>salt-master.service
+</pre></div>
+</div>
+<p>Проверим, изменив файл <code class="docutils literal notranslate"><span class="pre">index.html</span></code> на миньоне и подождав некоторое время:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="nb">echo</span><span class="w"> </span><span class="m">123</span><span class="w"> </span>&gt;<span class="w"> </span>/var/www/html/index.html
+<span class="gp"># </span>curl<span class="w"> </span>minion1.local<span class="p">;</span>sleep<span class="w"> </span><span class="m">5</span><span class="p">;</span>curl<span class="w"> </span>minion1.local
+<span class="go">123</span>
+<span class="go">hello from minion1</span>
+</pre></div>
+</div>
+</section>
+<section id="gitfs">
+<h2>GitFS<a class="headerlink" href="#gitfs" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">Salt</a> позволяет хранить состояния не только на локальной файловой
+системе, он также поддерживает различные бекенды для хранения. Одним из бекендов
+может выступать git репозиторий. Поднимем собственный git репозиторий на мастере,
+для этого опишем состояние для него в файле <code class="docutils literal notranslate"><span class="pre">/srv/salt/master.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">gitea</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker.io</span>
+
+<span class="w">  </span><span class="nt">pip.installed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">pkgs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pygit2</span>
+
+<span class="w">  </span><span class="nt">docker_container.running</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gitea/gitea</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">port_bindings</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3000:3000</span>
+</pre></div>
+</div>
+<p>Данным состоянием мы описываем запуск контейнера с образом <a class="reference external" href="https://about.gitea.com/">gitea</a>. Добавим
+это состояние на мастер в файле <code class="docutils literal notranslate"><span class="pre">/srv/salt/top.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">base</span><span class="p">:</span>
+<span class="w">  </span><span class="s">&#39;minion*&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="s">&#39;master&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">master</span>
+</pre></div>
+</div>
+<p>И применим его:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span>master<span class="w"> </span>state.apply
+<span class="go">master:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+
+<span class="go">Summary for master</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 3 (changed=3)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     3</span>
+<span class="go">Total run time:  53.592 s</span>
+</pre></div>
+</div>
+<p>После чего откроем в браузере страницу
+<a class="reference external" href="http://localhost:3000">http://localhost:3000</a> с <strong>Initial Configuration</strong>,
+на которой можно не меняя параметры нажать кнопку <strong>Install Gitea</strong>.
+После этого можно создать себе аккаунт, а после и новый репозиторий в правом
+верхнем углу. Создадим репозиторий с именем <code class="docutils literal notranslate"><span class="pre">salt</span></code>, после чего получим пустой
+репозиторий: <img alt="" src="_images/salt-gitea1.png" /></p>
+<p>Добавим все наши файлы из <code class="docutils literal notranslate"><span class="pre">/srv/salt</span></code> в новый репозиторий, для этого зайдем
+в эту директорию и инициализируем новый репозиторий, добавим все файлы и отправим
+в наш новый репозиторий:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span>/srv/salt/
+<span class="gp"># </span>git<span class="w"> </span>init
+<span class="go">Initialized empty Git repository in /srv/salt/.git/</span>
+<span class="gp"># </span>git<span class="w"> </span>add<span class="w"> </span>.
+<span class="gp"># </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s1">&#39;init&#39;</span>
+<span class="go"> 3 files changed, 37 insertions(+)</span>
+<span class="go"> create mode 100644 master.sls</span>
+<span class="go"> create mode 100644 nginx.sls</span>
+<span class="go"> create mode 100644 top.sls</span>
+<span class="gp"># </span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>http://localhost:3000/alex/salt.git
+<span class="gp"># </span>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>master
+<span class="go">Username for &#39;http://localhost:3000&#39;: alex</span>
+<span class="go">Password for &#39;http://alex@localhost:3000&#39;:</span>
+<span class="go">Enumerating objects: 5, done.</span>
+<span class="go">Counting objects: 100% (5/5), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (5/5), done.</span>
+<span class="go">Writing objects: 100% (5/5), 609 bytes | 609.00 KiB/s, done.</span>
+<span class="go">Total 5 (delta 0), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">remote: . Processing 1 references</span>
+<span class="go">remote: Processed 1 references in total</span>
+<span class="go">To http://localhost:3000/alex/salt.git</span>
+<span class="go"> * [new branch]      master -&gt; master</span>
+<span class="go">branch &#39;master&#39; set up to track &#39;origin/master&#39;.</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/salt-gitea2.png" /></p>
+<p>Теперь добавим конфигурацию для мастера, чтобы он брал состояния из нашего
+репозитория, для этого добавим файл <code class="docutils literal notranslate"><span class="pre">/etc/salt/master.d/git.conf</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">fileserver_backend</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gitfs</span>
+
+<span class="nt">gitfs_remotes</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://localhost:3000/alex/salt.git</span>
+</pre></div>
+</div>
+<p>Для применения новой конфигурации мастера необходимо перезапустить сервис:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>systemctl<span class="w"> </span>restart<span class="w"> </span>salt-master.service
+</pre></div>
+</div>
+<p>После чего более директория <code class="docutils literal notranslate"><span class="pre">/srv/salt</span></code> использоваться не будет, а состояние
+будет тянуться из нашего репозитория. Отредактируем файл состояния <code class="docutils literal notranslate"><span class="pre">nginx.sls</span></code>
+прямо через веб интерфейс <a class="reference external" href="http://localhost:3000">http://localhost:3000</a>,
+изменив контент для <code class="docutils literal notranslate"><span class="pre">index.html</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">pyinotify</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pip.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">hello from {{ grains[&#39;id&#39;] }} with git</span>
+
+<span class="nt">beacon_index</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">beacon.present</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mask</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">modify</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">disable_during_state_run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">beacon_module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inotify</span>
+</pre></div>
+</div>
+<p>По-умолчанию мастер обновляет состояние из репозитория раз в минуту, так что
+подождав некоторое время можно применить состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;minion*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+<span class="go">Summary for minion1</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 4 (changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     4</span>
+<span class="go">Total run time:   1.316 s</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion1.local
+<span class="go">hello from minion1 with git</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion2.local
+<span class="go">hello from minion2 with git</span>
+</pre></div>
+</div>
+</section>
+<section id="schedule">
+<h2>Schedule<a class="headerlink" href="#schedule" title="Permalink to this heading"></a></h2>
+<p>Чтобы не применять состояние вручную можно также добавить запуск по расписанию:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;minion*&#39;</span><span class="w"> </span>schedule.add<span class="w"> </span>apply_job<span class="w"> </span><span class="k">function</span><span class="o">=</span><span class="s1">&#39;state.apply&#39;</span><span class="w"> </span><span class="nv">seconds</span><span class="o">=</span><span class="m">30</span>
+<span class="go">minion1:</span>
+<span class="go">    ----------</span>
+<span class="go">    changes:</span>
+<span class="go">        ----------</span>
+<span class="go">        apply_job:</span>
+<span class="go">            added</span>
+<span class="go">    comment:</span>
+<span class="go">        Added job: apply_job to schedule.</span>
+<span class="go">    result:</span>
+<span class="go">        True</span>
+<span class="go">minion2:</span>
+<span class="go">    ----------</span>
+<span class="go">    changes:</span>
+<span class="go">        ----------</span>
+<span class="go">        apply_job:</span>
+<span class="go">            added</span>
+<span class="go">    comment:</span>
+<span class="go">        Added job: apply_job to schedule.</span>
+<span class="go">    result:</span>
+</pre></div>
+</div>
+<p>Обновим контент для <code class="docutils literal notranslate"><span class="pre">index.html</span></code> в файле <code class="docutils literal notranslate"><span class="pre">nginx.sls</span></code> в репозитории:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">pyinotify</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pip.installed</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[]</span>
+
+<span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">contents</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">      </span><span class="no">hello from {{ grains[&#39;id&#39;] }} with git by schedule</span>
+
+<span class="nt">beacon_index</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">beacon.present</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">save</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">enable</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">files</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">/var/www/html/index.html</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">mask</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">modify</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">disable_during_state_run</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">beacon_module</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">inotify</span>
+</pre></div>
+</div>
+<p>После чего через некоторое время состояние на миньонах обновится без ручного
+применения состояния:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>curl<span class="w"> </span>minion1.local
+<span class="go">hello from minion1 with git by schedule</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion2.local
+<span class="go">hello from minion2 with git by schedule</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="09_practice_saltstack.html" class="btn btn-neutral float-left" title="Salt" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="11_practice_secrets.html" class="btn btn-neutral float-right" title="Secret Management" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

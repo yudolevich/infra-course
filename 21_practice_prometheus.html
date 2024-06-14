@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prometheus &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Alertmanager" href="22_practice_alertmanager.html" />
+    <link rel="prev" title="Jenkins" href="20_practice_jenkins.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Prometheus</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Prometheus</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#grafana">Grafana</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dashboard">Dashboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app-metrics">App metrics</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Prometheus</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/21_practice_prometheus.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="prometheus">
+<h1>Prometheus<a class="headerlink" href="#prometheus" title="Permalink to this heading"></a></h1>
+<p>Данное практическое занятие посвящено знакомству с инструментами
+мониторинга <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> и <a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;prometheus&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;prometheus&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io docker-compose-v2</span>
+<span class="sh">      chmod o+rw /var/run/docker.sock</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация установит на виртуальную машину <a class="reference external" href="https://docs.docker.com/engine/">docker</a> и
+<a class="reference external" href="https://docs.docker.com/compose/">docker compose</a>, с помощью которых в дальнейшем будут
+развернуты остальные компоненты.</p>
+</section>
+<section id="id1">
+<h2>Prometheus<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>Для развертывания <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> определим для него файл конфигурации
+<code class="docutils literal notranslate"><span class="pre">prometheus.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">global</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
+
+<span class="nt">scrape_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;prometheus&#39;</span>
+<span class="w">    </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;localhost:9090&#39;</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;node&#39;</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;node-exporter:9100&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Здесь мы в глобальной конфигурации задает частоту сбора метрик с объектов
+мониторинга, а также в <code class="docutils literal notranslate"><span class="pre">scrape_configs</span></code> определяем отдельные конфигурации
+для самих объектов. В качестве объектов мониторинга у нас будут выступать
+сам сервер <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> и дополнительный экспортер метрик о состоянии
+виртуальной машины - <a class="reference external" href="https://github.com/prometheus/node_exporter">node-exporter</a>.</p>
+<p>Также зададим конфигурацию <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code> для развертывания данных компонентов:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mon</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8889:9090</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./prometheus.yml:/etc/prometheus/prometheus.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus_data:/prometheus</span>
+<span class="w">  </span><span class="nt">node-exporter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/node-exporter:v1.7.0</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.procfs=/host/proc&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.rootfs=/rootfs&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.sysfs=/host/sys&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc:/host/proc:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sys:/host/sys:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/:/rootfs:ro</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus_data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>После чего запустим <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 4/4</span>
+<span class="go"> ✔ Network mon_default            Created                                   0.0s</span>
+<span class="go"> ✔ Volume &quot;mon_prometheus_data&quot;   Created                                   0.0s</span>
+<span class="go"> ✔ Container mon-prometheus-1     Started                                   0.3s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Started                                   0.3s</span>
+</pre></div>
+</div>
+<p>После запуска по адресу <a class="reference external" href="http://localhost:8889/graph">localhost:8889</a> будет
+доступен веб интерфейс:</p>
+<p><img alt="" src="_images/prometheus1.png" /></p>
+<p>Список объектов мониторинга можно увидеть на странице
+<a class="reference external" href="http://localhost:8889/targets">localhost:8889/targets</a>:</p>
+<p><img alt="" src="_images/prometheus2.png" /></p>
+<p>Чтобы ознакомиться со списком доступных метрик можно нажать на кнопку
+<code class="docutils literal notranslate"><span class="pre">metrics</span> <span class="pre">explorer</span></code> слева от кнопки <code class="docutils literal notranslate"><span class="pre">Execute</span></code>:</p>
+<p><img alt="" src="_images/prometheus3.png" /></p>
+<p>Как видно, список довольно большой. Выберем метрику <code class="docutils literal notranslate"><span class="pre">go_info</span></code>, которая выдает
+информацию о используемой версии golang при сборке:</p>
+<p><img alt="" src="_images/prometheus4.png" /></p>
+<p>В качестве языка запросов используется <a class="reference external" href="https://prometheus.io/docs/prometheus/latest/querying/basics/">PromQL</a>, который позволяет производить
+различные выборки по временным рядам. Например, для просмотра свободного места
+на файловой системе в корневом разделе можно воспользоваться запросом
+<code class="docutils literal notranslate"><span class="pre">node_filesystem_avail_bytes{mountpoint=&quot;/&quot;}</span></code>:</p>
+<p><img alt="" src="_images/prometheus5.png" /></p>
+<p>Обычно метрики в базе хранятся в системе <a class="reference external" href="https://ru.wikipedia.org/wiki/%D0%9C%D0%B5%D0%B6%D0%B4%D1%83%D0%BD%D0%B0%D1%80%D0%BE%D0%B4%D0%BD%D0%B0%D1%8F_%D1%81%D0%B8%D1%81%D1%82%D0%B5%D0%BC%D0%B0_%D0%B5%D0%B4%D0%B8%D0%BD%D0%B8%D1%86">СИ</a> и данные о файловой системе
+хранятся в байтах, так что требуются дополнительные преобразования для вывода
+значений в ГБ. Сравним эти значения с выводом утилиты <code class="docutils literal notranslate"><span class="pre">df</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>df<span class="w"> </span>-hT<span class="w"> </span>/
+<span class="go">Filesystem     Type  Size  Used Avail Use% Mounted on</span>
+<span class="go">/dev/sda1      ext4   39G  4.4G   35G  12% /</span>
+</pre></div>
+</div>
+<p>Запишем 5ГБ данных и проверим результат:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>big_file<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">5120</span>
+<span class="go">5120+0 records in</span>
+<span class="go">5120+0 records out</span>
+<span class="go">5368709120 bytes (5.4 GB, 5.0 GiB) copied, 5.36085 s, 1.0 GB/s</span>
+<span class="gp">$ </span>df<span class="w"> </span>-hT<span class="w"> </span>/
+<span class="go">Filesystem     Type  Size  Used Avail Use% Mounted on</span>
+<span class="go">/dev/sda1      ext4   39G  9.4G   30G  25% /</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/prometheus6.png" /></p>
+<p>После чего можем удалить файл:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>rm<span class="w"> </span>big_file
+</pre></div>
+</div>
+<p>Спустя некоторое время на вкладке <code class="docutils literal notranslate"><span class="pre">Graph</span></code> можем увидеть процесс изменения места
+на файловой системе:</p>
+<p><img alt="" src="_images/prometheus7.png" /></p>
+</section>
+<section id="grafana">
+<h2>Grafana<a class="headerlink" href="#grafana" title="Permalink to this heading"></a></h2>
+<p>Добавим дополнительное средство визуализации метрик в нашу инсталляцию -
+<a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a>. Для этого дополним <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mon</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8889:9090</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./prometheus.yml:/etc/prometheus/prometheus.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus_data:/prometheus</span>
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:10.4.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:3000</span>
+<span class="w">  </span><span class="nt">node-exporter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/node-exporter:v1.7.0</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.procfs=/host/proc&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.rootfs=/rootfs&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.sysfs=/host/sys&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc:/host/proc:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sys:/host/sys:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/:/rootfs:ro</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus_data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container mon-grafana-1        Started                                   0.4s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Running                                   0.0s</span>
+<span class="go"> ✔ Container mon-prometheus-1     Running                                   0.0s</span>
+</pre></div>
+</div>
+<p>После запуска <a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a> будет доступна по адресу
+<a class="reference external" href="http://localhost:8888">localhost:8888</a>, где в ней можно авторизоваться с
+использованием стандартной пары логин и пароль - <code class="docutils literal notranslate"><span class="pre">admin/admin</span></code>.
+После авторизации нам понадобится добавить наш <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> в качестве
+<a class="reference external" href="https://grafana.com/docs/grafana/latest/datasources/">источника данных</a> в <a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a>, для этого необходимо перейти
+в раздел <a class="reference external" href="http://localhost:8888/connections/datasources">connections/datasources</a>
+и нажать кнопку <code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">data</span> <span class="pre">source</span></code>, после чего выбрать тип <code class="docutils literal notranslate"><span class="pre">Prometheus</span></code> и
+заполнить адрес <code class="docutils literal notranslate"><span class="pre">http://prometheus:9090</span></code>:</p>
+<p><img alt="" src="_images/prometheus8.png" /></p>
+<p>В конце нажав кнопку <code class="docutils literal notranslate"><span class="pre">Save</span> <span class="pre">&amp;</span> <span class="pre">test</span></code>:</p>
+<p><img alt="" src="_images/prometheus9.png" /></p>
+<p>После чего все метрики из <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> будут доступны в <a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a>.
+Посмотреть доступные метрики можно на странице
+<a class="reference external" href="http://localhost:8888/explore">explore</a>:<br />
+Либо используя режим builder</p>
+<p><img alt="" src="_images/prometheus10.png" /></p>
+<p>Либо используя режим code указывая запрос на языке <a class="reference external" href="https://prometheus.io/docs/prometheus/latest/querying/basics/">promql</a></p>
+<p><img alt="" src="_images/prometheus11.png" /></p>
+</section>
+<section id="dashboard">
+<h2>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this heading"></a></h2>
+<p>Также для визуализации можно создать дашборд на странице
+<a class="reference external" href="http://localhost:8888/dashboards">dashboards</a>. Добавим новую визуализацию,
+в которой зададим запрос на <a class="reference external" href="https://prometheus.io/docs/prometheus/latest/querying/basics/">promql</a> для отображения графика по изменению
+свободного места на файловой системе. Зададим заголовок, Unit в котором хранится
+метрика, а также можем задать custom легенду для указания на дашборде.
+После чего сохраним нажав <code class="docutils literal notranslate"><span class="pre">Apply</span></code>.</p>
+<p><img alt="" src="_images/prometheus12.png" /></p>
+<p>Добавим новую визуализацию для отображения графика по потреблению CPU,
+для этого воспользуемся метрикой <code class="docutils literal notranslate"><span class="pre">node_cpu_seconds_total</span></code>, которая считает
+время проведенное процессором в каждом режиме для каждого ядра.
+Таким образом общий счетчик времени в режиме бездействия можно посмотреть
+запросом <code class="docutils literal notranslate"><span class="pre">node_cpu_seconds_total{mode=&quot;idle&quot;}</span></code>, а для процентного отображения
+можно воспользоваться функцией <code class="docutils literal notranslate"><span class="pre">rate</span></code>, которая покажет насколько увеличился
+счетчик за одну секунду в заданный период. В итоге мы можем с помощью запроса
+<code class="docutils literal notranslate"><span class="pre">1-rate(node_cpu_seconds_total{mode=&quot;idle&quot;}[1m])</span></code> увидеть процентное потребление
+по каждому ядру процессора.</p>
+<p><img alt="" src="_images/prometheus13.png" /></p>
+<p>Добавим также визуализация для потребления оперативной памяти добавив в нее
+два запроса: общее количество памяти на виртуальной машине -
+<code class="docutils literal notranslate"><span class="pre">node_memory_MemTotal_bytes</span></code> и количество потребляемой памяти -
+<code class="docutils literal notranslate"><span class="pre">node_memory_MemTotal_bytes-node_memory_MemAvailable_bytes</span></code>.</p>
+<p><img alt="" src="_images/prometheus14.png" /></p>
+<p>В итоге получим следующий дашборд:</p>
+<p><img alt="" src="_images/prometheus15.png" /></p>
+<p>После чего можно сохранить дашборд нажав на иконку дискеты.</p>
+</section>
+<section id="app-metrics">
+<h2>App metrics<a class="headerlink" href="#app-metrics" title="Permalink to this heading"></a></h2>
+<p>Сделаем простое приложение, которое будет принимать http запросы и с некоторой
+вероятностью возвращать ошибку, а также будет отдавать метрики в формате
+prometheus. Пример на golang может быть следующим в <code class="docutils literal notranslate"><span class="pre">main.go</span></code>:</p>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;math/rand&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+
+<span class="w">        </span><span class="s">&quot;github.com/prometheus/client_golang/prometheus&quot;</span>
+<span class="w">        </span><span class="s">&quot;github.com/prometheus/client_golang/prometheus/promhttp&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">reqTotal</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">NewCounterVec</span><span class="p">(</span>
+<span class="w">                </span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">CounterOpts</span><span class="p">{</span><span class="nx">Name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;app_req_total&quot;</span><span class="p">},</span>
+<span class="w">                </span><span class="p">[]</span><span class="kt">string</span><span class="p">{</span><span class="s">&quot;code&quot;</span><span class="p">},</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="w">        </span><span class="nx">prometheus</span><span class="p">.</span><span class="nx">MustRegister</span><span class="p">(</span><span class="nx">reqTotal</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="s">&quot;/metrics&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">promhttp</span><span class="p">.</span><span class="nx">Handler</span><span class="p">())</span>
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">Handle</span><span class="p">(</span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="nx">rand</span><span class="p">.</span><span class="nx">Intn</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;OK\n&quot;</span><span class="p">))</span>
+<span class="w">                        </span><span class="nx">reqTotal</span><span class="p">.</span><span class="nx">WithLabelValues</span><span class="p">(</span><span class="s">&quot;200&quot;</span><span class="p">).</span><span class="nx">Inc</span><span class="p">()</span>
+
+<span class="w">                        </span><span class="k">return</span>
+<span class="w">                </span><span class="p">}</span>
+
+<span class="w">                </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;NE OK\n&quot;</span><span class="p">))</span>
+<span class="w">                </span><span class="nx">reqTotal</span><span class="p">.</span><span class="nx">WithLabelValues</span><span class="p">(</span><span class="s">&quot;500&quot;</span><span class="p">).</span><span class="nx">Inc</span><span class="p">()</span>
+<span class="w">        </span><span class="p">}))</span>
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Также добавим <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code> для сборки:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.21</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">build</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/src</span>
+
+<span class="k">COPY</span><span class="w"> </span>main.go<span class="w"> </span>/src/main.go
+<span class="k">RUN</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>example<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>tidy<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>/bin/app<span class="w"> </span>./main.go
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">scratch</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>build<span class="w"> </span>/bin/app<span class="w"> </span>/app
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/app&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>И добавим приложение в <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mon</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8889:9090</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./prometheus.yml:/etc/prometheus/prometheus.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus_data:/prometheus</span>
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:10.4.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:3000</span>
+<span class="w">  </span><span class="nt">node-exporter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/node-exporter:v1.7.0</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.procfs=/host/proc&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.rootfs=/rootfs&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.sysfs=/host/sys&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc:/host/proc:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sys:/host/sys:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/:/rootfs:ro</span>
+<span class="w">  </span><span class="nt">app</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8080:8080</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus_data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>А также в конфигурацию <code class="docutils literal notranslate"><span class="pre">prometheus.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">global</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
+
+<span class="nt">scrape_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;prometheus&#39;</span>
+<span class="w">    </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;localhost:9090&#39;</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;node&#39;</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;node-exporter:9100&#39;</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;app&#39;</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;app:8080&#39;</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Запустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>restart<span class="w"> </span>mon-prometheus-1
+<span class="go">mon-prometheus-1</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 4/4</span>
+<span class="go"> ✔ Container mon-app-1            Started                                   0.6s</span>
+<span class="go"> ✔ Container mon-grafana-1        Running                                   0.0s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Running                                   0.0s</span>
+<span class="go"> ✔ Container mon-prometheus-1     Running                                   0.0s</span>
+</pre></div>
+</div>
+<p>После чего в prometheus на странице <a class="reference external" href="http://localhost:8889/targets">targets</a>
+можно увидеть наше приложение:</p>
+<p><img alt="" src="_images/prometheus16.png" /></p>
+<p>А в момент сборки увидеть потребление ресурсов на дашборде:</p>
+<p><img alt="" src="_images/prometheus17.png" /></p>
+<p>Обратимся к нашему приложению из терминала:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">{</span><span class="m">1</span>..100<span class="o">}</span><span class="p">;</span><span class="k">do</span><span class="w"> </span>curl<span class="w"> </span>localhost:8080<span class="p">;</span><span class="k">done</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">NE OK</span>
+<span class="go">OK</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>Как видно приложение просто возвращает ответ 200 OK и с некоторой вероятностью
+ответ 500 NE OK.
+Для просмотра метрик необходимо обратиться к эндпоинту /metrics:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>localhost:8080/metrics
+<span class="gp"># </span>HELP<span class="w"> </span>app_req_total
+<span class="gp"># </span>TYPE<span class="w"> </span>app_req_total<span class="w"> </span>counter
+<span class="go">app_req_total{code=&quot;200&quot;} 95</span>
+<span class="go">app_req_total{code=&quot;500&quot;} 5</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_gc_duration_seconds<span class="w"> </span>A<span class="w"> </span>summary<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>pause<span class="w"> </span>duration<span class="w"> </span>of<span class="w"> </span>garbage<span class="w"> </span>collection<span class="w"> </span>cycles.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_gc_duration_seconds<span class="w"> </span>summary
+<span class="go">go_gc_duration_seconds{quantile=&quot;0&quot;} 6.7428e-05</span>
+<span class="go">go_gc_duration_seconds{quantile=&quot;0.25&quot;} 0.000103126</span>
+<span class="go">go_gc_duration_seconds{quantile=&quot;0.5&quot;} 0.000108896</span>
+<span class="go">go_gc_duration_seconds{quantile=&quot;0.75&quot;} 0.000115438</span>
+<span class="go">go_gc_duration_seconds{quantile=&quot;1&quot;} 0.000146137</span>
+<span class="go">go_gc_duration_seconds_sum 0.000541025</span>
+<span class="go">go_gc_duration_seconds_count 5</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_goroutines<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>goroutines<span class="w"> </span>that<span class="w"> </span>currently<span class="w"> </span>exist.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_goroutines<span class="w"> </span>gauge
+<span class="go">go_goroutines 7</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_info<span class="w"> </span>Information<span class="w"> </span>about<span class="w"> </span>the<span class="w"> </span>Go<span class="w"> </span>environment.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_info<span class="w"> </span>gauge
+<span class="go">go_info{version=&quot;go1.21.8&quot;} 1</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_alloc_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>allocated<span class="w"> </span>and<span class="w"> </span>still<span class="w"> </span><span class="k">in</span><span class="w"> </span>use.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_alloc_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_alloc_bytes 2.073528e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_alloc_bytes_total<span class="w"> </span>Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>allocated,<span class="w"> </span>even<span class="w"> </span><span class="k">if</span><span class="w"> </span>freed.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_alloc_bytes_total<span class="w"> </span>counter
+<span class="go">go_memstats_alloc_bytes_total 8.224104e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_buck_hash_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>used<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>profiling<span class="w"> </span>bucket<span class="w"> </span><span class="nb">hash</span><span class="w"> </span>table.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_buck_hash_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_buck_hash_sys_bytes 4250</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_frees_total<span class="w"> </span>Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>frees.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_frees_total<span class="w"> </span>counter
+<span class="go">go_memstats_frees_total 36883</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_gc_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>used<span class="w"> </span><span class="k">for</span><span class="w"> </span>garbage<span class="w"> </span>collection<span class="w"> </span>system<span class="w"> </span>metadata.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_gc_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_gc_sys_bytes 3.681824e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_heap_alloc_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>heap<span class="w"> </span>bytes<span class="w"> </span>allocated<span class="w"> </span>and<span class="w"> </span>still<span class="w"> </span><span class="k">in</span><span class="w"> </span>use.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_heap_alloc_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_heap_alloc_bytes 2.073528e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_heap_idle_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>heap<span class="w"> </span>bytes<span class="w"> </span>waiting<span class="w"> </span>to<span class="w"> </span>be<span class="w"> </span>used.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_heap_idle_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_heap_idle_bytes 4.530176e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_heap_inuse_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>heap<span class="w"> </span>bytes<span class="w"> </span>that<span class="w"> </span>are<span class="w"> </span><span class="k">in</span><span class="w"> </span>use.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_heap_inuse_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_heap_inuse_bytes 3.432448e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_heap_objects<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>allocated<span class="w"> </span>objects.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_heap_objects<span class="w"> </span>gauge
+<span class="go">go_memstats_heap_objects 1361</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_heap_released_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>heap<span class="w"> </span>bytes<span class="w"> </span>released<span class="w"> </span>to<span class="w"> </span>OS.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_heap_released_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_heap_released_bytes 3.653632e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_heap_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>heap<span class="w"> </span>bytes<span class="w"> </span>obtained<span class="w"> </span>from<span class="w"> </span>system.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_heap_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_heap_sys_bytes 7.962624e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_last_gc_time_seconds<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>seconds<span class="w"> </span>since<span class="w"> </span><span class="m">1970</span><span class="w"> </span>of<span class="w"> </span>last<span class="w"> </span>garbage<span class="w"> </span>collection.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_last_gc_time_seconds<span class="w"> </span>gauge
+<span class="go">go_memstats_last_gc_time_seconds 1.7102744046326103e+09</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_lookups_total<span class="w"> </span>Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>pointer<span class="w"> </span>lookups.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_lookups_total<span class="w"> </span>counter
+<span class="go">go_memstats_lookups_total 0</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_mallocs_total<span class="w"> </span>Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>mallocs.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_mallocs_total<span class="w"> </span>counter
+<span class="go">go_memstats_mallocs_total 38244</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_mcache_inuse_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span><span class="k">in</span><span class="w"> </span>use<span class="w"> </span>by<span class="w"> </span>mcache<span class="w"> </span>structures.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_mcache_inuse_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_mcache_inuse_bytes 2400</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_mcache_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>used<span class="w"> </span><span class="k">for</span><span class="w"> </span>mcache<span class="w"> </span>structures<span class="w"> </span>obtained<span class="w"> </span>from<span class="w"> </span>system.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_mcache_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_mcache_sys_bytes 15600</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_mspan_inuse_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span><span class="k">in</span><span class="w"> </span>use<span class="w"> </span>by<span class="w"> </span>mspan<span class="w"> </span>structures.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_mspan_inuse_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_mspan_inuse_bytes 63168</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_mspan_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>used<span class="w"> </span><span class="k">for</span><span class="w"> </span>mspan<span class="w"> </span>structures<span class="w"> </span>obtained<span class="w"> </span>from<span class="w"> </span>system.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_mspan_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_mspan_sys_bytes 65184</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_next_gc_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>heap<span class="w"> </span>bytes<span class="w"> </span>when<span class="w"> </span>next<span class="w"> </span>garbage<span class="w"> </span>collection<span class="w"> </span>will<span class="w"> </span>take<span class="w"> </span>place.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_next_gc_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_next_gc_bytes 4.3168e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_other_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>used<span class="w"> </span><span class="k">for</span><span class="w"> </span>other<span class="w"> </span>system<span class="w"> </span>allocations.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_other_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_other_sys_bytes 401862</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_stack_inuse_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span><span class="k">in</span><span class="w"> </span>use<span class="w"> </span>by<span class="w"> </span>the<span class="w"> </span>stack<span class="w"> </span>allocator.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_stack_inuse_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_stack_inuse_bytes 425984</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_stack_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>obtained<span class="w"> </span>from<span class="w"> </span>system<span class="w"> </span><span class="k">for</span><span class="w"> </span>stack<span class="w"> </span>allocator.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_stack_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_stack_sys_bytes 425984</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_memstats_sys_bytes<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>bytes<span class="w"> </span>obtained<span class="w"> </span>from<span class="w"> </span>system.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_memstats_sys_bytes<span class="w"> </span>gauge
+<span class="go">go_memstats_sys_bytes 1.2557328e+07</span>
+<span class="gp"># </span>HELP<span class="w"> </span>go_threads<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>OS<span class="w"> </span>threads<span class="w"> </span>created.
+<span class="gp"># </span>TYPE<span class="w"> </span>go_threads<span class="w"> </span>gauge
+<span class="go">go_threads 5</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_cpu_seconds_total<span class="w"> </span>Total<span class="w"> </span>user<span class="w"> </span>and<span class="w"> </span>system<span class="w"> </span>CPU<span class="w"> </span><span class="nb">time</span><span class="w"> </span>spent<span class="w"> </span><span class="k">in</span><span class="w"> </span>seconds.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_cpu_seconds_total<span class="w"> </span>counter
+<span class="go">process_cpu_seconds_total 0.12</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_max_fds<span class="w"> </span>Maximum<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>open<span class="w"> </span>file<span class="w"> </span>descriptors.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_max_fds<span class="w"> </span>gauge
+<span class="go">process_max_fds 1.048576e+06</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_open_fds<span class="w"> </span>Number<span class="w"> </span>of<span class="w"> </span>open<span class="w"> </span>file<span class="w"> </span>descriptors.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_open_fds<span class="w"> </span>gauge
+<span class="go">process_open_fds 9</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_resident_memory_bytes<span class="w"> </span>Resident<span class="w"> </span>memory<span class="w"> </span>size<span class="w"> </span><span class="k">in</span><span class="w"> </span>bytes.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_resident_memory_bytes<span class="w"> </span>gauge
+<span class="go">process_resident_memory_bytes 1.2488704e+07</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_start_time_seconds<span class="w"> </span>Start<span class="w"> </span><span class="nb">time</span><span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>process<span class="w"> </span>since<span class="w"> </span>unix<span class="w"> </span>epoch<span class="w"> </span><span class="k">in</span><span class="w"> </span>seconds.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_start_time_seconds<span class="w"> </span>gauge
+<span class="go">process_start_time_seconds 1.7102737835e+09</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_virtual_memory_bytes<span class="w"> </span>Virtual<span class="w"> </span>memory<span class="w"> </span>size<span class="w"> </span><span class="k">in</span><span class="w"> </span>bytes.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_virtual_memory_bytes<span class="w"> </span>gauge
+<span class="go">process_virtual_memory_bytes 1.26386176e+09</span>
+<span class="gp"># </span>HELP<span class="w"> </span>process_virtual_memory_max_bytes<span class="w"> </span>Maximum<span class="w"> </span>amount<span class="w"> </span>of<span class="w"> </span>virtual<span class="w"> </span>memory<span class="w"> </span>available<span class="w"> </span><span class="k">in</span><span class="w"> </span>bytes.
+<span class="gp"># </span>TYPE<span class="w"> </span>process_virtual_memory_max_bytes<span class="w"> </span>gauge
+<span class="go">process_virtual_memory_max_bytes 1.8446744073709552e+19</span>
+<span class="gp"># </span>HELP<span class="w"> </span>promhttp_metric_handler_requests_in_flight<span class="w"> </span>Current<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>scrapes<span class="w"> </span>being<span class="w"> </span>served.
+<span class="gp"># </span>TYPE<span class="w"> </span>promhttp_metric_handler_requests_in_flight<span class="w"> </span>gauge
+<span class="go">promhttp_metric_handler_requests_in_flight 1</span>
+<span class="gp"># </span>HELP<span class="w"> </span>promhttp_metric_handler_requests_total<span class="w"> </span>Total<span class="w"> </span>number<span class="w"> </span>of<span class="w"> </span>scrapes<span class="w"> </span>by<span class="w"> </span>HTTP<span class="w"> </span>status<span class="w"> </span>code.
+<span class="gp"># </span>TYPE<span class="w"> </span>promhttp_metric_handler_requests_total<span class="w"> </span>counter
+<span class="go">promhttp_metric_handler_requests_total{code=&quot;200&quot;} 43</span>
+<span class="go">promhttp_metric_handler_requests_total{code=&quot;500&quot;} 0</span>
+<span class="go">promhttp_metric_handler_requests_total{code=&quot;503&quot;} 0</span>
+</pre></div>
+</div>
+<p>Наша метрика <code class="docutils literal notranslate"><span class="pre">app_req_total</span></code> показывает количество запросов в разрезе разных
+кодов возврата. Также библиотека добавляет набор метрик golang runtime.</p>
+<p>Добавим визуализацию метрик приложения на наш дашборд.</p>
+<p>Общий процент ошибок:</p>
+<p><img alt="" src="_images/prometheus18.png" /></p>
+<p>И количество запросов в секунду:</p>
+<p><img alt="" src="_images/prometheus19.png" /></p>
+<p>Сгруппировать визуализации можно добавив Row:</p>
+<p><img alt="" src="_images/prometheus20.png" /></p>
+<p>Запустим в цикле запросы к нашему приложению, чтобы посмотреть как изменятся
+графики:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="k">while</span><span class="w"> </span>sleep<span class="w"> </span>.3<span class="p">;</span><span class="k">do</span><span class="w"> </span>curl<span class="w"> </span>localhost:8080<span class="p">;</span><span class="k">done</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">NE OK</span>
+<span class="go">OK</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p>Спустя некоторое время посмотрим на наш дашборд:</p>
+<p><img alt="" src="_images/prometheus21.png" /></p>
+<p>На графиках можно заметить изменение потребления ресурсов, а также метрики
+нашего приложения.
+Попробуем увеличить частоту запросов и оставим еще на некоторое время:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="k">while</span><span class="w"> </span>sleep<span class="w"> </span>.1<span class="p">;</span><span class="k">do</span><span class="w"> </span>curl<span class="w"> </span>localhost:8080<span class="p">;</span><span class="k">done</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">OK</span>
+<span class="go">NE OK</span>
+<span class="go">OK</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/prometheus22.png" /></p>
+<p>Как видно потребление CPU и rps увеличились, а процент ошибок все также в районе
+10%, как и указано у нас в коде. После прерывания цикла запросов, то мы увидим
+падение на графиках по CPU и rps:</p>
+<p><img alt="" src="_images/prometheus23.png" /></p>
+<p>Таким образом с помощью <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> и <a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a> можно визуализировать и
+отслеживать различные метрики инфраструктуры и приложений.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="20_practice_jenkins.html" class="btn btn-neutral float-left" title="Jenkins" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="22_practice_alertmanager.html" class="btn btn-neutral float-right" title="Alertmanager" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

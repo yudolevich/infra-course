@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vault &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="RabbitMQ" href="13_practice_rabbit.html" />
+    <link rel="prev" title="Secret Management" href="11_practice_secrets.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Vault</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#kv">KV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#certs">Certs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#agent">Agent</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transit">Transit</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Vault</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/12_practice_vault.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="vault">
+<h1>Vault<a class="headerlink" href="#vault" title="Permalink to this heading"></a></h1>
+<p>Данная практическая работа посвящена изучению базовому взаимодействию с
+инструментом управления секретами <a class="reference external" href="https://developer.hashicorp.com/vault/docs/what-is-vault">hashicorp vault</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://developer.hashicorp.com/vault/docs/what-is-vault">vault</a> воспользуемся следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;node&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8200</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8200</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      docker run -it --rm -d -p 8200:8200 --name vault vault:1.13.3</span>
+<span class="sh">      docker run --rm vault:1.13.3 cat /bin/vault &gt; /usr/local/bin/vault</span>
+<span class="sh">      chmod +x /usr/local/bin/vault</span>
+<span class="sh">      curl -L https://github.com/FiloSottile/age/releases/download/v1.1.1/age-v1.1.1-linux-amd64.tar.gz \</span>
+<span class="sh">        | tar xvz --strip-components=1 -C /usr/local/bin age/age age/age-keygen</span>
+<span class="sh">      curl -L https://github.com/getsops/sops/releases/download/v3.8.1/sops-v3.8.1.linux.amd64 \</span>
+<span class="sh">        -o /usr/local/bin/sops &amp;&amp; chmod +x /usr/local/bin/sops</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>После запуска виртуальной машины необходимо авторизоваться в запущенном vault
+server, который запущен в <code class="docutils literal notranslate"><span class="pre">dev</span></code> режиме, так что в его логе можно увидеть токен
+для авторизации:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>logs<span class="w"> </span>vault<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail
+<span class="gp">    $ </span><span class="nb">export</span><span class="w"> </span><span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://0.0.0.0:8200&#39;</span>
+
+<span class="go">The unseal key and root token are displayed below in case you want to</span>
+<span class="go">seal/unseal the Vault or re-authenticate.</span>
+
+<span class="go">Unseal Key: bo1HYFucRR7b7tfopTOjV4y2vW9xsmU8b8FzKvcOdRo=</span>
+<span class="go">Root Token: hvs.FIynHVPht3NxZGgotnzzjmIF</span>
+
+<span class="go">Development mode should NOT be used in production installations!</span>
+</pre></div>
+</div>
+<p>В дальнейшем для работы нам потребуется авторизоваться указав адрес в переменной
+<code class="docutils literal notranslate"><span class="pre">VAULT_ADDR</span></code> и токен в команде <code class="docutils literal notranslate"><span class="pre">vault</span> <span class="pre">login</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">VAULT_ADDR</span><span class="o">=</span><span class="s1">&#39;http://0.0.0.0:8200&#39;</span>
+<span class="gp">$ </span>vault<span class="w"> </span>login
+<span class="go">Token (will be hidden):</span>
+<span class="go">Success! You are now authenticated. The token information displayed below</span>
+<span class="go">is already stored in the token helper. You do NOT need to run &quot;vault login&quot;</span>
+<span class="go">again. Future Vault requests will automatically use this token.</span>
+
+<span class="go">Key                  Value</span>
+<span class="go">---                  -----</span>
+<span class="go">token                hvs.FIynHVPht3NxZGgotnzzjmIF</span>
+<span class="go">token_accessor       50RuiugSTnGr4VHZrTUgR71l</span>
+<span class="go">token_duration       ∞</span>
+<span class="go">token_renewable      false</span>
+<span class="go">token_policies       [&quot;root&quot;]</span>
+<span class="go">identity_policies    []</span>
+<span class="go">policies             [&quot;root&quot;]</span>
+</pre></div>
+</div>
+</section>
+<section id="kv">
+<h2>KV<a class="headerlink" href="#kv" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://developer.hashicorp.com/vault/docs/what-is-vault">Vault</a> обладает довольно широким функционалом по работе с секретами, в нем есть
+различные движки для разных типов чувствительной информации. Самым простым из
+них является <a class="reference external" href="https://developer.hashicorp.com/vault/tutorials/secrets-management/static-secrets">key-value</a> хранилище, который активирован по-умолчанию и
+доступен по пути <code class="docutils literal notranslate"><span class="pre">secret/</span></code>. Для доступа можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">vault</span> <span class="pre">kv</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>put<span class="w"> </span>secret/test<span class="w"> </span><span class="nv">somekey</span><span class="o">=</span>secretvalue
+<span class="go">== Secret Path ==</span>
+<span class="go">secret/data/test</span>
+
+<span class="go">======= Metadata =======</span>
+<span class="go">Key                Value</span>
+<span class="go">---                -----</span>
+<span class="go">created_time       2023-11-20T20:48:42.050403325Z</span>
+<span class="go">custom_metadata    &lt;nil&gt;</span>
+<span class="go">deletion_time      n/a</span>
+<span class="go">destroyed          false</span>
+<span class="go">version            1</span>
+<span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>list<span class="w"> </span>secret/
+<span class="go">Keys</span>
+<span class="go">----</span>
+<span class="go">test</span>
+
+<span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>get<span class="w"> </span>secret/test
+<span class="go">== Secret Path ==</span>
+<span class="go">secret/data/test</span>
+
+<span class="go">======= Metadata =======</span>
+<span class="go">Key                Value</span>
+<span class="go">---                -----</span>
+<span class="go">created_time       2023-11-20T20:48:42.050403325Z</span>
+<span class="go">custom_metadata    &lt;nil&gt;</span>
+<span class="go">deletion_time      n/a</span>
+<span class="go">destroyed          false</span>
+<span class="go">version            1</span>
+
+<span class="go">===== Data =====</span>
+<span class="go">Key        Value</span>
+<span class="go">---        -----</span>
+<span class="go">somekey    secretvalue</span>
+
+<span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>get<span class="w"> </span>-format<span class="o">=</span>json<span class="w"> </span>secret/test
+<span class="go">{</span>
+<span class="go">  &quot;request_id&quot;: &quot;751ff986-5a18-c694-4604-68fffd946d36&quot;,</span>
+<span class="go">  &quot;lease_id&quot;: &quot;&quot;,</span>
+<span class="go">  &quot;lease_duration&quot;: 0,</span>
+<span class="go">  &quot;renewable&quot;: false,</span>
+<span class="go">  &quot;data&quot;: {</span>
+<span class="go">    &quot;data&quot;: {</span>
+<span class="go">      &quot;somekey&quot;: &quot;secretvalue&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;metadata&quot;: {</span>
+<span class="go">      &quot;created_time&quot;: &quot;2023-11-20T20:48:42.050403325Z&quot;,</span>
+<span class="go">      &quot;custom_metadata&quot;: null,</span>
+<span class="go">      &quot;deletion_time&quot;: &quot;&quot;,</span>
+<span class="go">      &quot;destroyed&quot;: false,</span>
+<span class="go">      &quot;version&quot;: 1</span>
+<span class="go">    }</span>
+<span class="go">  },</span>
+<span class="go">  &quot;warnings&quot;: null</span>
+<span class="go">}</span>
+
+<span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>get<span class="w"> </span>-field<span class="o">=</span>somekey<span class="w"> </span>secret/test
+<span class="go">secretvalue</span>
+</pre></div>
+</div>
+<p>Как видно с помощью утилиты <code class="docutils literal notranslate"><span class="pre">vault</span></code> можно получить доступ к хранилищу, а также
+получить вывод в различных форматах, что удобно использовать в скриптах или
+CI/CD пайплайнах.</p>
+<p>Также данное хранилище имеет версионирование и дает возможность получить данные
+о секретах старых версий:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>put<span class="w"> </span>secret/test<span class="w"> </span><span class="nv">somekey</span><span class="o">=</span>anothervalue
+<span class="go">== Secret Path ==</span>
+<span class="go">secret/data/test</span>
+
+<span class="go">======= Metadata =======</span>
+<span class="go">Key                Value</span>
+<span class="go">---                -----</span>
+<span class="go">created_time       2023-11-20T20:57:28.206932401Z</span>
+<span class="go">custom_metadata    &lt;nil&gt;</span>
+<span class="go">deletion_time      n/a</span>
+<span class="go">destroyed          false</span>
+<span class="go">version            2</span>
+<span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>get<span class="w"> </span>-field<span class="o">=</span>somekey<span class="w"> </span>secret/test
+<span class="go">anothervalue</span>
+<span class="gp">$ </span>vault<span class="w"> </span>kv<span class="w"> </span>get<span class="w"> </span>-field<span class="o">=</span>somekey<span class="w"> </span>-version<span class="w"> </span><span class="m">1</span><span class="w"> </span>secret/test
+<span class="go">secretvalue</span>
+</pre></div>
+</div>
+</section>
+<section id="certs">
+<h2>Certs<a class="headerlink" href="#certs" title="Permalink to this heading"></a></h2>
+<p>Другим полезным движком для хранения секретов является <a class="reference external" href="https://developer.hashicorp.com/vault/tutorials/secrets-management/pki-engine">PKI</a>, который
+позволяет создать собственный удостоверяющий центр сертификации и выписывать
+сертификаты. Данный движок не активирован по-умолчанию, так что необходимо
+выполнить команду:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>secrets<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>pki
+<span class="go">Success! Enabled the pki secrets engine at: pki/</span>
+</pre></div>
+</div>
+<p>После чего данный движок будет доступен по пути <code class="docutils literal notranslate"><span class="pre">pki/</span></code> и можно будет сгенерировать
+корневой сертификат командой:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>write<span class="w"> </span>-field<span class="o">=</span>certificate<span class="w"> </span>pki/root/generate/internal<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">common_name</span><span class="o">=</span><span class="s2">&quot;example.com&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">issuer_name</span><span class="o">=</span><span class="s2">&quot;root-2023&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">     </span><span class="nv">ttl</span><span class="o">=</span><span class="m">87600</span>
+<span class="go">-----BEGIN CERTIFICATE-----</span>
+<span class="go">MIIDNTCCAh2gAwIBAgIUPr8UTRzxlri/a3K+O3fpwC0GhEQwDQYJKoZIhvcNAQEL</span>
+<span class="go">BQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjMxMTIwMjExMDExWhcNMjMx</span>
+<span class="go">MTIxMjEzMDQxWjAWMRQwEgYDVQQDEwtleGFtcGxlLmNvbTCCASIwDQYJKoZIhvcN</span>
+<span class="go">AQEBBQADggEPADCCAQoCggEBAMMquA00dkbKRJwcy3R+QbXuVS/b59S3GTMkQsUj</span>
+<span class="go">wc5IIJ70BJQDAdQu0x4TU5k6andV33R8UgIMVNTzDePdddlNLJg9W8EDcvIwPg/Z</span>
+<span class="go">UReSCw+fvm+C8wcKqUt3PxJ6z05w7JKB54/sDywCnwX4LRg4XDHEFnvOlvVGmTqO</span>
+<span class="go">iwdOTel5hjS8fDRvF8M4HHZEqgUii1+YBhm9DlPpHolGFSVyZ2iA/0YBbgS5Sb+/</span>
+<span class="go">gKUzXImKOjNito/X9O+TCR9HqxoiMG7HjC4r3LMy+AZ8LuvVJpp7mor1FRiB0iZ0</span>
+<span class="go">z7ZbEYr4kEmTJp75CWM2u+HKGlQ3u/ugSndPhweGJnGzZisCAwEAAaN7MHkwDgYD</span>
+<span class="go">VR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK5aQzjnvFcC</span>
+<span class="go">dOl/VOacaZpKsw9PMB8GA1UdIwQYMBaAFK5aQzjnvFcCdOl/VOacaZpKsw9PMBYG</span>
+<span class="go">A1UdEQQPMA2CC2V4YW1wbGUuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQC5o7IF6FsX</span>
+<span class="go">j4EA4KI1lhr6Kv60kJhaI5SaCIxc9o8KTShBkGRQD02Fuk9zxdJlJCnyttIDvzLk</span>
+<span class="go">pW/fQYhFPgjwIioH1avVRfd5Hh3vkLDxsLMN+9lyy6uS9KxDrWz/cdZUGfMOoLmS</span>
+<span class="go">6TAidhy4Z06wlk9IKMTbO3O+LBIr7oIpxH2laOAIwdTClnRwFZCwGkkPsp08l3n5</span>
+<span class="go">ZKg9ohy//H1pXx0grn7GXhlONPUUjP8rDZfc/Z5Eo5KlBRCIcW4WcdsPdH9HFxQv</span>
+<span class="go">O9r9M0S9iPyzlbZAdt+RhvM8mNU+CGpa1OxE5i2Y0eAITft8jfoA+MMyDC0NmF2J</span>
+<span class="go">W/JERPwFQdmK</span>
+<span class="go">-----END CERTIFICATE-----</span>
+</pre></div>
+</div>
+<p>После чего его можно увидеть в движке командой:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>list<span class="w"> </span>pki/issuers/
+<span class="go">Keys</span>
+<span class="go">----</span>
+<span class="go">79e5ab6e-8030-d428-5c3a-5f7a687d9f7c</span>
+<span class="gp">$ </span>vault<span class="w"> </span><span class="nb">read</span><span class="w"> </span>-field<span class="o">=</span>certificate<span class="w"> </span>pki/issuer/79e5ab6e-8030-d428-5c3a-5f7a687d9f7c<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-text
+<span class="go">Certificate:</span>
+<span class="go">    Data:</span>
+<span class="go">        Version: 3 (0x2)</span>
+<span class="go">        Serial Number:</span>
+<span class="go">            3e:bf:14:4d:1c:f1:96:b8:bf:6b:72:be:3b:77:e9:c0:2d:06:84:44</span>
+<span class="go">        Signature Algorithm: sha256WithRSAEncryption</span>
+<span class="go">        Issuer: CN = example.com</span>
+<span class="go">        Validity</span>
+<span class="go">            Not Before: Nov 20 21:10:11 2023 GMT</span>
+<span class="go">            Not After : Nov 21 21:30:41 2023 GMT</span>
+<span class="go">        Subject: CN = example.com</span>
+<span class="go">        Subject Public Key Info:</span>
+<span class="go">            Public Key Algorithm: rsaEncryption</span>
+<span class="go">                Public-Key: (2048 bit)</span>
+<span class="go">                Modulus:</span>
+<span class="go">                    00:c3:2a:b8:0d:34:76:46:ca:44:9c:1c:cb:74:7e:</span>
+<span class="go">                    41:b5:ee:55:2f:db:e7:d4:b7:19:33:24:42:c5:23:</span>
+<span class="go">                    c1:ce:48:20:9e:f4:04:94:03:01:d4:2e:d3:1e:13:</span>
+<span class="go">                    53:99:3a:6a:77:55:df:74:7c:52:02:0c:54:d4:f3:</span>
+<span class="go">                    0d:e3:dd:75:d9:4d:2c:98:3d:5b:c1:03:72:f2:30:</span>
+<span class="go">                    3e:0f:d9:51:17:92:0b:0f:9f:be:6f:82:f3:07:0a:</span>
+<span class="go">                    a9:4b:77:3f:12:7a:cf:4e:70:ec:92:81:e7:8f:ec:</span>
+<span class="go">                    0f:2c:02:9f:05:f8:2d:18:38:5c:31:c4:16:7b:ce:</span>
+<span class="go">                    96:f5:46:99:3a:8e:8b:07:4e:4d:e9:79:86:34:bc:</span>
+<span class="go">                    7c:34:6f:17:c3:38:1c:76:44:aa:05:22:8b:5f:98:</span>
+<span class="go">                    06:19:bd:0e:53:e9:1e:89:46:15:25:72:67:68:80:</span>
+<span class="go">                    ff:46:01:6e:04:b9:49:bf:bf:80:a5:33:5c:89:8a:</span>
+<span class="go">                    3a:33:62:b6:8f:d7:f4:ef:93:09:1f:47:ab:1a:22:</span>
+<span class="go">                    30:6e:c7:8c:2e:2b:dc:b3:32:f8:06:7c:2e:eb:d5:</span>
+<span class="go">                    26:9a:7b:9a:8a:f5:15:18:81:d2:26:74:cf:b6:5b:</span>
+<span class="go">                    11:8a:f8:90:49:93:26:9e:f9:09:63:36:bb:e1:ca:</span>
+<span class="go">                    1a:54:37:bb:fb:a0:4a:77:4f:87:07:86:26:71:b3:</span>
+<span class="go">                    66:2b</span>
+<span class="go">                Exponent: 65537 (0x10001)</span>
+<span class="go">        X509v3 extensions:</span>
+<span class="go">            X509v3 Key Usage: critical</span>
+<span class="go">                Certificate Sign, CRL Sign</span>
+<span class="go">            X509v3 Basic Constraints: critical</span>
+<span class="go">                CA:TRUE</span>
+<span class="go">            X509v3 Subject Key Identifier:</span>
+<span class="go">                AE:5A:43:38:E7:BC:57:02:74:E9:7F:54:E6:9C:69:9A:4A:B3:0F:4F</span>
+<span class="go">            X509v3 Authority Key Identifier:</span>
+<span class="go">                AE:5A:43:38:E7:BC:57:02:74:E9:7F:54:E6:9C:69:9A:4A:B3:0F:4F</span>
+<span class="go">            X509v3 Subject Alternative Name:</span>
+<span class="go">                DNS:example.com</span>
+<span class="go">    Signature Algorithm: sha256WithRSAEncryption</span>
+<span class="go">    Signature Value:</span>
+<span class="go">        b9:a3:b2:05:e8:5b:17:8f:81:00:e0:a2:35:96:1a:fa:2a:fe:</span>
+<span class="go">        b4:90:98:5a:23:94:9a:08:8c:5c:f6:8f:0a:4d:28:41:90:64:</span>
+<span class="go">        50:0f:4d:85:ba:4f:73:c5:d2:65:24:29:f2:b6:d2:03:bf:32:</span>
+<span class="go">        e4:a5:6f:df:41:88:45:3e:08:f0:22:2a:07:d5:ab:d5:45:f7:</span>
+<span class="go">        79:1e:1d:ef:90:b0:f1:b0:b3:0d:fb:d9:72:cb:ab:92:f4:ac:</span>
+<span class="go">        43:ad:6c:ff:71:d6:54:19:f3:0e:a0:b9:92:e9:30:22:76:1c:</span>
+<span class="go">        b8:67:4e:b0:96:4f:48:28:c4:db:3b:73:be:2c:12:2b:ee:82:</span>
+<span class="go">        29:c4:7d:a5:68:e0:08:c1:d4:c2:96:74:70:15:90:b0:1a:49:</span>
+<span class="go">        0f:b2:9d:3c:97:79:f9:64:a8:3d:a2:1c:bf:fc:7d:69:5f:1d:</span>
+<span class="go">        20:ae:7e:c6:5e:19:4e:34:f5:14:8c:ff:2b:0d:97:dc:fd:9e:</span>
+<span class="go">        44:a3:92:a5:05:10:88:71:6e:16:71:db:0f:74:7f:47:17:14:</span>
+<span class="go">        2f:3b:da:fd:33:44:bd:88:fc:b3:95:b6:40:76:df:91:86:f3:</span>
+<span class="go">        3c:98:d5:3e:08:6a:5a:d4:ec:44:e6:2d:98:d1:e0:08:4d:fb:</span>
+<span class="go">        7c:8d:fa:00:f8:c3:32:0c:2d:0d:98:5d:89:5b:f2:44:44:fc:</span>
+<span class="go">        05:41:d9:8a</span>
+</pre></div>
+</div>
+<p>После чего для данного сертификата можно определить роль, с помощью которой
+в дальнейшем можно будет выписывать сертификаты:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>write<span class="w"> </span>pki/roles/2023-servers<span class="w"> </span><span class="nv">allow_any_name</span><span class="o">=</span><span class="nb">true</span>
+<span class="go">Key                                   Value</span>
+<span class="go">---                                   -----</span>
+<span class="go">allow_any_name                        true</span>
+<span class="go">allow_bare_domains                    false</span>
+<span class="go">allow_glob_domains                    false</span>
+<span class="go">allow_ip_sans                         true</span>
+<span class="go">allow_localhost                       true</span>
+<span class="go">allow_subdomains                      false</span>
+<span class="go">allow_token_displayname               false</span>
+<span class="go">allow_wildcard_certificates           true</span>
+<span class="go">allowed_domains                       []</span>
+<span class="go">allowed_domains_template              false</span>
+<span class="go">allowed_other_sans                    []</span>
+<span class="go">allowed_serial_numbers                []</span>
+<span class="go">allowed_uri_sans                      []</span>
+<span class="go">allowed_uri_sans_template             false</span>
+<span class="go">allowed_user_ids                      []</span>
+<span class="go">basic_constraints_valid_for_non_ca    false</span>
+<span class="go">client_flag                           true</span>
+<span class="go">cn_validations                        [email hostname]</span>
+<span class="go">code_signing_flag                     false</span>
+<span class="go">country                               []</span>
+<span class="go">email_protection_flag                 false</span>
+<span class="go">enforce_hostnames                     true</span>
+<span class="go">ext_key_usage                         []</span>
+<span class="go">ext_key_usage_oids                    []</span>
+<span class="go">generate_lease                        false</span>
+<span class="go">issuer_ref                            default</span>
+<span class="go">key_bits                              2048</span>
+<span class="go">key_type                              rsa</span>
+<span class="go">key_usage                             [DigitalSignature KeyAgreement KeyEncipherment]</span>
+<span class="go">locality                              []</span>
+<span class="go">max_ttl                               0s</span>
+<span class="go">no_store                              false</span>
+<span class="go">not_after                             n/a</span>
+<span class="go">not_before_duration                   30s</span>
+<span class="go">organization                          []</span>
+<span class="go">ou                                    []</span>
+<span class="go">policy_identifiers                    []</span>
+<span class="go">postal_code                           []</span>
+<span class="go">province                              []</span>
+<span class="go">require_cn                            true</span>
+<span class="go">server_flag                           true</span>
+<span class="go">signature_bits                        256</span>
+<span class="go">street_address                        []</span>
+<span class="go">ttl                                   0s</span>
+<span class="go">use_csr_common_name                   true</span>
+<span class="go">use_csr_sans                          true</span>
+<span class="go">use_pss                               false</span>
+</pre></div>
+</div>
+<p>Теперь можно выписывать сертификаты следующей командой:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>write<span class="w"> </span>pki/issue/2023-servers<span class="w"> </span><span class="nv">common_name</span><span class="o">=</span><span class="s2">&quot;test.example.com&quot;</span><span class="w"> </span><span class="nv">ttl</span><span class="o">=</span><span class="s2">&quot;24h&quot;</span>
+<span class="go">Key                 Value</span>
+<span class="go">---                 -----</span>
+<span class="go">ca_chain            [-----BEGIN CERTIFICATE-----</span>
+<span class="go">MIIDNTCCAh2gAwIBAgIUPr8UTRzxlri/a3K+O3fpwC0GhEQwDQYJKoZIhvcNAQEL</span>
+<span class="go">BQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjMxMTIwMjExMDExWhcNMjMx</span>
+<span class="go">MTIxMjEzMDQxWjAWMRQwEgYDVQQDEwtleGFtcGxlLmNvbTCCASIwDQYJKoZIhvcN</span>
+<span class="go">AQEBBQADggEPADCCAQoCggEBAMMquA00dkbKRJwcy3R+QbXuVS/b59S3GTMkQsUj</span>
+<span class="go">wc5IIJ70BJQDAdQu0x4TU5k6andV33R8UgIMVNTzDePdddlNLJg9W8EDcvIwPg/Z</span>
+<span class="go">UReSCw+fvm+C8wcKqUt3PxJ6z05w7JKB54/sDywCnwX4LRg4XDHEFnvOlvVGmTqO</span>
+<span class="go">iwdOTel5hjS8fDRvF8M4HHZEqgUii1+YBhm9DlPpHolGFSVyZ2iA/0YBbgS5Sb+/</span>
+<span class="go">gKUzXImKOjNito/X9O+TCR9HqxoiMG7HjC4r3LMy+AZ8LuvVJpp7mor1FRiB0iZ0</span>
+<span class="go">z7ZbEYr4kEmTJp75CWM2u+HKGlQ3u/ugSndPhweGJnGzZisCAwEAAaN7MHkwDgYD</span>
+<span class="go">VR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK5aQzjnvFcC</span>
+<span class="go">dOl/VOacaZpKsw9PMB8GA1UdIwQYMBaAFK5aQzjnvFcCdOl/VOacaZpKsw9PMBYG</span>
+<span class="go">A1UdEQQPMA2CC2V4YW1wbGUuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQC5o7IF6FsX</span>
+<span class="go">j4EA4KI1lhr6Kv60kJhaI5SaCIxc9o8KTShBkGRQD02Fuk9zxdJlJCnyttIDvzLk</span>
+<span class="go">pW/fQYhFPgjwIioH1avVRfd5Hh3vkLDxsLMN+9lyy6uS9KxDrWz/cdZUGfMOoLmS</span>
+<span class="go">6TAidhy4Z06wlk9IKMTbO3O+LBIr7oIpxH2laOAIwdTClnRwFZCwGkkPsp08l3n5</span>
+<span class="go">ZKg9ohy//H1pXx0grn7GXhlONPUUjP8rDZfc/Z5Eo5KlBRCIcW4WcdsPdH9HFxQv</span>
+<span class="go">O9r9M0S9iPyzlbZAdt+RhvM8mNU+CGpa1OxE5i2Y0eAITft8jfoA+MMyDC0NmF2J</span>
+<span class="go">W/JERPwFQdmK</span>
+<span class="go">-----END CERTIFICATE-----]</span>
+<span class="go">certificate         -----BEGIN CERTIFICATE-----</span>
+<span class="go">MIIDTzCCAjegAwIBAgIUHTTWLpiBAl3/xIvzwZvbOfar30QwDQYJKoZIhvcNAQEL</span>
+<span class="go">BQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjMxMTIwMjExOTE4WhcNMjMx</span>
+<span class="go">MTIxMjExOTQ4WjAbMRkwFwYDVQQDExB0ZXN0LmV4YW1wbGUuY29tMIIBIjANBgkq</span>
+<span class="go">hkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4lec07w+zRA14s11dYJA8be4bw8qKUdr</span>
+<span class="go">w2Pz1UqdCwKOSsdyRyx/FJn1QsdHiqZfQEFug8v9xH0PJSW9VWyzT7drZmyU9qc0</span>
+<span class="go">5ajTatQEPjSfEQRuoMV75ni7xDH7YgEfk+m6fjOyrHusXM0H6tv8HmbherIpnO+O</span>
+<span class="go">xnjqXdEDDioSsaaiWv70NsIEAr6z+P7q6z+I85NMyaODcRyPf4bFqQaKRqbDbABu</span>
+<span class="go">h6tpkhG6Zn/09sCPoCa/HroJBpuRfC6oay4Q9bj8DT0xsq+6b3TH2fK8fTpExu0c</span>
+<span class="go">r9nEv9Nbb/Qv0y8Rezyv8gCl09OLFaE/wcUN7qdREfu+8JTx6lJV1wIDAQABo4GP</span>
+<span class="go">MIGMMA4GA1UdDwEB/wQEAwIDqDAdBgNVHSUEFjAUBggrBgEFBQcDAQYIKwYBBQUH</span>
+<span class="go">AwIwHQYDVR0OBBYEFPAMiaQiLgckjrJNzA5RV091yulKMB8GA1UdIwQYMBaAFK5a</span>
+<span class="go">QzjnvFcCdOl/VOacaZpKsw9PMBsGA1UdEQQUMBKCEHRlc3QuZXhhbXBsZS5jb20w</span>
+<span class="go">DQYJKoZIhvcNAQELBQADggEBAERd7d7RfqIPQKZZ76mhUW098g9cRoMU7TOwrLdl</span>
+<span class="go">VfMFfIxme7KFCWhJ1FAinZkpFdBikQG00sm3myyvivxTvE9cQPZGkV3hAqYI+D+g</span>
+<span class="go">zJBupzr29kbLKBmDlmG/U1KnhNCHI1TptQ8ifRoln5+BY2MnB1BfArh0RE33Lw3Q</span>
+<span class="go">5M11x0GvKJ4cpSDkvz4+MtRO9OBwCDIAks5bnaDrGSlCee8U8pWRTch6amYwHBuH</span>
+<span class="go">1jhovGOe1Qf7AUJEWXs/07QmaXagqv8r+vckEtrAp2odUXcBazKdyxByHUiSv0a8</span>
+<span class="go">CIBluKGaA/B2UciNPX4lMCV2Njq04/HLiZc73bVKAho5B9Q=</span>
+<span class="go">-----END CERTIFICATE-----</span>
+<span class="go">expiration          1700601588</span>
+<span class="go">issuing_ca          -----BEGIN CERTIFICATE-----</span>
+<span class="go">MIIDNTCCAh2gAwIBAgIUPr8UTRzxlri/a3K+O3fpwC0GhEQwDQYJKoZIhvcNAQEL</span>
+<span class="go">BQAwFjEUMBIGA1UEAxMLZXhhbXBsZS5jb20wHhcNMjMxMTIwMjExMDExWhcNMjMx</span>
+<span class="go">MTIxMjEzMDQxWjAWMRQwEgYDVQQDEwtleGFtcGxlLmNvbTCCASIwDQYJKoZIhvcN</span>
+<span class="go">AQEBBQADggEPADCCAQoCggEBAMMquA00dkbKRJwcy3R+QbXuVS/b59S3GTMkQsUj</span>
+<span class="go">wc5IIJ70BJQDAdQu0x4TU5k6andV33R8UgIMVNTzDePdddlNLJg9W8EDcvIwPg/Z</span>
+<span class="go">UReSCw+fvm+C8wcKqUt3PxJ6z05w7JKB54/sDywCnwX4LRg4XDHEFnvOlvVGmTqO</span>
+<span class="go">iwdOTel5hjS8fDRvF8M4HHZEqgUii1+YBhm9DlPpHolGFSVyZ2iA/0YBbgS5Sb+/</span>
+<span class="go">gKUzXImKOjNito/X9O+TCR9HqxoiMG7HjC4r3LMy+AZ8LuvVJpp7mor1FRiB0iZ0</span>
+<span class="go">z7ZbEYr4kEmTJp75CWM2u+HKGlQ3u/ugSndPhweGJnGzZisCAwEAAaN7MHkwDgYD</span>
+<span class="go">VR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFK5aQzjnvFcC</span>
+<span class="go">dOl/VOacaZpKsw9PMB8GA1UdIwQYMBaAFK5aQzjnvFcCdOl/VOacaZpKsw9PMBYG</span>
+<span class="go">A1UdEQQPMA2CC2V4YW1wbGUuY29tMA0GCSqGSIb3DQEBCwUAA4IBAQC5o7IF6FsX</span>
+<span class="go">j4EA4KI1lhr6Kv60kJhaI5SaCIxc9o8KTShBkGRQD02Fuk9zxdJlJCnyttIDvzLk</span>
+<span class="go">pW/fQYhFPgjwIioH1avVRfd5Hh3vkLDxsLMN+9lyy6uS9KxDrWz/cdZUGfMOoLmS</span>
+<span class="go">6TAidhy4Z06wlk9IKMTbO3O+LBIr7oIpxH2laOAIwdTClnRwFZCwGkkPsp08l3n5</span>
+<span class="go">ZKg9ohy//H1pXx0grn7GXhlONPUUjP8rDZfc/Z5Eo5KlBRCIcW4WcdsPdH9HFxQv</span>
+<span class="go">O9r9M0S9iPyzlbZAdt+RhvM8mNU+CGpa1OxE5i2Y0eAITft8jfoA+MMyDC0NmF2J</span>
+<span class="go">W/JERPwFQdmK</span>
+<span class="go">-----END CERTIFICATE-----</span>
+<span class="go">private_key         -----BEGIN RSA PRIVATE KEY-----</span>
+<span class="go">MIIEowIBAAKCAQEA4lec07w+zRA14s11dYJA8be4bw8qKUdrw2Pz1UqdCwKOSsdy</span>
+<span class="go">Ryx/FJn1QsdHiqZfQEFug8v9xH0PJSW9VWyzT7drZmyU9qc05ajTatQEPjSfEQRu</span>
+<span class="go">oMV75ni7xDH7YgEfk+m6fjOyrHusXM0H6tv8HmbherIpnO+OxnjqXdEDDioSsaai</span>
+<span class="go">Wv70NsIEAr6z+P7q6z+I85NMyaODcRyPf4bFqQaKRqbDbABuh6tpkhG6Zn/09sCP</span>
+<span class="go">oCa/HroJBpuRfC6oay4Q9bj8DT0xsq+6b3TH2fK8fTpExu0cr9nEv9Nbb/Qv0y8R</span>
+<span class="go">ezyv8gCl09OLFaE/wcUN7qdREfu+8JTx6lJV1wIDAQABAoIBAHm7IxZhZOlG8aRE</span>
+<span class="go">WgrT/ffClofsgQFobxXL+QTatzGHs12WfOi4jrRWxSigIuL37bySNEzf9mCp3e5d</span>
+<span class="go">qMF7z8hs3m9csJUjgniN3v7SfmGyTWaKmrEO5T8j6eBv/UJNVl1n1Cwxw8OuVBop</span>
+<span class="go">DzwKCkOTk2s4zNahpIkr2OiSE/GWPiiXn5rHcV6MdMvbI5qc/RXp/bioo7X+0kg6</span>
+<span class="go">BPdSQbJP2K9CTJzjh4mGqkJI6hOpJ9ChepyU8CUpyogi3THwcM0c5ru2/U+52xjO</span>
+<span class="go">kjfRffHRbwOgkUWbIjXVCi+6C5esrJqZVrhbrvwe58TGTa5QBoQATouvyiAzl+/U</span>
+<span class="go">qhHv2MkCgYEA6lDmQkVvZQd5udghNrZ+nFyxKfJdKm2lp3TP1HshI2cxMm3SxVga</span>
+<span class="go">qDGvJGSgjaKgCGxAeYQVVISVILQ1frPQ7aRn3BGJPvgUY3UGk8pL4ZMhAwZ7eNUD</span>
+<span class="go">R2bWZc3QxN2yH5YBQvOSTDpMVayqjHAVoK7wo/EyYfWAF5GfRsBU8cMCgYEA90nP</span>
+<span class="go">I79P3Ik4xB//QseXh2mdpd2KRDcIkf1MwhidnB9/QSY1YiV5GipVSZgC4hUeBPmz</span>
+<span class="go">05C5CrcCBoASstqgxskWB0Zp6HPH6wixok17ijy+H23YB3bYf2STFZVLvTSVt4xT</span>
+<span class="go">F8Po08mdo4NZaCFjsqAcigjbd7Mp83K18YnVVl0CgYAvfbQdrHsWa/x0+WRJ9ZUV</span>
+<span class="go">1gema9QMPGr91MQm2cnupgSnpvC4RNIqUt+frbGI43QyINa0ilvUZIbhOQU6p/Fp</span>
+<span class="go">qQ/P39IEbD2dpuNtYuwcTTi8pzyxUeM3PpWnzp5IuHJYyot46Ws2ff5owvVSP4ly</span>
+<span class="go">puJpKALBLgQHQuGYcnUFBwKBgF/ZMfqPGqtGXMRYCp6dsjQAUeSKXB9YnW/ImEnb</span>
+<span class="go">NKvg4XglESf7klb79ZbS3rs2qC4RgwwL2k025ggS+Cxu5UZnhqxHNKGuztxgwElC</span>
+<span class="go">cxH/vUl9T/CEtiGaoBALkBHEIgvEzig1/TapvPo13R+pYXVI7gbqq/ZXcXk1CySV</span>
+<span class="go">4iTZAoGBAIbhooHtQbiAS4BF9ffQAoMxsbTGZeMUAu5snvI2IFo/gb5vgO/XF91e</span>
+<span class="go">+6e/z9+R7knvX331UKniHFtPvBwwIB7oSRllEInY/t++TS+eZZrYHl9kPX3F/xbw</span>
+<span class="go">/NzljHESdpucYFdALpI9JZZZ1ustAxd8jIXHRg++PMDAp9RefFAs</span>
+<span class="go">-----END RSA PRIVATE KEY-----</span>
+<span class="go">private_key_type    rsa</span>
+<span class="go">serial_number       1d:34:d6:2e:98:81:02:5d:ff:c4:8b:f3:c1:9b:db:39:f6:ab:df:44</span>
+</pre></div>
+</div>
+<p>Посмотреть сертификаты в движке можно следующим образом:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>list<span class="w"> </span>pki/certs
+<span class="go">Keys</span>
+<span class="go">----</span>
+<span class="go">1d:34:d6:2e:98:81:02:5d:ff:c4:8b:f3:c1:9b:db:39:f6:ab:df:44</span>
+<span class="go">3e:bf:14:4d:1c:f1:96:b8:bf:6b:72:be:3b:77:e9:c0:2d:06:84:44</span>
+<span class="gp">$ </span>vault<span class="w"> </span><span class="nb">read</span><span class="w"> </span>-field<span class="o">=</span>certificate<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>pki/cert/1d:34:d6:2e:98:81:02:5d:ff:c4:8b:f3:c1:9b:db:39:f6:ab:df:44<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span><span class="p">|</span><span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-noout<span class="w"> </span>-text
+<span class="go">Certificate:</span>
+<span class="go">    Data:</span>
+<span class="go">        Version: 3 (0x2)</span>
+<span class="go">        Serial Number:</span>
+<span class="go">            1d:34:d6:2e:98:81:02:5d:ff:c4:8b:f3:c1:9b:db:39:f6:ab:df:44</span>
+<span class="go">        Signature Algorithm: sha256WithRSAEncryption</span>
+<span class="go">        Issuer: CN = example.com</span>
+<span class="go">        Validity</span>
+<span class="go">            Not Before: Nov 20 21:19:18 2023 GMT</span>
+<span class="go">            Not After : Nov 21 21:19:48 2023 GMT</span>
+<span class="go">        Subject: CN = test.example.com</span>
+<span class="go">        Subject Public Key Info:</span>
+<span class="go">            Public Key Algorithm: rsaEncryption</span>
+<span class="go">                Public-Key: (2048 bit)</span>
+<span class="go">                Modulus:</span>
+<span class="go">                    00:e2:57:9c:d3:bc:3e:cd:10:35:e2:cd:75:75:82:</span>
+<span class="go">                    40:f1:b7:b8:6f:0f:2a:29:47:6b:c3:63:f3:d5:4a:</span>
+<span class="go">                    9d:0b:02:8e:4a:c7:72:47:2c:7f:14:99:f5:42:c7:</span>
+<span class="go">                    47:8a:a6:5f:40:41:6e:83:cb:fd:c4:7d:0f:25:25:</span>
+<span class="go">                    bd:55:6c:b3:4f:b7:6b:66:6c:94:f6:a7:34:e5:a8:</span>
+<span class="go">                    d3:6a:d4:04:3e:34:9f:11:04:6e:a0:c5:7b:e6:78:</span>
+<span class="go">                    bb:c4:31:fb:62:01:1f:93:e9:ba:7e:33:b2:ac:7b:</span>
+<span class="go">                    ac:5c:cd:07:ea:db:fc:1e:66:e1:7a:b2:29:9c:ef:</span>
+<span class="go">                    8e:c6:78:ea:5d:d1:03:0e:2a:12:b1:a6:a2:5a:fe:</span>
+<span class="go">                    f4:36:c2:04:02:be:b3:f8:fe:ea:eb:3f:88:f3:93:</span>
+<span class="go">                    4c:c9:a3:83:71:1c:8f:7f:86:c5:a9:06:8a:46:a6:</span>
+<span class="go">                    c3:6c:00:6e:87:ab:69:92:11:ba:66:7f:f4:f6:c0:</span>
+<span class="go">                    8f:a0:26:bf:1e:ba:09:06:9b:91:7c:2e:a8:6b:2e:</span>
+<span class="go">                    10:f5:b8:fc:0d:3d:31:b2:af:ba:6f:74:c7:d9:f2:</span>
+<span class="go">                    bc:7d:3a:44:c6:ed:1c:af:d9:c4:bf:d3:5b:6f:f4:</span>
+<span class="go">                    2f:d3:2f:11:7b:3c:af:f2:00:a5:d3:d3:8b:15:a1:</span>
+<span class="go">                    3f:c1:c5:0d:ee:a7:51:11:fb:be:f0:94:f1:ea:52:</span>
+<span class="go">                    55:d7</span>
+<span class="go">                Exponent: 65537 (0x10001)</span>
+<span class="go">        X509v3 extensions:</span>
+<span class="go">            X509v3 Key Usage: critical</span>
+<span class="go">                Digital Signature, Key Encipherment, Key Agreement</span>
+<span class="go">            X509v3 Extended Key Usage:</span>
+<span class="go">                TLS Web Server Authentication, TLS Web Client Authentication</span>
+<span class="go">            X509v3 Subject Key Identifier:</span>
+<span class="go">                F0:0C:89:A4:22:2E:07:24:8E:B2:4D:CC:0E:51:57:4F:75:CA:E9:4A</span>
+<span class="go">            X509v3 Authority Key Identifier:</span>
+<span class="go">                AE:5A:43:38:E7:BC:57:02:74:E9:7F:54:E6:9C:69:9A:4A:B3:0F:4F</span>
+<span class="go">            X509v3 Subject Alternative Name:</span>
+<span class="go">                DNS:test.example.com</span>
+<span class="go">    Signature Algorithm: sha256WithRSAEncryption</span>
+<span class="go">    Signature Value:</span>
+<span class="go">        44:5d:ed:de:d1:7e:a2:0f:40:a6:59:ef:a9:a1:51:6d:3d:f2:</span>
+<span class="go">        0f:5c:46:83:14:ed:33:b0:ac:b7:65:55:f3:05:7c:8c:66:7b:</span>
+<span class="go">        b2:85:09:68:49:d4:50:22:9d:99:29:15:d0:62:91:01:b4:d2:</span>
+<span class="go">        c9:b7:9b:2c:af:8a:fc:53:bc:4f:5c:40:f6:46:91:5d:e1:02:</span>
+<span class="go">        a6:08:f8:3f:a0:cc:90:6e:a7:3a:f6:f6:46:cb:28:19:83:96:</span>
+<span class="go">        61:bf:53:52:a7:84:d0:87:23:54:e9:b5:0f:22:7d:1a:25:9f:</span>
+<span class="go">        9f:81:63:63:27:07:50:5f:02:b8:74:44:4d:f7:2f:0d:d0:e4:</span>
+<span class="go">        cd:75:c7:41:af:28:9e:1c:a5:20:e4:bf:3e:3e:32:d4:4e:f4:</span>
+<span class="go">        e0:70:08:32:00:92:ce:5b:9d:a0:eb:19:29:42:79:ef:14:f2:</span>
+<span class="go">        95:91:4d:c8:7a:6a:66:30:1c:1b:87:d6:38:68:bc:63:9e:d5:</span>
+<span class="go">        07:fb:01:42:44:59:7b:3f:d3:b4:26:69:76:a0:aa:ff:2b:fa:</span>
+<span class="go">        f7:24:12:da:c0:a7:6a:1d:51:77:01:6b:32:9d:cb:10:72:1d:</span>
+<span class="go">        48:92:bf:46:bc:08:80:65:b8:a1:9a:03:f0:76:51:c8:8d:3d:</span>
+<span class="go">        7e:25:30:25:76:36:3a:b4:e3:f1:cb:89:97:3b:dd:b5:4a:02:</span>
+<span class="go">        1a:39:07:d4</span>
+</pre></div>
+</div>
+<p>Таким образом можно построить инфраструктуру управления сертификатами, например,
+внутри компании.</p>
+</section>
+<section id="agent">
+<h2>Agent<a class="headerlink" href="#agent" title="Permalink to this heading"></a></h2>
+<p>Утилита <code class="docutils literal notranslate"><span class="pre">vault</span></code> может также работать в виде агента на сервере, синхронизируя
+секреты, а также вставляя их в конфигурационные файлы. Создадим конфигурацию
+агента в файле <code class="docutils literal notranslate"><span class="pre">config.hcl</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">auto_auth</span> <span class="p">{</span>
+  <span class="n">method</span> <span class="p">{</span>
+     <span class="nb">type</span> <span class="o">=</span> <span class="s2">&quot;token_file&quot;</span>
+     <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">token_file_path</span> <span class="o">=</span> <span class="s2">&quot;/home/vagrant/.vault-token&quot;</span>
+     <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="n">sink</span> <span class="s2">&quot;file&quot;</span> <span class="p">{</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+      <span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/tmp/file-foo&quot;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">template</span> <span class="p">{</span>
+  <span class="n">contents</span> <span class="o">=</span> <span class="o">&lt;&lt;</span><span class="n">EOF</span>
+<span class="p">{{</span><span class="o">-</span> <span class="k">with</span> <span class="n">secret</span> <span class="s2">&quot;secret/test&quot;</span> <span class="o">-</span><span class="p">}}</span>
+<span class="n">secret_value</span><span class="o">=</span><span class="p">{{</span> <span class="o">.</span><span class="n">Data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">somekey</span> <span class="p">}}</span>
+<span class="p">{{</span><span class="o">-</span> <span class="n">end</span> <span class="p">}}</span>
+<span class="n">EOF</span>
+  <span class="n">destination</span> <span class="o">=</span> <span class="s2">&quot;/home/vagrant/config&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Здесь мы указали параметры авторизации, а также шаблон конфигурации, который
+использует key-value движок <code class="docutils literal notranslate"><span class="pre">secret/</span></code> и путь, по которому полученная конфигурация
+будет сохранена. Запустим агент, добавив в него опцию <code class="docutils literal notranslate"><span class="pre">-exit-after-auth</span></code>, чтобы
+после создания конфигурации агент завершил свою работу, а не был постоянно запущен
+отслеживая секреты:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>agent<span class="w"> </span>-exit-after-auth<span class="w"> </span>-config<span class="w"> </span>config.hcl
+<span class="go">==&gt; Vault Agent started! Log data will stream in below:</span>
+
+<span class="go">==&gt; Vault Agent configuration:</span>
+
+<span class="go">           Api Address 1: http://bufconn</span>
+<span class="go">                     Cgo: disabled</span>
+<span class="go">               Log Level:</span>
+<span class="go">                 Version: Vault v1.13.3, built 2023-06-06T18:12:37Z</span>
+<span class="go">             Version Sha: 3bedf816cbf851656ae9e6bd65dd4a67a9ddff5e</span>
+
+<span class="go">2023-11-20T22:09:51.206Z [INFO]  agent.sink.file: creating file sink</span>
+<span class="go">2023-11-20T22:09:51.207Z [INFO]  agent.sink.file: file sink configured: path=/tmp/file-foo mode=-rw-r-----</span>
+<span class="go">2023-11-20T22:09:51.207Z [INFO]  agent.template.server: starting template server</span>
+<span class="go">2023-11-20T22:09:51.207Z [INFO] (runner) creating new runner (dry: false, once: false)</span>
+<span class="go">2023-11-20T22:09:51.207Z [INFO]  agent.auth.handler: starting auth handler</span>
+<span class="go">2023-11-20T22:09:51.207Z [INFO]  agent.auth.handler: authenticating</span>
+<span class="go">2023-11-20T22:09:51.208Z [INFO]  agent.sink.server: starting sink server</span>
+<span class="go">2023-11-20T22:09:51.208Z [INFO] (runner) creating watcher</span>
+<span class="go">2023-11-20T22:09:51.209Z [INFO]  agent.auth.handler: authentication successful, sending token to sinks</span>
+<span class="go">2023-11-20T22:09:51.209Z [INFO]  agent.auth.handler: not starting token renewal process, as token has unlimited TTL</span>
+<span class="go">2023-11-20T22:09:51.209Z [INFO]  agent.template.server: template server received new token</span>
+<span class="go">2023-11-20T22:09:51.209Z [INFO] (runner) stopping</span>
+<span class="go">2023-11-20T22:09:51.209Z [INFO] (runner) creating new runner (dry: false, once: false)</span>
+<span class="go">2023-11-20T22:09:51.209Z [INFO]  agent.sink.file: token written: path=/tmp/file-foo</span>
+<span class="go">2023-11-20T22:09:51.210Z [INFO]  agent.sink.server: sink server stopped</span>
+<span class="go">2023-11-20T22:09:51.210Z [INFO]  agent: sinks finished, exiting</span>
+<span class="go">2023-11-20T22:09:51.210Z [INFO] (runner) creating watcher</span>
+<span class="go">2023-11-20T22:09:51.210Z [INFO] (runner) starting</span>
+<span class="go">2023-11-20T22:09:51.216Z [INFO] (runner) stopping</span>
+<span class="go">2023-11-20T22:09:51.216Z [INFO]  agent.template.server: template server stopped</span>
+<span class="go">2023-11-20T22:09:51.216Z [INFO] (runner) received finish</span>
+<span class="go">2023-11-20T22:09:51.216Z [INFO]  agent.auth.handler: shutdown triggered, stopping lifetime watcher</span>
+<span class="go">2023-11-20T22:09:51.216Z [INFO]  agent.auth.handler: auth handler stopped</span>
+
+<span class="gp">$ </span>cat<span class="w"> </span>/home/vagrant/config
+<span class="go">secret_value=anothervalue</span>
+</pre></div>
+</div>
+<p>Как видно агент взял информацию из движка <code class="docutils literal notranslate"><span class="pre">secret/</span></code> и вставил в описанный шаблон.
+Таким образом можно шаблонизировать конфигурации различных приложений, передавая
+в них чувствительные данные.</p>
+</section>
+<section id="transit">
+<h2>Transit<a class="headerlink" href="#transit" title="Permalink to this heading"></a></h2>
+<p>Vault сервер также предоставляет возможность использования движка
+<a class="reference external" href="https://developer.hashicorp.com/vault/tutorials/encryption-as-a-service/eaas-transit">transit</a>, который позволяет шифровать данные отправляя их
+на сервер и возвращая их в зашифрованном виде, при этом сами данные не сохраняются
+на сервер. Это можно использовать с такими приложениями как <a class="reference external" href="https://github.com/getsops/sops">sops</a>, управляя
+доступом к движку для определенного круга лиц на стороне vault сервера.</p>
+<p>Активируем движок и сгенерируем в нем ключ:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vault<span class="w"> </span>secrets<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>transit
+<span class="go">Success! Enabled the transit secrets engine at: transit/</span>
+<span class="gp">$ </span>vault<span class="w"> </span>write<span class="w"> </span>transit/keys/testkey<span class="w"> </span><span class="nv">type</span><span class="o">=</span>rsa-4096
+<span class="go">Success! Data written to: transit/keys/testkey</span>
+</pre></div>
+</div>
+<p>После чего воспользуемся командой <code class="docutils literal notranslate"><span class="pre">sops</span></code>. Ей можно явно задать в опциях путь
+до движка опцией <code class="docutils literal notranslate"><span class="pre">--hc-vault-transit</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span>secret<span class="w"> </span><span class="p">|</span><span class="w"> </span>sops<span class="w"> </span>--hc-vault-transit<span class="w"> </span><span class="nv">$VAULT_ADDR</span>/v1/transit/keys/testkey<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-e<span class="w"> </span>/dev/stdin
+<span class="go">{</span>
+<span class="go">        &quot;data&quot;: &quot;ENC[AES256_GCM,data:0Fllhj06Vw==,iv:2H4+9YFWwIYaLNluDsUR28L44t6R3t3UePw5v4mK/xA=,tag:woPdlSGAPERYB9ZJecR5TQ==,type:str]&quot;,</span>
+<span class="go">        &quot;sops&quot;: {</span>
+<span class="go">                &quot;kms&quot;: null,</span>
+<span class="go">                &quot;gcp_kms&quot;: null,</span>
+<span class="go">                &quot;azure_kv&quot;: null,</span>
+<span class="go">                &quot;hc_vault&quot;: [</span>
+<span class="go">                        {</span>
+<span class="go">                                &quot;vault_address&quot;: &quot;http://0.0.0.0:8200&quot;,</span>
+<span class="go">                                &quot;engine_path&quot;: &quot;transit&quot;,</span>
+<span class="go">                                &quot;key_name&quot;: &quot;testkey&quot;,</span>
+<span class="go">                                &quot;created_at&quot;: &quot;2023-11-21T20:19:41Z&quot;,</span>
+<span class="go">                                &quot;enc&quot;: &quot;vault:v1:mcs+8rnEdOABX+gzA0hzVCDqM3ELJbuG6JNQwTY/FkBMrc8pI7z34Kn5kzrHuW1Wj7+s3cEPt6rEfN4XCFw7cZyzD8KA2sHtXxB/ygIimW4hZoBHJC0TyKzK3792z8uVW9gsPx14asHVFxsarxVW/2psXRG7JT78rNJisNtkZbf4zuoFh2I0Hkv6oYYSp/q3slJ/tOcE408tLT9d9hu3PfJmwFA+wT+YQx2jpx8v1nGVok4HsdOXCwV13zvqsF1LlGIINIqHSFKBNqdCzpEjdFNma642A5K8GiDaJ6mNsX8BLBuiZ/9QETLdMEKOE60BEt9OE0uH03jnPJM/dy1spuan2f3UIQXuQtMHvfSDoELGcwf8MzaMj/0If9NAoJvWyPkdotuN0LEbYKFAN0xCgnlznn6dNhNRqocU7VBrorgNg80C5haNOma5HcudOSSmCT6zvWMVDeiICbqNp69WgEMxQ6L5Sk5m9Fe9mFbAjcSApqN/XeM1a5Lc63umu4zJrfIMqZhta1QfdnVC4r5W7UlBZFCbaoaBaTTHXDiQBSbuzJDfUTLk4VCa8PhTJWlczfH+tYTeN1075MtquEZ4nuo1RCPrfpU4H3i9dlOIm7UCMG5uQTRTLenlIiD8UDF6tRfGqrcDMoVe3ZpWuhWMFICuJCHBbW4FYpXm30H63hA=&quot;</span>
+<span class="go">                        }</span>
+<span class="go">                ],</span>
+<span class="go">                &quot;age&quot;: null,</span>
+<span class="go">                &quot;lastmodified&quot;: &quot;2023-11-21T20:19:41Z&quot;,</span>
+<span class="go">                &quot;mac&quot;: &quot;ENC[AES256_GCM,data:grPZ9LLSKxdjbIIbbbx8ElkJj7eL408YJRFoezBnGLR4Wc2WCx8Yw8Qi8Fcbu1PoHrHwjilak4TPY2Pw3vtPlsjOOaFUx6b8VL37wH+CAygxjXiu0YiBgvD0TQwqSq/y9A9ultcCteb++cXywafG9weyUfooUIA8f7Fu7PA7ofc=,iv:E3ekXNpfXVc1e5kjMBVrjEYnhzv70Qd2vehDu61E46Y=,tag:LQSRYDROrH0Foi3KyOb/zw==,type:str]&quot;,</span>
+<span class="go">                &quot;pgp&quot;: null,</span>
+<span class="go">                &quot;unencrypted_suffix&quot;: &quot;_unencrypted&quot;,</span>
+<span class="go">                &quot;version&quot;: &quot;3.8.1&quot;</span>
+<span class="go">        }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+<p>Также можно задать через файл конфигурации <code class="docutils literal notranslate"><span class="pre">.sops.yaml</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>&lt;&lt;EOF&gt;<span class="w"> </span>.sops.yaml
+<span class="go">&gt; creation_rules:</span>
+<span class="go">&gt; - hc_vault_transit_uri: $VAULT_ADDR/v1/transit/keys/testkey</span>
+<span class="go">&gt; EOF</span>
+<span class="gp">$ </span>sops<span class="w"> </span>-e<span class="w"> </span>-i<span class="w"> </span>config
+<span class="gp">$ </span>cat<span class="w"> </span>config
+<span class="go">{</span>
+<span class="go">        &quot;data&quot;: &quot;ENC[AES256_GCM,data:fSVS3USuD4hLtfbVOMI5iNqY7o5p0/M1p98=,iv:jxwNyzWhoOnh11TvtwBMEOXm/QncMtZhLh2mT0YVPMg=,tag:i/73k3yh3yy0guiwlHiSKA==,type:str]&quot;,</span>
+<span class="go">        &quot;sops&quot;: {</span>
+<span class="go">                &quot;kms&quot;: null,</span>
+<span class="go">                &quot;gcp_kms&quot;: null,</span>
+<span class="go">                &quot;azure_kv&quot;: null,</span>
+<span class="go">                &quot;hc_vault&quot;: [</span>
+<span class="go">                        {</span>
+<span class="go">                                &quot;vault_address&quot;: &quot;http://0.0.0.0:8200&quot;,</span>
+<span class="go">                                &quot;engine_path&quot;: &quot;transit&quot;,</span>
+<span class="go">                                &quot;key_name&quot;: &quot;testkey&quot;,</span>
+<span class="go">                                &quot;created_at&quot;: &quot;2023-11-21T20:35:10Z&quot;,</span>
+<span class="go">                                &quot;enc&quot;: &quot;vault:v1:C5DsMajw83NQYuM9t6+4Ohgd/WsW76Caimvjjh+FxFa5mZjKTdVur2YLTcLZdtW9IhNa5VJM+ZpaDlJ3aog8Rgmp49Id3eVqYB9ZpTBwE7yIAaUR8Bx8OpqMZk7WWr+cG6RVRW51yoSzpx8qMY1HKrHTn+IABVenPGN0ALCbis28iSHTDrazv1N1nUgDzPyqNOKww9f+koIeXylG9z/rrTTL/coLBSoRjQ3h2iekOz3GeyVVdup9v8LeGr0MXVNun463JYDY+G8hM3Bn5HBg0R0SuKrZDoVV5O0+7w/MtdwVtQfWZeZ0bZY6mRwozgA53xt5EP7eAYD5dvK4jka0TrXGzDBe/kNuoASww4H7NrMKSdZvw9a6FiXgtL5Ki9BX6jWW+L9XIH1hP2eI6ol5Jfe2Z3k78Bacmkxf8bwcZi+2HGDJkW/cUbvoe8zKqhPN1BkXXFHsGVfeSaflrrNAnmfSJomqPpzwaPqlppv8NBQHoicNAnIIxszzuU6nvFBt4mlxfiYuJLPiyYQpvfdpohOWifT5NqRQ3fjdcx23ytFlZ8RjJDAbc9fHwqlfcug/Cp3E1gWqqoi1PRqfUWkgEz7Rt3y+JobhcD8+HTOYfO2nCxlEHL0L/hwqJ3QnPSpLjfPfDL001JRwNDQWrT+cLcpDx9Ju2tGuc66o5/42rEw=&quot;</span>
+<span class="go">                        }</span>
+<span class="go">                ],</span>
+<span class="go">                &quot;age&quot;: null,</span>
+<span class="go">                &quot;lastmodified&quot;: &quot;2023-11-21T20:35:10Z&quot;,</span>
+<span class="go">                &quot;mac&quot;: &quot;ENC[AES256_GCM,data:D6gFwf4VxO+EsaIMRpAwxQaZRtRnB+DYziUDVkrY6Kdtndk/wlTDgbqxCmJlJCOmSp3phR6aFEUUtxPs9U+vHjo3bX/6viecscmDOSDj26xKpNyu08yv3KjH97vabrMRIgSYR6/1n8w9NTFS4RxdUkYDX8zauHRqx3Btz9FRmik=,iv:fXuXuFWU/FRW4o/Ao98Z3/5/9+ayiGy+0ZALp1UHI1c=,tag:z/Y3Jw9FATexgzaVNDdkgQ==,type:str]&quot;,</span>
+<span class="go">                &quot;pgp&quot;: null,</span>
+<span class="go">                &quot;unencrypted_suffix&quot;: &quot;_unencrypted&quot;,</span>
+<span class="go">                &quot;version&quot;: &quot;3.8.1&quot;</span>
+<span class="go">        }</span>
+<span class="go">}</span>
+<span class="gp">$ </span>sops<span class="w"> </span>-d<span class="w"> </span>-i<span class="w"> </span>config
+<span class="gp">$ </span>cat<span class="w"> </span>config
+<span class="go">secret_value=anothervalue</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="11_practice_secrets.html" class="btn btn-neutral float-left" title="Secret Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="13_practice_rabbit.html" class="btn btn-neutral float-right" title="RabbitMQ" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

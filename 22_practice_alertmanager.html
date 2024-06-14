@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alertmanager &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="ELK Stack" href="23_practice_elasticsearch.html" />
+    <link rel="prev" title="Prometheus" href="21_practice_prometheus.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Alertmanager</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Alertmanager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#trigger-alert">Trigger Alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#route-alert">Route Alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inhibit-alert">Inhibit Alert</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#silence-alert">Silence Alert</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Alertmanager</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/22_practice_alertmanager.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="alertmanager">
+<h1>Alertmanager<a class="headerlink" href="#alertmanager" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии познакомимся с компонентом для организации
+уведомлений о событиях мониторинга в системе <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> - <a class="reference external" href="https://prometheus.io/docs/alerting/latest/alertmanager/">alertmanager</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;prometheus&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;prometheus&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io docker-compose-v2</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация установит на виртуальную машину <a class="reference external" href="https://docs.docker.com/engine/">docker</a> и
+<a class="reference external" href="https://docs.docker.com/compose/">docker compose</a>, с помощью которых в дальнейшем будут
+развернуты остальные компоненты.</p>
+</section>
+<section id="id1">
+<h2>Alertmanager<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<p>Для развертывания компонентов опишем <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code> файл:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mon</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8889:9090</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./prometheus.yml:/etc/prometheus/prometheus.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./rules.yaml:/etc/prometheus/rules.yaml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus_data:/prometheus</span>
+<span class="w">  </span><span class="nt">alertmanager</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/alertmanager:v0.27.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:9093</span>
+<span class="w">  </span><span class="nt">node-exporter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/node-exporter:v1.7.0</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.procfs=/host/proc&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.rootfs=/rootfs&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.sysfs=/host/sys&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc:/host/proc:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sys:/host/sys:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/:/rootfs:ro</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus_data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>Данная конфигурация развернет контейнеры <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a>, <a class="reference external" href="https://github.com/prometheus/node_exporter">node-exporter</a>
+и <a class="reference external" href="https://prometheus.io/docs/alerting/latest/alertmanager/">alertmanager</a>.
+Также нам понадобится конфигурация <code class="docutils literal notranslate"><span class="pre">prometheus.yml</span></code>, в которой мы опишем
+получение метрик с <a class="reference external" href="https://github.com/prometheus/node_exporter">node-exporter</a> и подключение алертинга к <a class="reference external" href="https://prometheus.io/docs/alerting/latest/alertmanager/">alertmanager</a>.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">global</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">15s</span>
+
+<span class="nt">scrape_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;prometheus&#39;</span>
+<span class="w">    </span><span class="nt">scrape_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;localhost:9090&#39;</span><span class="p p-Indicator">]</span>
+
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">job_name</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;node&#39;</span>
+<span class="w">    </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;node-exporter:9100&#39;</span><span class="p p-Indicator">]</span>
+
+<span class="nt">rule_files</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rules.yaml</span>
+
+<span class="nt">alerting</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">alertmanagers</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">static_configs</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">targets</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">alertmanager:9093</span>
+</pre></div>
+</div>
+<p>А также необходим файл с правилами, по которым будут формироваться события -
+<code class="docutils literal notranslate"><span class="pre">rules.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">groups</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighFilesystemUsage</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_filesystem_avail_bytes{mountpoint=&quot;/&quot;}/node_filesystem_size_bytes &lt; 0.6</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warn</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Filesystem Usage</span>
+</pre></div>
+</div>
+<p>После чего запустим <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container mon-prometheus-1     Started                                              0.8s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Started                                              0.9s</span>
+<span class="go"> ✔ Container mon-alertmanager-1   Started                                              0.9s</span>
+</pre></div>
+</div>
+<p>Нам станут доступны prometheus по адресу <a class="reference external" href="http://localhost:8889">localhost:8889</a>
+и alertmanager по адресу <a class="reference external" href="http://localhost:8888">localhost:8888</a>. На странице
+<a class="reference external" href="http://localhost:8889/status">status</a> можно увидеть, что prometheus подключен к
+alertmanager:</p>
+<p><img alt="" src="_images/alertmanager1.png" /></p>
+<p>А на странице <a class="reference external" href="http://localhost:8889/rules">rules</a> наши правила:</p>
+<p><img alt="" src="_images/alertmanager2.png" /></p>
+<p>Сам же alertmanager сейчас <a class="reference external" href="http://localhost:8888/#/alerts">не содержит алертов</a>:</p>
+<p><img alt="" src="_images/alertmanager3.png" /></p>
+</section>
+<section id="trigger-alert">
+<h2>Trigger Alert<a class="headerlink" href="#trigger-alert" title="Permalink to this heading"></a></h2>
+<p>Возьмем метрику, для которой мы описали правило - <code class="docutils literal notranslate"><span class="pre">node_filesystem_avail_bytes</span></code></p>
+<p><img alt="" src="_images/alertmanager4.png" /></p>
+<p>Смотреть метрики можно также через <a class="reference external" href="https://prometheus.io/docs/prometheus/latest/querying/api/">http api</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/api/v1/query<span class="w"> </span>--data-urlencode<span class="w"> </span><span class="s1">&#39;query=node_filesystem_avail_bytes{mountpoint=&quot;/&quot;}/2^30&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;.data.result[] | [.metric,.value[1]]&#39;</span>
+<span class="go">[{&quot;device&quot;:&quot;/dev/sda1&quot;,&quot;fstype&quot;:&quot;ext4&quot;,&quot;instance&quot;:&quot;node-exporter:9100&quot;,&quot;job&quot;:&quot;node&quot;,&quot;mountpoint&quot;:&quot;/&quot;},&quot;35.24398422241211&quot;]</span>
+</pre></div>
+</div>
+<p>Посмотрим на размер корневой файловой системы и заполним его таким образом, чтобы
+сработало правило алертинга:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>df<span class="w"> </span>-h<span class="w"> </span>/
+<span class="go">Filesystem      Size  Used Avail Use% Mounted on</span>
+<span class="go">/dev/sda1        39G  3.5G   36G   9% /</span>
+<span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>big_file<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">20000</span>
+<span class="go">20908605440 bytes (21 GB, 19 GiB) copied, 24 s, 871 MB/s</span>
+<span class="go">20000+0 records in</span>
+<span class="go">20000+0 records out</span>
+<span class="go">20971520000 bytes (21 GB, 20 GiB) copied, 24.0671 s, 871 MB/s</span>
+<span class="gp">$ </span>df<span class="w"> </span>-h<span class="w"> </span>/
+<span class="go">Filesystem      Size  Used Avail Use% Mounted on</span>
+<span class="go">/dev/sda1        39G   23G   16G  60% /</span>
+</pre></div>
+</div>
+<p>Убедимся, что в мониторинге отразилось новое значение:</p>
+<p><img alt="" src="_images/alertmanager5.png" /></p>
+<p>Через некоторое время на странице <a class="reference external" href="http://localhost:8889/alerts">alerts</a> можно будет
+увидеть алерт в состоянии <code class="docutils literal notranslate"><span class="pre">Pending</span></code>:</p>
+<p><img alt="" src="_images/alertmanager6.png" /></p>
+<p>В данное состояние он переходит после попадание под выражение в нашем правиле, а
+спустя время, указанное в параметре <code class="docutils literal notranslate"><span class="pre">for</span></code>, алерт перейдет в состояние <code class="docutils literal notranslate"><span class="pre">Firing</span></code>:</p>
+<p><img alt="" src="_images/alertmanager7.png" /></p>
+<p>После чего окажется в alertmanager:</p>
+<p><img alt="" src="_images/alertmanager8.png" /></p>
+<p>Теперь можно удалить файл:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>rm<span class="w"> </span>big_file
+</pre></div>
+</div>
+<p>После чего спустя некоторое время алерт пропадет:</p>
+<p><img alt="" src="_images/alertmanager9.png" /></p>
+<p><img alt="" src="_images/alertmanager10.png" /></p>
+</section>
+<section id="route-alert">
+<h2>Route Alert<a class="headerlink" href="#route-alert" title="Permalink to this heading"></a></h2>
+<p>На текущий момент alertmanager не сконфигурирован для отправки уведомлений ко внешним
+получателям. Alertmanager позволяет настроить правила маршрутизации событий к разным
+потребителям на основе их атрибутов, а также позволяет задать получателя по-умолчанию.
+Зададим конфигурацию с отправкой событий в telegram бота в файле <code class="docutils literal notranslate"><span class="pre">alertmanager.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">route</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;alertname&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">group_wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">  </span><span class="nt">group_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">  </span><span class="nt">repeat_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24h</span>
+<span class="w">  </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telegram</span>
+
+<span class="nt">receivers</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telegram</span>
+<span class="w">  </span><span class="nt">telegram_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bot_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;token&gt;</span>
+<span class="w">    </span><span class="nt">chat_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;chat_id&gt;</span>
+</pre></div>
+</div>
+<p>Для получения <code class="docutils literal notranslate"><span class="pre">bot_token</span></code> можно обратиться к <a class="reference external" href="https://t.me/botfather">&#64;BotFather</a>,
+чтобы создать нового бота или получить токен существующего. А для получения
+<code class="docutils literal notranslate"><span class="pre">chat_id</span></code> можно написать сообщение боту и сделать запрос из терминала:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">token</span><span class="o">=</span>&lt;токен<span class="w"> </span>бота&gt;
+<span class="gp">$ </span>curl<span class="w"> </span>https://api.telegram.org/bot<span class="si">${</span><span class="nv">token</span><span class="si">}</span>/getUpdates
+</pre></div>
+</div>
+<p>Где в ответе в поле <code class="docutils literal notranslate"><span class="pre">id</span></code> будет искомое значение.</p>
+<p>После задания конфигурации обновим <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mon</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8889:9090</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./prometheus.yml:/etc/prometheus/prometheus.yml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./rules.yaml:/etc/prometheus/rules.yaml</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus_data:/prometheus</span>
+<span class="w">  </span><span class="nt">alertmanager</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/alertmanager:v0.27.0</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./alertmanager.yml:/etc/alertmanager/alertmanager.yml</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:9093</span>
+<span class="w">  </span><span class="nt">node-exporter</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/node-exporter:v1.7.0</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.procfs=/host/proc&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.rootfs=/rootfs&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--path.sysfs=/host/sys&#39;</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&#39;--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)&#39;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/proc:/host/proc:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/sys:/host/sys:ro</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/:/rootfs:ro</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">prometheus_data</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{}</span>
+</pre></div>
+</div>
+<p>И перезапустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container mon-prometheus-1     Running                                              0.0s</span>
+<span class="go"> ✔ Container mon-alertmanager-1   Started                                              0.9s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Running                                              0.0s</span>
+</pre></div>
+</div>
+<p>Попробуем снова спровоцировать алерт:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>big_file<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">20000</span>
+<span class="go">20248002560 bytes (20 GB, 19 GiB) copied, 22 s, 920 MB/s</span>
+<span class="go">20000+0 records in</span>
+<span class="go">20000+0 records out</span>
+<span class="go">20971520000 bytes (21 GB, 20 GiB) copied, 22.7681 s, 921 MB/s</span>
+</pre></div>
+</div>
+<p>Спустя некоторое время в наш бот придет уведомление:</p>
+<p><img alt="" src="_images/alertmanager11.png" /></p>
+<p>После чего мы можем очистить место и увидеть сообщение о разрешении алерта:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>rm<span class="w"> </span>big_file
+</pre></div>
+</div>
+<p><img alt="" src="_images/alertmanager12.png" /></p>
+</section>
+<section id="inhibit-alert">
+<h2>Inhibit Alert<a class="headerlink" href="#inhibit-alert" title="Permalink to this heading"></a></h2>
+<p>На текущий момент наш алерт оповещает нас о нехватке места на файловой системе
+с уровнем критичности(severity) - <code class="docutils literal notranslate"><span class="pre">warn</span></code>(warning), чтобы мы по возможности обратили на
+это внимание. Добавим также правило с критичностью <code class="docutils literal notranslate"><span class="pre">crit</span></code>(critical), когда нам
+точно необходимо совершить какие-либо действия для устранения проблемы. Для этого
+допишем файл <code class="docutils literal notranslate"><span class="pre">rules.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">groups</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">example</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighFilesystemUsage</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_filesystem_avail_bytes{mountpoint=&quot;/&quot;}/node_filesystem_size_bytes &lt; 0.6</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">warn</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Filesystem Usage</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">alert</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">HighFilesystemUsage</span>
+<span class="w">    </span><span class="nt">expr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">node_filesystem_avail_bytes{mountpoint=&quot;/&quot;}/node_filesystem_size_bytes &lt; 0.3</span>
+<span class="w">    </span><span class="nt">for</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">    </span><span class="nt">labels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">severity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">crit</span>
+<span class="w">    </span><span class="nt">annotations</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">summary</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Filesystem Usage</span>
+</pre></div>
+</div>
+<p>И перезапустим:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container mon-prometheus-1     Started                                              1.1s</span>
+<span class="go"> ✔ Container mon-alertmanager-1   Started                                              1.1s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Started                                              1.1s</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/alertmanager13.png" /></p>
+<p>После чего запишем файл еще большего размера, чтобы на файловой системе
+было мене 30% свободного места:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>big_file<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">30000</span>
+<span class="go">30915166208 bytes (31 GB, 29 GiB) copied, 33 s, 937 MB/s</span>
+<span class="go">30000+0 records in</span>
+<span class="go">30000+0 records out</span>
+<span class="go">31457280000 bytes (31 GB, 29 GiB) copied, 33.5849 s, 937 MB/s</span>
+</pre></div>
+</div>
+<p>Спустя некоторое время придет сообщение от бота:</p>
+<p><img alt="" src="_images/alertmanager14.png" /></p>
+<p>Как видно в сообщении мы получили сразу два алерта <code class="docutils literal notranslate"><span class="pre">crit</span></code> и <code class="docutils literal notranslate"><span class="pre">warn</span></code>, так как текущее
+состояние метрики подходит под оба правила. Для того, чтобы подавить отправку событий
+важности <code class="docutils literal notranslate"><span class="pre">warn</span></code>, когда у нас есть события более высокой важности <code class="docutils literal notranslate"><span class="pre">crit</span></code> можно
+воспользоваться <code class="docutils literal notranslate"><span class="pre">inhibition_rules</span></code> в конфигурации alertmanager.</p>
+<p>Очистим место на файловой системе и дождемся очистки алертов:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>rm<span class="w"> </span>big_file
+<span class="gp">$ </span>df<span class="w"> </span>-h<span class="w"> </span>/
+<span class="go">Filesystem      Size  Used Avail Use% Mounted on</span>
+<span class="go">/dev/sda1        39G  3.5G   36G   9% /</span>
+</pre></div>
+</div>
+<p>После чего добавим в конфигурацию <code class="docutils literal notranslate"><span class="pre">alertmanager.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">route</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">group_by</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;alertname&#39;</span><span class="p p-Indicator">]</span>
+<span class="w">  </span><span class="nt">group_wait</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">30s</span>
+<span class="w">  </span><span class="nt">group_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1m</span>
+<span class="w">  </span><span class="nt">repeat_interval</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">24h</span>
+<span class="w">  </span><span class="nt">receiver</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telegram</span>
+
+<span class="nt">inhibit_rules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source_matchers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">severity=&quot;crit&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">target_matchers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">severity=&quot;warn&quot;</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">equal</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">alertname</span><span class="p p-Indicator">]</span>
+
+<span class="nt">receivers</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">telegram</span>
+<span class="w">  </span><span class="nt">telegram_configs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">bot_token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5930109659:AAHcdB9urrAyJOqxoZxIs1qhlNJXu25vsPs</span>
+<span class="w">    </span><span class="nt">chat_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">184542544</span>
+</pre></div>
+</div>
+<p>Перезапустим контейнеры и загрузим файловую систему:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8889/api/v1/query<span class="w"> </span>--data-urlencode<span class="w"> </span><span class="s1">&#39;query=ALERTS&#39;</span>
+<span class="go">{&quot;status&quot;:&quot;success&quot;,&quot;data&quot;:{&quot;resultType&quot;:&quot;vector&quot;,&quot;result&quot;:[]}}</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container mon-prometheus-1     Started                                              1.1s</span>
+<span class="go"> ✔ Container mon-alertmanager-1   Started                                              1.0s</span>
+<span class="go"> ✔ Container mon-node-exporter-1  Started                                              1.0s</span>
+<span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>big_file<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">30000</span>
+<span class="go">31136415744 bytes (31 GB, 29 GiB) copied, 35 s, 890 MB/s</span>
+<span class="go">30000+0 records in</span>
+<span class="go">30000+0 records out</span>
+<span class="go">31457280000 bytes (31 GB, 29 GiB) copied, 35.366 s, 889 MB/s</span>
+</pre></div>
+</div>
+<p>Через некоторое время получим сообщение от бота:</p>
+<p><img alt="" src="_images/alertmanager15.png" /></p>
+<p>Теперь мы получили только один алерт важности <code class="docutils literal notranslate"><span class="pre">crit</span></code>, который подавил генерацию
+события важности <code class="docutils literal notranslate"><span class="pre">warn</span></code>.</p>
+<p><img alt="" src="_images/alertmanager16.png" /></p>
+<p>После чего можем опять очистить файловую систему:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>rm<span class="w"> </span>big_file
+</pre></div>
+</div>
+</section>
+<section id="silence-alert">
+<h2>Silence Alert<a class="headerlink" href="#silence-alert" title="Permalink to this heading"></a></h2>
+<p>Если в какие-то моменты необходимо временно отключить получение алертов, например
+при плановом обслуживании, то можно воспользоваться механизмом
+<a class="reference external" href="http://localhost:8888/#/silences">silences</a>, где нажав <code class="docutils literal notranslate"><span class="pre">New</span> <span class="pre">Silence</span></code> можно создать
+правило, под которое попадают алерты и временно их отключить:</p>
+<p><img alt="" src="_images/alertmanager17.png" /></p>
+<p>Заполним данные, чтобы заглушить алерты важности <code class="docutils literal notranslate"><span class="pre">crit</span></code>:</p>
+<p><img alt="" src="_images/alertmanager19.png" /></p>
+<p>И снова заполним файловую систему:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>big_file<span class="w"> </span><span class="nv">status</span><span class="o">=</span>progress<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">30000</span>
+<span class="go">30835474432 bytes (31 GB, 29 GiB) copied, 33 s, 934 MB/s</span>
+<span class="go">30000+0 records in</span>
+<span class="go">30000+0 records out</span>
+<span class="go">31457280000 bytes (31 GB, 29 GiB) copied, 33.6948 s, 934 MB/s</span>
+</pre></div>
+</div>
+<p>Теперь мы не получим уведомления, а спустя некоторое время можем увидеть
+в интерфейсе alertmanager наши алерты в <code class="docutils literal notranslate"><span class="pre">inhibited</span></code> и <code class="docutils literal notranslate"><span class="pre">silenced</span></code> состояниях:</p>
+<p><img alt="" src="_images/alertmanager20.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="21_practice_prometheus.html" class="btn btn-neutral float-left" title="Prometheus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="23_practice_elasticsearch.html" class="btn btn-neutral float-right" title="ELK Stack" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

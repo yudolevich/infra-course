@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gitlab CI &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Jenkins" href="20_practice_jenkins.html" />
+    <link rel="prev" title="Terraform + Ansible" href="18_practice_terraform_ansible.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Gitlab CI</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#new-project">New Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-stage">Test Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-stage">Build Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-stage">Deploy Stage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#test">Test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#prod">Prod</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Gitlab CI</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/19_practice_gitlab.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gitlab-ci">
+<h1>Gitlab CI<a class="headerlink" href="#gitlab-ci" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии рассмотрим построение CI/CD конвейера
+с помощью инструмента <a class="reference external" href="https://docs.gitlab.com/ee/ci/">gitlab-ci</a>, который является частью платформы
+<a class="reference external" href="https://docs.gitlab.com/ee/">gitlab</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;gitlab&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="s2">&quot;virtualbox&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">v</span><span class="o">|</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5120</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;gitlab&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq golang-go docker.io</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      host=&quot;http://localhost:8888&quot;</span>
+<span class="sh">      curl -LO https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/jammy/gitlab-ce_16.8.3-ce.0_amd64.deb/download.deb \</span>
+<span class="sh">        &amp;&amp; EXTERNAL_URL=$host dpkg -i download.deb &amp;&amp; rm download.deb</span>
+<span class="sh">      gitlab-ctl reconfigure</span>
+<span class="sh">      pass=&quot;$(awk &#39;/^Password/{print $2}&#39; /etc/gitlab/initial_root_password)&quot;</span>
+<span class="sh">      otoken=$(curl -sH &quot;Content-Type: application/json&quot; &quot;$host/oauth/token&quot; \</span>
+<span class="sh">        -d &#39;{&quot;grant_type&quot;:&quot;password&quot;,&quot;username&quot;:&quot;root&quot;,&quot;password&quot;:&quot;&#39;&quot;$pass&quot;&#39;&quot;}&#39; \</span>
+<span class="sh">        | jq -r &#39;.access_token&#39;)</span>
+<span class="sh">      ptoken=$(curl -s &quot;$host/api/v4/users/1/personal_access_tokens&quot; \</span>
+<span class="sh">        -H &quot;Authorization: Bearer $otoken&quot; -d &quot;name=test&quot; -d &quot;scopes[]=api&quot; \</span>
+<span class="sh">        | jq -r &#39;.token&#39;)</span>
+<span class="sh">      rtoken=$(curl -sH &quot;PRIVATE-TOKEN: $ptoken&quot; &quot;$host/api/v4/user/runners&quot; \</span>
+<span class="sh">        -d &quot;runner_type=instance_type&quot; -d &quot;tag_list=shared&quot; | jq -r &#39;.token&#39;)</span>
+<span class="sh">      curl -LO https://packages.gitlab.com/runner/gitlab-runner/packages/ubuntu/jammy/gitlab-runner_16.8.1_amd64.deb/download.deb \</span>
+<span class="sh">        &amp;&amp; dpkg -i download.deb &amp;&amp; rm download.deb \</span>
+<span class="sh">        &amp;&amp; gitlab-runner register --non-interactive --url $host --executor shell --token &quot;$rtoken&quot;</span>
+<span class="sh">      curl -XPUT -sH &quot;PRIVATE-TOKEN: $ptoken&quot; -o /dev/null \</span>
+<span class="sh">        &quot;$host/api/v4/application/settings?auto_devops_enabled=false&quot;</span>
+<span class="sh">      echo &quot;root password: $pass&quot;</span>
+<span class="sh">      usermod -a -G docker gitlab-runner</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация развернет виртуальную машину и установит
+пакеты gitlab, а также подключит <a class="reference external" href="https://docs.gitlab.com/runner/">gitlab-runner</a>. После
+развертывания gitlab должен быть доступен по адресу
+<a class="reference external" href="http://localhost:8888/">localhost:8888</a>, для авторизации
+необходимо использовать логин <code class="docutils literal notranslate"><span class="pre">root</span></code> и пароль, который
+выводится на экран в конце развертывания, а также
+его можно посмотреть в файле <code class="docutils literal notranslate"><span class="pre">/etc/gitlab/initial_root_password</span></code>.</p>
+</section>
+<section id="new-project">
+<h2>New Project<a class="headerlink" href="#new-project" title="Permalink to this heading"></a></h2>
+<p>Создадим новый пустой проект <code class="docutils literal notranslate"><span class="pre">test-ci</span></code> на странице
+<a class="reference external" href="http://localhost:8888/projects/new#blank_project">projects/new</a>
+и склонируем на виртуальную машину:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>git@localhost:root/test-ci.git
+<span class="go">Cloning into &#39;test-ci&#39;...</span>
+<span class="go">warning: You appear to have cloned an empty repository.</span>
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>test-ci/
+<span class="gp">$ </span>ls<span class="w"> </span>-a
+<span class="go">.  ..  .git</span>
+</pre></div>
+</div>
+<p>На текущий момент наш репозиторий пустой, добавим в него
+файл <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> с описанием простого пайплайна, чтобы
+проверить работоспособность <a class="reference external" href="https://docs.gitlab.com/ee/ci/">gitlab-ci</a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">echo &quot;it&#39;s works&quot;</span>
+</pre></div>
+</div>
+<p>Сделаем коммит и запушим репозиторий:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>.gitlab-ci.yml
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s1">&#39;init&#39;</span>
+<span class="go">[master (root-commit) f2ee095] init</span>
+<span class="go"> 1 file changed, 7 insertions(+)</span>
+<span class="go"> create mode 100644 .gitlab-ci.yml</span>
+<span class="gp">$ </span>git<span class="w"> </span>push
+<span class="go">Enumerating objects: 3, done.</span>
+<span class="go">Counting objects: 100% (3/3), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (2/2), done.</span>
+<span class="go">Writing objects: 100% (3/3), 259 bytes | 129.00 KiB/s, done.</span>
+<span class="go">Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">To localhost:root/test-ci.git</span>
+<span class="go"> * [new branch]      master -&gt; master</span>
+</pre></div>
+</div>
+<p>После чего в описании последнего коммита будет виден статус выполнения
+пайплайна, в данном случае отмеченного зеленой галочкой:
+<img alt="" src="_images/gitlab-ci1.png" />
+Перейдя по ней можно получить более подробное описание выполнения пайплайна,
+либо перейдя из левой панели в разделе <strong>Build</strong>:</p>
+<p><img alt="" src="_images/gitlab-ci2.png" /></p>
+<p><img alt="" src="_images/gitlab-ci3.png" /></p>
+<p>Перейдя по статусу <code class="docutils literal notranslate"><span class="pre">Passed</span></code> можно увидеть из каких шагов состоял пайплайн
+и отдельно рассмотреть каждый шаг:</p>
+<p><img alt="" src="_images/gitlab-ci4.png" /></p>
+<p>Перейдя в шаг <code class="docutils literal notranslate"><span class="pre">test</span></code> можно увидеть лог выполнения:</p>
+<p><img alt="" src="_images/gitlab-ci5.png" /></p>
+</section>
+<section id="test-stage">
+<h2>Test Stage<a class="headerlink" href="#test-stage" title="Permalink to this heading"></a></h2>
+<p>Хорошей практикой при разработке приложений является запуск тестов после пуша,
+чтобы разработчик знал, что при изменении функционала тесты все также проходят.
+Создадим простое приложение <code class="docutils literal notranslate"><span class="pre">main.go</span></code> и тест к нему <code class="docutils literal notranslate"><span class="pre">main_test.go</span></code>:</p>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;log&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">Handler</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;Hello!\n&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;0.0.0.0:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span><span class="nx">Handler</span><span class="p">));</span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http/httptest&quot;</span>
+<span class="w">        </span><span class="s">&quot;testing&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">TestHandler</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewRequest</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nx">rec</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">httptest</span><span class="p">.</span><span class="nx">NewRecorder</span><span class="p">()</span>
+
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span><span class="nx">Handler</span><span class="p">).</span><span class="nx">ServeHTTP</span><span class="p">(</span><span class="nx">rec</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Code</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span>
+<span class="w">                        </span><span class="s">&quot;wrong status code: want %v got %v&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span>
+<span class="w">                </span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;Hello!\n&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;wrong body: got %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">String</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>А также изменим скрипт в <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test</span>
+</pre></div>
+</div>
+<p>И отправим в репозиторий, создав модуль:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span><span class="nb">test</span>
+<span class="go">go: creating new go.mod: module test</span>
+<span class="go">go: to add module requirements and sums:</span>
+<span class="go">        go mod tidy</span>
+<span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>.
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s1">&#39;add test ci&#39;</span>
+<span class="go">[master cf6ec4d] add test ci</span>
+<span class="go"> 4 files changed, 50 insertions(+), 1 deletion(-)</span>
+<span class="go"> create mode 100644 go.mod</span>
+<span class="go"> create mode 100644 main.go</span>
+<span class="go"> create mode 100644 main_test.go</span>
+<span class="gp">$ </span>git<span class="w"> </span>push
+<span class="go">Enumerating objects: 8, done.</span>
+<span class="go">Counting objects: 100% (8/8), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (5/5), done.</span>
+<span class="go">Writing objects: 100% (6/6), 909 bytes | 454.00 KiB/s, done.</span>
+<span class="go">Total 6 (delta 0), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">To localhost:root/test-ci.git</span>
+<span class="go">   f2ee095..cf6ec4d  master -&gt; master</span>
+</pre></div>
+</div>
+<p>В результате выполнения задачи <code class="docutils literal notranslate"><span class="pre">test</span></code> нашего пайплайна увидим результат теста:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Running with gitlab-runner 16.8.1 (a6097117)</span>
+<span class="go">  on gitlab X9GQT59xD, system ID: s_fd69ce32a6f8</span>
+<span class="go">Preparing the &quot;shell&quot; executor 00:00</span>
+<span class="go">Using Shell (bash) executor...</span>
+<span class="go">Preparing environment 00:00</span>
+<span class="go">Running on gitlab...</span>
+<span class="go">Getting source from Git repository 00:01</span>
+<span class="go">Fetching changes with git depth set to 20...</span>
+<span class="go">Reinitialized existing Git repository in /home/gitlab-runner/builds/X9GQT59xD/0/root/test-ci/.git/</span>
+<span class="go">Checking out cf6ec4d7 as detached HEAD (ref is master)...</span>
+<span class="go">Skipping Git submodules setup</span>
+<span class="go">Executing &quot;step_script&quot; stage of the job script 00:01</span>
+<span class="gp">$ </span>go<span class="w"> </span><span class="nb">test</span>
+<span class="go">PASS</span>
+<span class="go">ok  	test	0.004s</span>
+<span class="go">Job succeeded</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://docs.gitlab.com/ee/ci/">Gitlab-ci</a> <a class="reference external" href="https://docs.gitlab.com/ee/ci/testing/">позволяет производить различную обработку результатов
+тестов</a>. Попробуем добавить отображение процента покрытия,
+добавив параметр <code class="docutils literal notranslate"><span class="pre">coverage</span></code> в <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test -cover</span>
+<span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/coverage:</span><span class="nv"> </span><span class="s">(\d+.\d+)%</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">statements$/&#39;</span>
+</pre></div>
+</div>
+<p>В данном скрипте утилита <code class="docutils literal notranslate"><span class="pre">go</span> <span class="pre">test</span></code> выведет информацию о покрытии,
+а с помощью регулярного выражение в параметре <code class="docutils literal notranslate"><span class="pre">coverage</span></code> gitlab сможет
+его считать и отобразить. Запушим данные изменения и посмотрим результат:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Executing &quot;step_script&quot; stage of the job script 00:01</span>
+<span class="gp">$ </span>go<span class="w"> </span><span class="nb">test</span><span class="w"> </span>-cover
+<span class="go">PASS</span>
+<span class="go">	test	coverage: 50.0% of statements</span>
+<span class="go">ok  	test	0.004s</span>
+<span class="go">Job succeeded</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/gitlab-ci7.png" /></p>
+<p><img alt="" src="_images/gitlab-ci6.png" /></p>
+</section>
+<section id="build-stage">
+<h2>Build Stage<a class="headerlink" href="#build-stage" title="Permalink to this heading"></a></h2>
+<p>Добавим процесс сборки нашего приложения новым шагом в <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test -cover</span>
+<span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/coverage:</span><span class="nv"> </span><span class="s">(\d+.\d+)%</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">statements$/&#39;</span>
+
+<span class="nt">build</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go build</span>
+</pre></div>
+</div>
+<p>И отправим в репозиторий, после чего у нас появится новая стадия:
+<img alt="" src="_images/gitlab-ci8.png" /></p>
+<p>Но вероятно нам не потребуется делать сборку каждый коммит. Добавим правила,
+чтобы сборка выполнялась только при наличии тега, либо при ручном запуске:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test -cover</span>
+<span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/coverage:</span><span class="nv"> </span><span class="s">(\d+.\d+)%</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">statements$/&#39;</span>
+
+<span class="nt">build</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go build</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_COMMIT_TAG</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+</pre></div>
+</div>
+<p>Теперь после пуша сборка не запустится сама:
+<img alt="" src="_images/gitlab-ci9.png" /></p>
+<p>И ее можно будет запустить вручную в gitlab:
+<img alt="" src="_images/gitlab-ci10.png" /></p>
+<p>Работать с бинарными исполняемыми файлами напрямую после сборки не очень удобно,
+переделаем процесс сборки, чтобы в результате получался docker образ. Добавим
+в репозиторий <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.22-alpine</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/usr/src</span>
+
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>/usr/src/app
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">scratch</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/usr/src/app<span class="w"> </span>/app
+
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/app&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>А скрипт сборки в <code class="docutils literal notranslate"><span class="pre">.gitlab-ci.yml</span></code> изменим следующим образом:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test -cover</span>
+<span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/coverage:</span><span class="nv"> </span><span class="s">(\d+.\d+)%</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">statements$/&#39;</span>
+
+<span class="nt">build</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker build -t test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA} .</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_COMMIT_TAG</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+</pre></div>
+</div>
+<p>Данный скрипт после сборки проставит образу тег соответствующий тегу в гит
+репозитории, либо, при его отсутствии, короткий хэш коммита.</p>
+<p>После пуша запустим сборку вручную в gitlab:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Executing &quot;step_script&quot; stage of the job script 00:21</span>
+<span class="gp">$ </span>docker<span class="w"> </span>build<span class="w"> </span>-t<span class="w"> </span>test:<span class="si">${</span><span class="nv">CI_COMMIT_TAG</span><span class="k">:-</span><span class="nv">$CI_COMMIT_SHORT_SHA</span><span class="si">}</span><span class="w"> </span>.
+<span class="go">DEPRECATED: The legacy builder is deprecated and will be removed in a future release.</span>
+<span class="go">            Install the buildx component to build images with BuildKit:</span>
+<span class="go">            https://docs.docker.com/go/buildx/</span>
+<span class="go">Step 1/7 : FROM golang:1.22-alpine as builder</span>
+<span class="go"> ---&gt; a2742f74d90f</span>
+<span class="go">Step 2/7 : WORKDIR /usr/src</span>
+<span class="go"> ---&gt; Using cache</span>
+<span class="go"> ---&gt; b99e933ad4c2</span>
+<span class="go">Step 3/7 : COPY . .</span>
+<span class="go"> ---&gt; faa8e15e14c1</span>
+<span class="go">Step 4/7 : RUN go build -o /usr/src/app</span>
+<span class="go"> ---&gt; Running in 8cb8d80d21ac</span>
+<span class="go">Removing intermediate container 8cb8d80d21ac</span>
+<span class="go"> ---&gt; d71d3c810c82</span>
+<span class="go">Step 5/7 : FROM scratch</span>
+<span class="go"> ---&gt; </span>
+<span class="go">Step 6/7 : COPY --from=builder /usr/src/app /app</span>
+<span class="go"> ---&gt; 5cf470e9d810</span>
+<span class="go">Step 7/7 : CMD [&quot;/app&quot;]</span>
+<span class="go"> ---&gt; Running in 9a223691c8c6</span>
+<span class="go">Removing intermediate container 9a223691c8c6</span>
+<span class="go"> ---&gt; 3a194e61f59b</span>
+<span class="go">Successfully built 3a194e61f59b</span>
+<span class="go">Successfully tagged test:523f63cb</span>
+<span class="go">Job succeeded</span>
+</pre></div>
+</div>
+<p>На виртуальной машине можно увидеть собранный образ:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG           IMAGE ID       CREATED         SIZE</span>
+<span class="go">test         523f63cb      3a194e61f59b   5 minutes ago   6.95MB</span>
+<span class="go">golang       1.22-alpine   a2742f74d90f   3 weeks ago     230MB</span>
+</pre></div>
+</div>
+</section>
+<section id="deploy-stage">
+<h2>Deploy Stage<a class="headerlink" href="#deploy-stage" title="Permalink to this heading"></a></h2>
+<section id="test">
+<h3>Test<a class="headerlink" href="#test" title="Permalink to this heading"></a></h3>
+<p>После сборки возможно нам захочется произвести деплой приложения в тестовую
+среду, добавим стадию деплоя описав запуск и остановку в тестовой среде:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test -cover</span>
+<span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/coverage:</span><span class="nv"> </span><span class="s">(\d+.\d+)%</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">statements$/&#39;</span>
+
+<span class="nt">build</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker build -t test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA} .</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_COMMIT_TAG</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+
+<span class="nt">deploy_test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker run -p 8000:8080 -d --name test test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">on_stop</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop_test</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+
+<span class="nt">stop_test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker rm -f test</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+</pre></div>
+</div>
+<p>После чего у нас появится новая стадия в пайплайне:</p>
+<p><img alt="" src="_images/gitlab-ci11.png" /></p>
+<p>Запустим сборку и деплой:</p>
+<p><img alt="" src="_images/gitlab-ci12.png" /></p>
+<p>После чего на сервере увидим результат:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE           COMMAND   CREATED          STATUS          PORTS                                       NAMES</span>
+<span class="go">6b6e6c9786fc   test:017e1343   &quot;/app&quot;    51 seconds ago   Up 50 seconds   0.0.0.0:8000-&gt;8080/tcp, :::8000-&gt;8080/tcp   test</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:8000
+<span class="go">Hello!</span>
+</pre></div>
+</div>
+</section>
+<section id="prod">
+<h3>Prod<a class="headerlink" href="#prod" title="Permalink to this heading"></a></h3>
+<p>Также можем добавить деплой в продуктивную среду в этой же стадии, но сделаем
+обязательными правилами наличие тега с ручным запуском:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">stages</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+
+<span class="nt">test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">go test -cover</span>
+<span class="w">  </span><span class="nt">coverage</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/coverage:</span><span class="nv"> </span><span class="s">(\d+.\d+)%</span><span class="nv"> </span><span class="s">of</span><span class="nv"> </span><span class="s">statements$/&#39;</span>
+
+<span class="nt">build</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">build</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker build -t test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA} .</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_COMMIT_TAG</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+
+<span class="nt">deploy_test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker run -p 8000:8080 -d --name test test:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">on_stop</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop_test</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+
+<span class="nt">stop_test</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker rm -f test</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+
+<span class="nt">deploy_production</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker run -p 9000:8080 -d --name prod test:$CI_COMMIT_TAG</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">    </span><span class="nt">on_stop</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop_production</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_COMMIT_TAG</span>
+<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+
+<span class="nt">stop_production</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">stage</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deploy</span>
+<span class="w">  </span><span class="nt">script</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">docker rm -f prod</span>
+<span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">production</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">stop</span>
+<span class="w">  </span><span class="nt">rules</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">if</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">$CI_COMMIT_TAG</span>
+<span class="w">      </span><span class="nt">when</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">manual</span>
+</pre></div>
+</div>
+<p>На текущий момент в пайплайне не появится возможность деплоя в продуктивную
+среду, так как необходимо иметь тег:</p>
+<p><img alt="" src="_images/gitlab-ci13.png" /></p>
+<p>Добавим и запушим тег:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ git tag v0.0.1
+$ git push origin v0.0.1
+Total 0 (delta 0), reused 0 (delta 0), pack-reused 0
+To localhost:root/test-ci.git
+ * [new tag]         v0.0.1 -&gt; v0.0.1
+</pre></div>
+</div>
+<p>После чего появится новый пайплайн:</p>
+<p><img alt="" src="_images/gitlab-ci14.png" /></p>
+<p>Как видно сборка запустилась автоматически при наличии тега, запустим теперь
+деплой в прод и после проверим результат:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE           COMMAND   CREATED              STATUS              PORTS                                       NAMES</span>
+<span class="go">0929d8d7b92a   test:v0.0.1     &quot;/app&quot;    About a minute ago   Up About a minute   0.0.0.0:9000-&gt;8080/tcp, :::9000-&gt;8080/tcp   prod</span>
+<span class="go">6b6e6c9786fc   test:017e1343   &quot;/app&quot;    32 minutes ago       Up 32 minutes       0.0.0.0:8000-&gt;8080/tcp, :::8000-&gt;8080/tcp   test</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:9000
+<span class="go">Hello!</span>
+</pre></div>
+</div>
+<p>Также управление средами развертки можно управлять со страницы
+<a class="reference external" href="http://localhost:8888/root/test-ci/-/environments">Operate/Environments</a>:</p>
+<p><img alt="" src="_images/gitlab-ci15.png" /></p>
+<p>Таким образом с помощью пайплайна <code class="docutils literal notranslate"><span class="pre">gitlab-ci</span></code> можно построить удобный процесс
+разработки, тестирования и развертывания.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="18_practice_terraform_ansible.html" class="btn btn-neutral float-left" title="Terraform + Ansible" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="20_practice_jenkins.html" class="btn btn-neutral float-right" title="Jenkins" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

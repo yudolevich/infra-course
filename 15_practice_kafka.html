@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apache Kafka &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Apache Kafka Cluster" href="16_practice_kafka_cluster.html" />
+    <link rel="prev" title="RabbitMQ Routing" href="14_practice_rabbit_routing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Apache Kafka</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status">Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#send">Send</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#receive">Receive</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-consumers">Multiple Consumers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Apache Kafka</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/15_practice_kafka.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="apache-kafka">
+<h1>Apache Kafka<a class="headerlink" href="#apache-kafka" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии познакомимся с базовой работой с брокером сообщений
+<a class="reference external" href="https://kafka.apache.org/">Apache Kafka</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://kafka.apache.org/">kafka</a> воспользуемся следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;node&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq python3-kafka openjdk-17-jre</span>
+<span class="sh">      mkdir /opt/kafka</span>
+<span class="sh">      curl https://dlcdn.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz \</span>
+<span class="sh">        | tar xz --strip-components=1 -C /opt/kafka</span>
+<span class="sh">      /opt/kafka/bin/kafka-storage.sh format \</span>
+<span class="sh">        -t &quot;$(/opt/kafka/bin/kafka-storage.sh random-uuid)&quot; \</span>
+<span class="sh">        -c /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      systemd-run -u kafka -E KAFKA_HEAP_OPTS=&quot;-Xmx256M -Xms128M&quot; \</span>
+<span class="sh">        /opt/kafka/bin/kafka-server-start.sh \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      echo &#39;PATH=&quot;$PATH:/opt/kafka/bin&quot;&#39; &gt; /etc/profile.d/kafka.sh</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>После развертывания виртуальной машины на ней будет находиться сервер <a class="reference external" href="https://kafka.apache.org/">kafka</a>,
+а также библиотека для взаимодействия из языка <code class="docutils literal notranslate"><span class="pre">python</span></code> - <a class="reference external" href="https://kafka-python.readthedocs.io/en/master/index.html">python-kafka</a>.</p>
+</section>
+<section id="status">
+<h2>Status<a class="headerlink" href="#status" title="Permalink to this heading"></a></h2>
+<p>Вместе с дистрибутивом <a class="reference external" href="https://kafka.apache.org/">apache kafka</a> идет набор утилит для работы,
+которые находятся в директории <code class="docutils literal notranslate"><span class="pre">/opt/kafka/bin</span></code>. Убедимся в том, что сервер
+работает, запустив утилиту <code class="docutils literal notranslate"><span class="pre">kafka-broker-api-versions.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-broker-api-versions.sh<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">localhost:9092 (id: 1 rack: null) -&gt; (</span>
+<span class="go">        Produce(0): 0 to 9 [usable: 9],</span>
+<span class="go">        Fetch(1): 0 to 15 [usable: 15],</span>
+<span class="go">        ListOffsets(2): 0 to 8 [usable: 8],</span>
+<span class="go">        Metadata(3): 0 to 12 [usable: 12],</span>
+<span class="go">        LeaderAndIsr(4): UNSUPPORTED,</span>
+<span class="go">        StopReplica(5): UNSUPPORTED,</span>
+<span class="go">        UpdateMetadata(6): UNSUPPORTED,</span>
+<span class="go">        ControlledShutdown(7): UNSUPPORTED,</span>
+<span class="go">        OffsetCommit(8): 0 to 8 [usable: 8],</span>
+<span class="go">        OffsetFetch(9): 0 to 8 [usable: 8],</span>
+<span class="go">        FindCoordinator(10): 0 to 4 [usable: 4],</span>
+<span class="go">        JoinGroup(11): 0 to 9 [usable: 9],</span>
+<span class="go">        Heartbeat(12): 0 to 4 [usable: 4],</span>
+<span class="go">        LeaveGroup(13): 0 to 5 [usable: 5],</span>
+<span class="go">        SyncGroup(14): 0 to 5 [usable: 5],</span>
+<span class="go">        DescribeGroups(15): 0 to 5 [usable: 5],</span>
+<span class="go">        ListGroups(16): 0 to 4 [usable: 4],</span>
+<span class="go">        SaslHandshake(17): 0 to 1 [usable: 1],</span>
+<span class="go">        ApiVersions(18): 0 to 3 [usable: 3],</span>
+<span class="go">        CreateTopics(19): 0 to 7 [usable: 7],</span>
+<span class="go">        DeleteTopics(20): 0 to 6 [usable: 6],</span>
+<span class="go">        DeleteRecords(21): 0 to 2 [usable: 2],</span>
+<span class="go">        InitProducerId(22): 0 to 4 [usable: 4],</span>
+<span class="go">        OffsetForLeaderEpoch(23): 0 to 4 [usable: 4],</span>
+<span class="go">        AddPartitionsToTxn(24): 0 to 4 [usable: 4],</span>
+<span class="go">        AddOffsetsToTxn(25): 0 to 3 [usable: 3],</span>
+<span class="go">        EndTxn(26): 0 to 3 [usable: 3],</span>
+<span class="go">        WriteTxnMarkers(27): 0 to 1 [usable: 1],</span>
+<span class="go">        TxnOffsetCommit(28): 0 to 3 [usable: 3],</span>
+<span class="go">        DescribeAcls(29): 0 to 3 [usable: 3],</span>
+<span class="go">        CreateAcls(30): 0 to 3 [usable: 3],</span>
+<span class="go">        DeleteAcls(31): 0 to 3 [usable: 3],</span>
+<span class="go">        DescribeConfigs(32): 0 to 4 [usable: 4],</span>
+<span class="go">        AlterConfigs(33): 0 to 2 [usable: 2],</span>
+<span class="go">        AlterReplicaLogDirs(34): 0 to 2 [usable: 2],</span>
+<span class="go">        DescribeLogDirs(35): 0 to 4 [usable: 4],</span>
+<span class="go">        SaslAuthenticate(36): 0 to 2 [usable: 2],</span>
+<span class="go">        CreatePartitions(37): 0 to 3 [usable: 3],</span>
+<span class="go">        CreateDelegationToken(38): 0 to 3 [usable: 3],</span>
+<span class="go">        RenewDelegationToken(39): 0 to 2 [usable: 2],</span>
+<span class="go">        ExpireDelegationToken(40): 0 to 2 [usable: 2],</span>
+<span class="go">        DescribeDelegationToken(41): 0 to 3 [usable: 3],</span>
+<span class="go">        DeleteGroups(42): 0 to 2 [usable: 2],</span>
+<span class="go">        ElectLeaders(43): 0 to 2 [usable: 2],</span>
+<span class="go">        IncrementalAlterConfigs(44): 0 to 1 [usable: 1],</span>
+<span class="go">        AlterPartitionReassignments(45): 0 [usable: 0],</span>
+<span class="go">        ListPartitionReassignments(46): 0 [usable: 0],</span>
+<span class="go">        OffsetDelete(47): 0 [usable: 0],</span>
+<span class="go">        DescribeClientQuotas(48): 0 to 1 [usable: 1],</span>
+<span class="go">        AlterClientQuotas(49): 0 to 1 [usable: 1],</span>
+<span class="go">        DescribeUserScramCredentials(50): 0 [usable: 0],</span>
+<span class="go">        AlterUserScramCredentials(51): 0 [usable: 0],</span>
+<span class="go">        DescribeQuorum(55): 0 to 1 [usable: 1],</span>
+<span class="go">        AlterPartition(56): UNSUPPORTED,</span>
+<span class="go">        UpdateFeatures(57): 0 to 1 [usable: 1],</span>
+<span class="go">        Envelope(58): UNSUPPORTED,</span>
+<span class="go">        DescribeCluster(60): 0 [usable: 0],</span>
+<span class="go">        DescribeProducers(61): 0 [usable: 0],</span>
+<span class="go">        UnregisterBroker(64): 0 [usable: 0],</span>
+<span class="go">        DescribeTransactions(65): 0 [usable: 0],</span>
+<span class="go">        ListTransactions(66): 0 [usable: 0],</span>
+<span class="go">        AllocateProducerIds(67): UNSUPPORTED,</span>
+<span class="go">        ConsumerGroupHeartbeat(68): UNSUPPORTED</span>
+<span class="go">)</span>
+</pre></div>
+</div>
+<p>Команда показывает доступные апи вызовы, которые есть на сервере.</p>
+</section>
+<section id="send">
+<h2>Send<a class="headerlink" href="#send" title="Permalink to this heading"></a></h2>
+<p>Для записи сообщений необходимо создать топик, в который мы будем писать. Для
+работы с топиком есть утилита <code class="docutils literal notranslate"><span class="pre">kafka-topics.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--create<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Created topic test.</span>
+<span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--list<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">test</span>
+<span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--describe<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Topic: test     TopicId: Tj0UQ5ZSR4WPDcZNQtbkBA PartitionCount: 1       ReplicationFactor: 1     Configs: segment.bytes=1073741824</span>
+<span class="go">        Topic: test     Partition: 0    Leader: 1       Replicas: 1     Isr: 1</span>
+</pre></div>
+</div>
+<p>Для записи в топик можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">kafka-console-producer.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;hello</span>
+<span class="go">&gt;world</span>
+<span class="go">&gt;!</span>
+<span class="go">&gt;</span>
+</pre></div>
+</div>
+<p>После записи мы можем посмотреть офсеты в топике командой <code class="docutils literal notranslate"><span class="pre">kafka-get-offsets.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-get-offsets.sh<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">test:0:3</span>
+</pre></div>
+</div>
+</section>
+<section id="receive">
+<h2>Receive<a class="headerlink" href="#receive" title="Permalink to this heading"></a></h2>
+<p>Таким образом видно, что в partition 0 топика test есть три сообщения.
+Прочитать мы их можем командой <code class="docutils literal notranslate"><span class="pre">kafka-console-consumer.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span>--from-beginning
+<span class="go">hello</span>
+<span class="go">world</span>
+<span class="go">!</span>
+<span class="go">^CProcessed a total of 3 messages</span>
+</pre></div>
+</div>
+<p>Сообщения после получения не удаляются и их можно повторно перечитать, также
+можно задать <code class="docutils literal notranslate"><span class="pre">offset</span></code> и <code class="docutils literal notranslate"><span class="pre">partition</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span>--partition<span class="w"> </span><span class="m">0</span><span class="w"> </span>--offset<span class="w"> </span><span class="m">1</span>
+<span class="go">world</span>
+<span class="go">!</span>
+<span class="go">^CProcessed a total of 2 messages</span>
+</pre></div>
+</div>
+</section>
+<section id="multiple-consumers">
+<h2>Multiple Consumers<a class="headerlink" href="#multiple-consumers" title="Permalink to this heading"></a></h2>
+<p>Одновременно из топика вычитывать сообщения могут несколько консьюмеров,
+для этого можем запустить команду <code class="docutils literal notranslate"><span class="pre">kafka-console-consumer.sh</span></code> в паре
+терминалов, а также в отдельном <code class="docutils literal notranslate"><span class="pre">kafka-console-producer.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+<span class="go">4</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+<span class="go">4</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;1</span>
+<span class="go">&gt;2</span>
+<span class="go">&gt;3</span>
+<span class="go">&gt;4</span>
+<span class="go">&gt;5</span>
+<span class="go">&gt;</span>
+</pre></div>
+</div>
+<p>Как видно в таком случае все продюсеры вычитывают одинаковые сообщения.
+Для распределения сообщений между консьюмерами необходимо использовать
+несколько партиций, создать дополнительные можно командой <code class="docutils literal notranslate"><span class="pre">kafka-topics.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--alter<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--partitions<span class="w"> </span><span class="m">2</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="gp">$ </span>kafka-get-offsets.sh<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="nb">test</span>
+<span class="go">test:0:8</span>
+<span class="go">test:1:0</span>
+</pre></div>
+</div>
+<p>Таким образом мы подключим двух консьюмеров каждого к своей партиции. Для
+распределения сообщений можно явно указывать партицию для записи, либо
+воспользоваться механизмом распределения по ключам, для этого к каждому
+сообщению добавляется ключ и в зависимости от хэша этого ключа будет выбираться
+партиция. Запустим консьюмеров в двух терминалах и отдельно продюсера:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span>--partition<span class="w"> </span><span class="m">0</span>
+<span class="go">hello2</span>
+<span class="go">hello5</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span>--partition<span class="w"> </span><span class="m">1</span>
+<span class="go">hello1</span>
+<span class="go">hello3</span>
+<span class="go">hello4</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span>--property<span class="w"> </span><span class="s2">&quot;parse.key=true&quot;</span><span class="w"> </span>--property<span class="w"> </span>key.separator<span class="o">=</span>:
+<span class="go">&gt;1:hello1</span>
+<span class="go">&gt;2:hello2</span>
+<span class="go">&gt;3:hello3</span>
+<span class="go">&gt;4:hello4</span>
+<span class="go">&gt;5:hello5</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="14_practice_rabbit_routing.html" class="btn btn-neutral float-left" title="RabbitMQ Routing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="16_practice_kafka_cluster.html" class="btn btn-neutral float-right" title="Apache Kafka Cluster" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

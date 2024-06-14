@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terraform &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Terraform + Ansible" href="18_practice_terraform_ansible.html" />
+    <link rel="prev" title="Apache Kafka Cluster" href="16_practice_kafka_cluster.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Terraform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#init">Init</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#plan">Plan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#apply">Apply</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#change">Change</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#destroy">Destroy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Terraform</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/17_practice_terraform.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="terraform">
+<h1>Terraform<a class="headerlink" href="#terraform" title="Permalink to this heading"></a></h1>
+<p>Данное практическое занятие посвящено основам управления инфраструктурой
+с использованием <a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a>. В качестве инфраструктурного <a class="reference external" href="https://github.com/kreuzwerker/terraform-provider-docker/">провайдера
+будет использоваться docker</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a> воспользуемся следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;node&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">apt-get update -q</span>
+<span class="sh">apt-get install -yq docker.io</span>
+<span class="sh">usermod -a -G docker vagrant</span>
+<span class="sh">curl -L https://hashicorp-releases.yandexcloud.net/terraform/1.7.3/terraform_1.7.3_linux_amd64.zip \</span>
+<span class="sh">  | zcat &gt; /usr/local/bin/terraform</span>
+<span class="sh">chmod +x /usr/local/bin/terraform</span>
+<span class="sh">cat &gt; /home/vagrant/.terraformrc &lt;&lt;EOF</span>
+<span class="sh">provider_installation {</span>
+<span class="sh">    network_mirror {</span>
+<span class="sh">        url = &quot;https://terraform-mirror.yandexcloud.net/&quot;</span>
+<span class="sh">        include = [&quot;registry.terraform.io/*/*&quot;]</span>
+<span class="sh">}</span>
+<span class="sh">    direct {</span>
+<span class="sh">        exclude = [&quot;registry.terraform.io/*/*&quot;]</span>
+<span class="sh">    }</span>
+<span class="sh">}</span>
+<span class="sh">EOF</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</section>
+<section id="init">
+<h2>Init<a class="headerlink" href="#init" title="Permalink to this heading"></a></h2>
+<p>Состояние инфраструктуры, управляемое с помощью <a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a>, описывается
+с помощью <a class="reference external" href="https://developer.hashicorp.com/terraform/language#about-the-terraform-language">языка конфигурации terraform</a>.
+Опишем состояние ресурсов, которые мы хотим получить в файле <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>:</p>
+<div class="highlight-tf notranslate"><div class="highlight"><pre><span></span><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">docker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;kreuzwerker/docker&quot;</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 3.0.2&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">name</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;nginx:latest&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.nginx.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tutorial&quot;</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">80</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8000</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>В данной конфигурации мы указываем провайдера ресурсов -
+<a class="reference external" href="https://github.com/kreuzwerker/terraform-provider-docker/">docker</a>, образ и описание контейнера, которые мы хотим
+получить. Подробности о конфигурации ресурсов можно получить
+<a class="reference external" href="https://github.com/kreuzwerker/terraform-provider-docker/">в документации провайдера</a>. С помощью команды
+<code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">validate</span></code> можно проверить описанную конфигурацию:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>validate
+<span class="go">Success! The configuration is valid.</span>
+</pre></div>
+</div>
+<p>После описания конфигурации запустим команду <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">init</span></code>
+для инициализации рабочей директории:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>init
+
+<span class="go">Initializing the backend...</span>
+
+<span class="go">Initializing provider plugins...</span>
+<span class="go">- Finding kreuzwerker/docker versions matching &quot;~&gt; 3.0.2&quot;...</span>
+<span class="go">- Installing kreuzwerker/docker v3.0.2...</span>
+<span class="go">- Installed kreuzwerker/docker v3.0.2 (unauthenticated)</span>
+
+<span class="go">Terraform has created a lock file .terraform.lock.hcl to record the provider</span>
+<span class="go">selections it made above. Include this file in your version control repository</span>
+<span class="go">so that Terraform can guarantee to make the same selections by default when</span>
+<span class="go">you run &quot;terraform init&quot; in the future.</span>
+
+<span class="go">Terraform has been successfully initialized!</span>
+</pre></div>
+</div>
+<p>Как видно, данная команда также установила <a class="reference external" href="https://github.com/kreuzwerker/terraform-provider-docker/">необходимый плагин провайдера
+</a> и внесла информацию о нем в файл
+<code class="docutils literal notranslate"><span class="pre">.terraform.lock.hcl</span></code>.</p>
+</section>
+<section id="plan">
+<h2>Plan<a class="headerlink" href="#plan" title="Permalink to this heading"></a></h2>
+<p>Для просмотра вносимых изменений в инфраструктуру, описанных в
+конфигурации, до непосредственного изменения существует команда
+<code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">plan</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>plan
+
+<span class="go">Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:</span>
+<span class="go">  + create</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_container&quot; &quot;nginx&quot; {</span>
+<span class="go">      + attach                                      = false</span>
+<span class="go">      + bridge                                      = (known after apply)</span>
+<span class="go">      + command                                     = (known after apply)</span>
+<span class="go">      + container_logs                              = (known after apply)</span>
+<span class="go">      + container_read_refresh_timeout_milliseconds = 15000</span>
+<span class="go">      + entrypoint                                  = (known after apply)</span>
+<span class="go">      + env                                         = (known after apply)</span>
+<span class="go">      + exit_code                                   = (known after apply)</span>
+<span class="go">      + hostname                                    = (known after apply)</span>
+<span class="go">      + id                                          = (known after apply)</span>
+<span class="go">      + image                                       = (known after apply)</span>
+<span class="go">      + init                                        = (known after apply)</span>
+<span class="go">      + ipc_mode                                    = (known after apply)</span>
+<span class="go">      + log_driver                                  = (known after apply)</span>
+<span class="go">      + logs                                        = false</span>
+<span class="go">      + must_run                                    = true</span>
+<span class="go">      + name                                        = &quot;tutorial&quot;</span>
+<span class="go">      + network_data                                = (known after apply)</span>
+<span class="go">      + read_only                                   = false</span>
+<span class="go">      + remove_volumes                              = true</span>
+<span class="go">      + restart                                     = &quot;no&quot;</span>
+<span class="go">      + rm                                          = false</span>
+<span class="go">      + runtime                                     = (known after apply)</span>
+<span class="go">      + security_opts                               = (known after apply)</span>
+<span class="go">      + shm_size                                    = (known after apply)</span>
+<span class="go">      + start                                       = true</span>
+<span class="go">      + stdin_open                                  = false</span>
+<span class="go">      + stop_signal                                 = (known after apply)</span>
+<span class="go">      + stop_timeout                                = (known after apply)</span>
+<span class="go">      + tty                                         = false</span>
+<span class="go">      + wait                                        = false</span>
+<span class="go">      + wait_timeout                                = 60</span>
+
+<span class="go">      + ports {</span>
+<span class="go">          + external = 8000</span>
+<span class="go">          + internal = 80</span>
+<span class="go">          + ip       = &quot;0.0.0.0&quot;</span>
+<span class="go">          + protocol = &quot;tcp&quot;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_image&quot; &quot;nginx&quot; {</span>
+<span class="go">      + id          = (known after apply)</span>
+<span class="go">      + image_id    = (known after apply)</span>
+<span class="go">      + name        = &quot;nginx:latest&quot;</span>
+<span class="go">      + repo_digest = (known after apply)</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 2 to add, 0 to change, 0 to destroy.</span>
+</pre></div>
+</div>
+<p>Данная команда выводит все изменения, которые произойдут с ресурсами при
+применении данной конфигурации.</p>
+</section>
+<section id="apply">
+<h2>Apply<a class="headerlink" href="#apply" title="Permalink to this heading"></a></h2>
+<p>Применить текущую конфигурацию можно командой <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">apply</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>apply<span class="w"> </span>--auto-approve
+
+<span class="go">Terraform used the selected providers to generate the following execution</span>
+<span class="go">plan. Resource actions are indicated with the following symbols:</span>
+<span class="go">  + create</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_container&quot; &quot;nginx&quot; {</span>
+<span class="go">      + attach                                      = false</span>
+<span class="go">      + bridge                                      = (known after apply)</span>
+<span class="go">      + command                                     = (known after apply)</span>
+<span class="go">      + container_logs                              = (known after apply)</span>
+<span class="go">      + container_read_refresh_timeout_milliseconds = 15000</span>
+<span class="go">      + entrypoint                                  = (known after apply)</span>
+<span class="go">      + env                                         = (known after apply)</span>
+<span class="go">      + exit_code                                   = (known after apply)</span>
+<span class="go">      + hostname                                    = (known after apply)</span>
+<span class="go">      + id                                          = (known after apply)</span>
+<span class="go">      + image                                       = (known after apply)</span>
+<span class="go">      + init                                        = (known after apply)</span>
+<span class="go">      + ipc_mode                                    = (known after apply)</span>
+<span class="go">      + log_driver                                  = (known after apply)</span>
+<span class="go">      + logs                                        = false</span>
+<span class="go">      + must_run                                    = true</span>
+<span class="go">      + name                                        = &quot;tutorial&quot;</span>
+<span class="go">      + network_data                                = (known after apply)</span>
+<span class="go">      + read_only                                   = false</span>
+<span class="go">      + remove_volumes                              = true</span>
+<span class="go">      + restart                                     = &quot;no&quot;</span>
+<span class="go">      + rm                                          = false</span>
+<span class="go">      + runtime                                     = (known after apply)</span>
+<span class="go">      + security_opts                               = (known after apply)</span>
+<span class="go">      + shm_size                                    = (known after apply)</span>
+<span class="go">      + start                                       = true</span>
+<span class="go">      + stdin_open                                  = false</span>
+<span class="go">      + stop_signal                                 = (known after apply)</span>
+<span class="go">      + stop_timeout                                = (known after apply)</span>
+<span class="go">      + tty                                         = false</span>
+<span class="go">      + wait                                        = false</span>
+<span class="go">      + wait_timeout                                = 60</span>
+
+<span class="go">      + ports {</span>
+<span class="go">          + external = 8000</span>
+<span class="go">          + internal = 80</span>
+<span class="go">          + ip       = &quot;0.0.0.0&quot;</span>
+<span class="go">          + protocol = &quot;tcp&quot;</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>created
+<span class="go">  + resource &quot;docker_image&quot; &quot;nginx&quot; {</span>
+<span class="go">      + id          = (known after apply)</span>
+<span class="go">      + image_id    = (known after apply)</span>
+<span class="go">      + name        = &quot;nginx:latest&quot;</span>
+<span class="go">      + repo_digest = (known after apply)</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 2 to add, 0 to change, 0 to destroy.</span>
+<span class="go">docker_image.nginx: Creating...</span>
+<span class="go">docker_image.nginx: Still creating... [10s elapsed]</span>
+<span class="go">docker_image.nginx: Creation complete after 10s [id=sha256:247f7abff9f7097bbdab57df76fedd124d1e24a6ec4944fb5ef0ad128997ce05nginx:latest]</span>
+<span class="go">docker_container.nginx: Creating...</span>
+<span class="go">docker_container.nginx: Creation complete after 0s [id=6c830b003efd1939725e78490013225267a625a429780d1c1b918e6ac3cf7650]</span>
+
+<span class="go">Apply complete! Resources: 2 added, 0 changed, 0 destroyed.</span>
+</pre></div>
+</div>
+<p>После выполнения данной команды мы получим инфраструктурные ресурсы в
+том состоянии, в котором они описаны в файле <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>, а также файл
+состояния <code class="docutils literal notranslate"><span class="pre">terraform.tfstate</span></code>, в котором <a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a> будет хранить
+текущее состояние инфраструктуры:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls
+<span class="go">main.tf  terraform.tfstate</span>
+<span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG       IMAGE ID       CREATED        SIZE</span>
+<span class="go">nginx        latest    247f7abff9f7   3 months ago   187MB</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                  NAMES</span>
+<span class="go">6c830b003efd   247f7abff9f7   &quot;/docker-entrypoint.…&quot;   5 minutes ago   Up 5 minutes   0.0.0.0:8000-&gt;80/tcp   tutorial</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-I<span class="w"> </span>localhost:8000
+<span class="go">HTTP/1.1 200 OK</span>
+</pre></div>
+</div>
+</section>
+<section id="change">
+<h2>Change<a class="headerlink" href="#change" title="Permalink to this heading"></a></h2>
+<p>Внесем изменения в конфигурационный файл <code class="docutils literal notranslate"><span class="pre">main.tf</span></code>, например, изменив
+тег образа и порт контейнера:</p>
+<div class="highlight-tf notranslate"><div class="highlight"><pre><span></span><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nb">docker</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;kreuzwerker/docker&quot;</span>
+<span class="w">      </span><span class="na">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;~&gt; 3.0.2&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kr">provider</span><span class="w"> </span><span class="nv">&quot;docker&quot;</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_image&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">name</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;nginx:alpine&quot;</span>
+<span class="p">}</span>
+
+<span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;docker_container&quot;</span><span class="w"> </span><span class="nv">&quot;nginx&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="na">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">docker_image.nginx.image_id</span>
+<span class="w">  </span><span class="na">name</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;tutorial&quot;</span>
+<span class="w">  </span><span class="nb">ports</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">internal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">80</span>
+<span class="w">    </span><span class="na">external</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8001</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>И попробуем применить данную конфигурацию. Команда <code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">apply</span></code> без
+аргументов покажет вносимые изменения и запросит подтверждение перед
+применением:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>apply
+<span class="go">docker_image.nginx: Refreshing state... [id=sha256:247f7abff9f7097bbdab57df76fedd124d1e24a6ec4944fb5ef0ad128997ce05nginx:latest]</span>
+<span class="go">docker_container.nginx: Refreshing state... [id=6c830b003efd1939725e78490013225267a625a429780d1c1b918e6ac3cf7650]</span>
+
+<span class="go">Terraform used the selected providers to generate the following execution</span>
+<span class="go">plan. Resource actions are indicated with the following symbols:</span>
+<span class="go">-/+ destroy and then create replacement</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.nginx<span class="w"> </span>must<span class="w"> </span>be<span class="w"> </span>replaced
+<span class="go">-/+ resource &quot;docker_container&quot; &quot;nginx&quot; {</span>
+<span class="go">      + bridge                                      = (known after apply)</span>
+<span class="go">      ~ command                                     = [</span>
+<span class="go">          - &quot;nginx&quot;,</span>
+<span class="go">          - &quot;-g&quot;,</span>
+<span class="go">          - &quot;daemon off;&quot;,</span>
+<span class="go">        ] -&gt; (known after apply)</span>
+<span class="go">      + container_logs                              = (known after apply)</span>
+<span class="go">      - cpu_shares                                  = 0 -&gt; null</span>
+<span class="go">      - dns                                         = [] -&gt; null</span>
+<span class="go">      - dns_opts                                    = [] -&gt; null</span>
+<span class="go">      - dns_search                                  = [] -&gt; null</span>
+<span class="go">      ~ entrypoint                                  = [</span>
+<span class="go">          - &quot;/docker-entrypoint.sh&quot;,</span>
+<span class="go">        ] -&gt; (known after apply)</span>
+<span class="go">      ~ env                                         = [] -&gt; (known after apply)</span>
+<span class="go">      + exit_code                                   = (known after apply)</span>
+<span class="go">      - group_add                                   = [] -&gt; null</span>
+<span class="go">      ~ hostname                                    = &quot;6c830b003efd&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ id                                          = &quot;6c830b003efd1939725e78490013225267a625a429780d1c1b918e6ac3cf7650&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ image                                       = &quot;sha256:247f7abff9f7097bbdab57df76fedd124d1e24a6ec4944fb5ef0ad128997ce05&quot; # forces replacement -&gt; (known after apply) # forces replacement</span>
+<span class="go">      ~ init                                        = false -&gt; (known after apply)</span>
+<span class="go">      ~ ipc_mode                                    = &quot;private&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ log_driver                                  = &quot;json-file&quot; -&gt; (known after apply)</span>
+<span class="go">      - log_opts                                    = {} -&gt; null</span>
+<span class="go">      - max_retry_count                             = 0 -&gt; null</span>
+<span class="go">      - memory                                      = 0 -&gt; null</span>
+<span class="go">      - memory_swap                                 = 0 -&gt; null</span>
+<span class="go">        name                                        = &quot;tutorial&quot;</span>
+<span class="go">      ~ network_data                                = [</span>
+<span class="go">          - {</span>
+<span class="go">              - gateway                   = &quot;172.17.0.1&quot;</span>
+<span class="go">              - global_ipv6_address       = &quot;&quot;</span>
+<span class="go">              - global_ipv6_prefix_length = 0</span>
+<span class="go">              - ip_address                = &quot;172.17.0.2&quot;</span>
+<span class="go">              - ip_prefix_length          = 16</span>
+<span class="go">              - ipv6_gateway              = &quot;&quot;</span>
+<span class="go">              - mac_address               = &quot;02:42:ac:11:00:02&quot;</span>
+<span class="go">              - network_name              = &quot;bridge&quot;</span>
+<span class="go">            },</span>
+<span class="go">        ] -&gt; (known after apply)</span>
+<span class="go">      - network_mode                                = &quot;default&quot; -&gt; null</span>
+<span class="go">      - privileged                                  = false -&gt; null</span>
+<span class="go">      - publish_all_ports                           = false -&gt; null</span>
+<span class="go">      ~ runtime                                     = &quot;runc&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ security_opts                               = [] -&gt; (known after apply)</span>
+<span class="go">      ~ shm_size                                    = 64 -&gt; (known after apply)</span>
+<span class="go">      ~ stop_signal                                 = &quot;SIGQUIT&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ stop_timeout                                = 0 -&gt; (known after apply)</span>
+<span class="go">      - storage_opts                                = {} -&gt; null</span>
+<span class="go">      - sysctls                                     = {} -&gt; null</span>
+<span class="go">      - tmpfs                                       = {} -&gt; null</span>
+<span class="gp">        # </span><span class="o">(</span><span class="m">13</span><span class="w"> </span>unchanged<span class="w"> </span>attributes<span class="w"> </span>hidden<span class="o">)</span>
+
+<span class="go">      ~ ports {</span>
+<span class="go">          ~ external = 8000 -&gt; 8001 # forces replacement</span>
+<span class="gp">            # </span><span class="o">(</span><span class="m">3</span><span class="w"> </span>unchanged<span class="w"> </span>attributes<span class="w"> </span>hidden<span class="o">)</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.nginx<span class="w"> </span>must<span class="w"> </span>be<span class="w"> </span>replaced
+<span class="go">-/+ resource &quot;docker_image&quot; &quot;nginx&quot; {</span>
+<span class="go">      ~ id          = &quot;sha256:247f7abff9f7097bbdab57df76fedd124d1e24a6ec4944fb5ef0ad128997ce05nginx:latest&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ image_id    = &quot;sha256:247f7abff9f7097bbdab57df76fedd124d1e24a6ec4944fb5ef0ad128997ce05&quot; -&gt; (known after apply)</span>
+<span class="go">      ~ name        = &quot;nginx:latest&quot; -&gt; &quot;nginx:alpine&quot; # forces replacement</span>
+<span class="go">      ~ repo_digest = &quot;nginx@sha256:ea97e6aace270d82c73da382ea1a8c42d44b9dc11b55159104e21c49c687e7fb&quot; -&gt; (known after apply)</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 2 to add, 0 to change, 2 to destroy.</span>
+
+<span class="go">Do you want to perform these actions?</span>
+<span class="go">  Terraform will perform the actions described above.</span>
+<span class="go">  Only &#39;yes&#39; will be accepted to approve.</span>
+
+<span class="go">  Enter a value: yes</span>
+
+<span class="go">docker_container.nginx: Destroying... [id=6c830b003efd1939725e78490013225267a625a429780d1c1b918e6ac3cf7650]</span>
+<span class="go">docker_container.nginx: Destruction complete after 0s</span>
+<span class="go">docker_image.nginx: Destroying... [id=sha256:247f7abff9f7097bbdab57df76fedd124d1e24a6ec4944fb5ef0ad128997ce05nginx:latest]</span>
+<span class="go">docker_image.nginx: Destruction complete after 1s</span>
+<span class="go">docker_image.nginx: Creating...</span>
+<span class="go">docker_image.nginx: Creation complete after 5s [id=sha256:2b70e4aaac6b5370bf3a556f5e13156692351696dd5d7c5530d117aa21772748nginx:alpine]</span>
+<span class="go">docker_container.nginx: Creating...</span>
+<span class="go">docker_container.nginx: Creation complete after 0s [id=c9346b76c28117d69383fbaf27523b1185def2dde87b823fe299333aee38469c]</span>
+
+<span class="go">Apply complete! Resources: 2 added, 0 changed, 2 destroyed.</span>
+</pre></div>
+</div>
+<p>Как видно, оба ресурса были пересозданы:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG       IMAGE ID       CREATED        SIZE</span>
+<span class="go">nginx        alpine    2b70e4aaac6b   3 months ago   42.6MB</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE          COMMAND                  CREATED              STATUS              PORTS                  NAMES</span>
+<span class="go">c9346b76c281   2b70e4aaac6b   &quot;/docker-entrypoint.…&quot;   About a minute ago   Up About a minute   0.0.0.0:8001-&gt;80/tcp   tutorial</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-I<span class="w"> </span>localhost:8001
+<span class="go">HTTP/1.1 200 OK</span>
+</pre></div>
+</div>
+</section>
+<section id="destroy">
+<h2>Destroy<a class="headerlink" href="#destroy" title="Permalink to this heading"></a></h2>
+<p>Для удаления всех инфраструктурных ресурсов есть команда
+<code class="docutils literal notranslate"><span class="pre">terraform</span> <span class="pre">destroy</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>terraform<span class="w"> </span>destroy
+<span class="go">docker_image.nginx: Refreshing state... [id=sha256:2b70e4aaac6b5370bf3a556f5e13156692351696dd5d7c5530d117aa21772748nginx:alpine]</span>
+<span class="go">docker_container.nginx: Refreshing state... [id=c9346b76c28117d69383fbaf27523b1185def2dde87b823fe299333aee38469c]</span>
+
+<span class="go">Terraform used the selected providers to generate the following execution</span>
+<span class="go">plan. Resource actions are indicated with the following symbols:</span>
+<span class="go">  - destroy</span>
+
+<span class="go">Terraform will perform the following actions:</span>
+
+<span class="gp">  # </span>docker_container.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>destroyed
+<span class="go">  - resource &quot;docker_container&quot; &quot;nginx&quot; {</span>
+<span class="go">      - attach                                      = false -&gt; null</span>
+<span class="go">      - command                                     = [</span>
+<span class="go">          - &quot;nginx&quot;,</span>
+<span class="go">          - &quot;-g&quot;,</span>
+<span class="go">          - &quot;daemon off;&quot;,</span>
+<span class="go">        ] -&gt; null</span>
+<span class="go">      - container_read_refresh_timeout_milliseconds = 15000 -&gt; null</span>
+<span class="go">      - cpu_shares                                  = 0 -&gt; null</span>
+<span class="go">      - dns                                         = [] -&gt; null</span>
+<span class="go">      - dns_opts                                    = [] -&gt; null</span>
+<span class="go">      - dns_search                                  = [] -&gt; null</span>
+<span class="go">      - entrypoint                                  = [</span>
+<span class="go">          - &quot;/docker-entrypoint.sh&quot;,</span>
+<span class="go">        ] -&gt; null</span>
+<span class="go">      - env                                         = [] -&gt; null</span>
+<span class="go">      - group_add                                   = [] -&gt; null</span>
+<span class="go">      - hostname                                    = &quot;c9346b76c281&quot; -&gt; null</span>
+<span class="go">      - id                                          = &quot;c9346b76c28117d69383fbaf27523b1185def2dde87b823fe299333aee38469c&quot; -&gt; null</span>
+<span class="go">      - image                                       = &quot;sha256:2b70e4aaac6b5370bf3a556f5e13156692351696dd5d7c5530d117aa21772748&quot; -&gt; null</span>
+<span class="go">      - init                                        = false -&gt; null</span>
+<span class="go">      - ipc_mode                                    = &quot;private&quot; -&gt; null</span>
+<span class="go">      - log_driver                                  = &quot;json-file&quot; -&gt; null</span>
+<span class="go">      - log_opts                                    = {} -&gt; null</span>
+<span class="go">      - logs                                        = false -&gt; null</span>
+<span class="go">      - max_retry_count                             = 0 -&gt; null</span>
+<span class="go">      - memory                                      = 0 -&gt; null</span>
+<span class="go">      - memory_swap                                 = 0 -&gt; null</span>
+<span class="go">      - must_run                                    = true -&gt; null</span>
+<span class="go">      - name                                        = &quot;tutorial&quot; -&gt; null</span>
+<span class="go">      - network_data                                = [</span>
+<span class="go">          - {</span>
+<span class="go">              - gateway                   = &quot;172.17.0.1&quot;</span>
+<span class="go">              - global_ipv6_address       = &quot;&quot;</span>
+<span class="go">              - global_ipv6_prefix_length = 0</span>
+<span class="go">              - ip_address                = &quot;172.17.0.2&quot;</span>
+<span class="go">              - ip_prefix_length          = 16</span>
+<span class="go">              - ipv6_gateway              = &quot;&quot;</span>
+<span class="go">              - mac_address               = &quot;02:42:ac:11:00:02&quot;</span>
+<span class="go">              - network_name              = &quot;bridge&quot;</span>
+<span class="go">            },</span>
+<span class="go">        ] -&gt; null</span>
+<span class="go">      - network_mode                                = &quot;default&quot; -&gt; null</span>
+<span class="go">      - privileged                                  = false -&gt; null</span>
+<span class="go">      - publish_all_ports                           = false -&gt; null</span>
+<span class="go">      - read_only                                   = false -&gt; null</span>
+<span class="go">      - remove_volumes                              = true -&gt; null</span>
+<span class="go">      - restart                                     = &quot;no&quot; -&gt; null</span>
+<span class="go">      - rm                                          = false -&gt; null</span>
+<span class="go">      - runtime                                     = &quot;runc&quot; -&gt; null</span>
+<span class="go">      - security_opts                               = [] -&gt; null</span>
+<span class="go">      - shm_size                                    = 64 -&gt; null</span>
+<span class="go">      - start                                       = true -&gt; null</span>
+<span class="go">      - stdin_open                                  = false -&gt; null</span>
+<span class="go">      - stop_signal                                 = &quot;SIGQUIT&quot; -&gt; null</span>
+<span class="go">      - stop_timeout                                = 0 -&gt; null</span>
+<span class="go">      - storage_opts                                = {} -&gt; null</span>
+<span class="go">      - sysctls                                     = {} -&gt; null</span>
+<span class="go">      - tmpfs                                       = {} -&gt; null</span>
+<span class="go">      - tty                                         = false -&gt; null</span>
+<span class="go">      - wait                                        = false -&gt; null</span>
+<span class="go">      - wait_timeout                                = 60 -&gt; null</span>
+
+<span class="go">      - ports {</span>
+<span class="go">          - external = 8001 -&gt; null</span>
+<span class="go">          - internal = 80 -&gt; null</span>
+<span class="go">          - ip       = &quot;0.0.0.0&quot; -&gt; null</span>
+<span class="go">          - protocol = &quot;tcp&quot; -&gt; null</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+
+<span class="gp">  # </span>docker_image.nginx<span class="w"> </span>will<span class="w"> </span>be<span class="w"> </span>destroyed
+<span class="go">  - resource &quot;docker_image&quot; &quot;nginx&quot; {</span>
+<span class="go">      - id          = &quot;sha256:2b70e4aaac6b5370bf3a556f5e13156692351696dd5d7c5530d117aa21772748nginx:alpine&quot; -&gt; null</span>
+<span class="go">      - image_id    = &quot;sha256:2b70e4aaac6b5370bf3a556f5e13156692351696dd5d7c5530d117aa21772748&quot; -&gt; null</span>
+<span class="go">      - name        = &quot;nginx:alpine&quot; -&gt; null</span>
+<span class="go">      - repo_digest = &quot;nginx@sha256:f2802c2a9d09c7aa3ace27445dfc5656ff24355da28e7b958074a0111e3fc076&quot; -&gt; null</span>
+<span class="go">    }</span>
+
+<span class="go">Plan: 0 to add, 0 to change, 2 to destroy.</span>
+
+<span class="go">Do you really want to destroy all resources?</span>
+<span class="go">  Terraform will destroy all your managed infrastructure, as shown above.</span>
+<span class="go">  There is no undo. Only &#39;yes&#39; will be accepted to confirm.</span>
+
+<span class="go">  Enter a value: yes</span>
+
+<span class="go">docker_container.nginx: Destroying... [id=c9346b76c28117d69383fbaf27523b1185def2dde87b823fe299333aee38469c]</span>
+<span class="go">docker_container.nginx: Destruction complete after 1s</span>
+<span class="go">docker_image.nginx: Destroying... [id=sha256:2b70e4aaac6b5370bf3a556f5e13156692351696dd5d7c5530d117aa21772748nginx:alpine]</span>
+<span class="go">docker_image.nginx: Destruction complete after 0s</span>
+
+<span class="go">Destroy complete! Resources: 2 destroyed.</span>
+</pre></div>
+</div>
+<p>После выполнения - все ресурсы, управляемые <a class="reference external" href="https://developer.hashicorp.com/terraform">terraform</a> будут удалены:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images
+<span class="go">REPOSITORY   TAG       IMAGE ID   CREATED   SIZE</span>
+<span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="16_practice_kafka_cluster.html" class="btn btn-neutral float-left" title="Apache Kafka Cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="18_practice_terraform_ansible.html" class="btn btn-neutral float-right" title="Terraform + Ansible" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opentelemetry Collector &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Opentelemetry Instrumentation" href="28_practice_otel_instrumentation.html" />
+    <link rel="prev" title="Jaeger E2E" href="26_practice_jaeger_e2e.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Opentelemetry Collector</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#collector">Collector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#metrics">Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logs">Logs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traces">Traces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#visualization">Visualization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prometheus">Prometheus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#elasticsearch">Elasticsearch</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jaeger">Jaeger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dashboard">Dashboard</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Opentelemetry Collector</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/27_practice_opentelemetry.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="opentelemetry-collector">
+<h1>Opentelemetry Collector<a class="headerlink" href="#opentelemetry-collector" title="Permalink to this heading"></a></h1>
+<p>Данное практическое занятие посвящено знакомству с <a class="reference external" href="https://opentelemetry.io/docs/collector/">opentelemetry collector</a>,
+с помощью которого можно отправлять метрики, логи и трейсы в различные хранилища для
+дальнейшей обработки и анализа.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;otel&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="s2">&quot;virtualbox&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">v</span><span class="o">|</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2048</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;otel&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io docker-compose-v2</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      docker pull ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:latest</span>
+<span class="sh">      docker inspect ghcr.io/open-telemetry/opentelemetry-collector-contrib/telemetrygen:latest \</span>
+<span class="sh">        | jq -r &#39;.[0].GraphDriver.Data.UpperDir&#39; \</span>
+<span class="sh">        | xargs -i sudo cp {}/telemetrygen /usr/local/bin/</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация установит на виртуальную машину <a class="reference external" href="https://docs.docker.com/engine/">docker</a> и
+<a class="reference external" href="https://docs.docker.com/compose/">docker compose</a>, с помощью которых в дальнейшем будут
+развернуты остальные компоненты. А также поставит утилиту <a class="reference external" href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/cmd/telemetrygen">telemetrygen</a>,
+с помощью которой можно будет сгенерировать метрики, логи и трейсы и отправить
+в <a class="reference external" href="https://opentelemetry.io/docs/collector/">коллектор</a>.</p>
+</section>
+<section id="collector">
+<h2>Collector<a class="headerlink" href="#collector" title="Permalink to this heading"></a></h2>
+<p>Развернем коллектор при помощи <a class="reference external" href="https://docs.docker.com/compose/">docker-compose</a>, для этого зададим для него
+конфигурацию в файл <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grpc</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+
+<span class="nt">processors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">batch</span><span class="p">:</span>
+
+<span class="nt">exporters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">verbosity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detailed</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">traces</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Данная конфигурация позволяет принимать метрики, логи и трейсы по протоколу <a class="reference external" href="https://opentelemetry.io/docs/specs/otel/protocol/">otlp</a> и
+выводить информацию об этом в лог коллектора.
+После чего создадим сам файл <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otel-collector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">collector</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel/opentelemetry-collector-contrib:0.86.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317:4317</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config.yaml:/etc/otelcol-contrib/config.yaml</span>
+</pre></div>
+</div>
+<p>Запустим и отправим метрику в коллектор утилитой <a class="reference external" href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/cmd/telemetrygen">telemetrygen</a>, после чего
+увидим ее в логах коллектора:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 2/2</span>
+<span class="go"> ✔ Network vagrant_default  Created                                                 0.1s</span>
+<span class="go"> ✔ Container collector      Started                                                 0.9s</span>
+<span class="gp">$ </span>telemetrygen<span class="w"> </span>metrics<span class="w"> </span>--otlp-insecure
+<span class="go">2024-04-24T17:09:35.396Z        INFO    metrics/metrics.go:30   starting the metrics generator with configuration        {&quot;config&quot;: {&quot;WorkerCount&quot;:1,&quot;Rate&quot;:0,&quot;TotalDuration&quot;:0,&quot;ReportingInterval&quot;:1000000000,&quot;SkipSettingGRPCLogger&quot;:false,&quot;CustomEndpoint&quot;:&quot;&quot;,&quot;Insecure&quot;:true,&quot;UseHTTP&quot;:false,&quot;HTTPPath&quot;:&quot;/v1/metrics&quot;,&quot;Headers&quot;:{},&quot;ResourceAttributes&quot;:{},&quot;TelemetryAttributes&quot;:{},&quot;CaFile&quot;:&quot;&quot;,&quot;ClientAuth&quot;:{&quot;Enabled&quot;:false,&quot;ClientCertFile&quot;:&quot;&quot;,&quot;ClientKeyFile&quot;:&quot;&quot;},&quot;NumMetrics&quot;:1,&quot;MetricType&quot;:&quot;Gauge&quot;}}</span>
+<span class="go">2024-04-24T17:09:35.396Z        INFO    metrics/metrics.go:81   generation of metrics isn&#39;t being throttled</span>
+<span class="go">2024-04-24T17:09:35.396Z        INFO    metrics/metrics.go:49   starting gRPC exporter</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:427  [core][Channel #1]Channel created        {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:1668 [core][Channel #1]original dial target is: &quot;localhost:4317&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:1675 [core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:&quot;localhost&quot;, Opaque:&quot;4317&quot;, User:(*url.Userinfo)(nil), Host:&quot;&quot;, Path:&quot;&quot;, RawPath:&quot;&quot;, OmitHost:false, ForceQuery:false, RawQuery:&quot;&quot;, Fragment:&quot;&quot;, RawFragment:&quot;&quot;}}      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:1694 [core][Channel #1]fallback to scheme &quot;dns&quot;       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:1702 [core][Channel #1]parsed dial target is: dns:///localhost:4317   {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:1825 [core][Channel #1]Channel authority set to &quot;localhost:4317&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.397Z        INFO    grpc@v1.63.2/clientconn.go:332  [core][Channel #1]Channel exiting idle mode      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.398Z        INFO    grpc@v1.63.2/resolver_wrapper.go:197    [core][Channel #1]Resolver state updated: {</span>
+<span class="go">  &quot;Addresses&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">      &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">      &quot;Attributes&quot;: null,</span>
+<span class="go">      &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">      &quot;Metadata&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;Endpoints&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addresses&quot;: [</span>
+<span class="go">        {</span>
+<span class="go">          &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">          &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">          &quot;Attributes&quot;: null,</span>
+<span class="go">          &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">          &quot;Metadata&quot;: null</span>
+<span class="go">        }</span>
+<span class="go">      ],</span>
+<span class="go">      &quot;Attributes&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;ServiceConfig&quot;: null,</span>
+<span class="go">  &quot;Attributes&quot;: null</span>
+<span class="go">} (resolver returned new addresses)     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.399Z        INFO    grpc@v1.63.2/balancer_wrapper.go:103    [core][Channel #1]Channel switches to new LB policy &quot;pick_first&quot; {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.399Z        INFO    grpc@v1.63.2/balancer_wrapper.go:170    [core][Channel #1 SubChannel #2]Subchannel created       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.399Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to CONNECTING      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.399Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.399Z        INFO    grpc@v1.63.2/clientconn.go:1310 [core][Channel #1 SubChannel #2]Subchannel picks a new address &quot;127.0.0.1:4317&quot; to connect       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.400Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY  {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.401Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to READY   {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:09:35.402Z        INFO    metrics/worker.go:103   metrics generated       {&quot;worker&quot;: 0, &quot;metrics&quot;: 1}</span>
+<span class="gp">$ </span>docker<span class="w"> </span>logs<span class="w"> </span>collector
+<span class="go">2024-04-24T17:07:40.261Z        info    service@v0.86.0/telemetry.go:84 Setting up own telemetry...</span>
+<span class="go">2024-04-24T17:07:40.261Z        info    service@v0.86.0/telemetry.go:201        Serving Prometheus metrics      {&quot;address&quot;: &quot;:8888&quot;, &quot;level&quot;: &quot;Basic&quot;}</span>
+<span class="go">2024-04-24T17:07:40.261Z        info    exporter@v0.86.0/exporter.go:275        Development component. May change in the future.        {&quot;kind&quot;: &quot;exporter&quot;, &quot;data_type&quot;: &quot;metrics&quot;, &quot;name&quot;: &quot;debug&quot;}</span>
+<span class="go">2024-04-24T17:07:40.262Z        info    exporter@v0.86.0/exporter.go:275        Development component. May change in the future.        {&quot;kind&quot;: &quot;exporter&quot;, &quot;data_type&quot;: &quot;logs&quot;, &quot;name&quot;: &quot;debug&quot;}</span>
+<span class="go">2024-04-24T17:07:40.262Z        info    exporter@v0.86.0/exporter.go:275        Development component. May change in the future.        {&quot;kind&quot;: &quot;exporter&quot;, &quot;data_type&quot;: &quot;traces&quot;, &quot;name&quot;: &quot;debug&quot;}</span>
+<span class="go">2024-04-24T17:07:40.262Z        info    service@v0.86.0/service.go:138  Starting otelcol-contrib...     {&quot;Version&quot;: &quot;0.86.0&quot;, &quot;NumCPU&quot;: 2}</span>
+<span class="go">2024-04-24T17:07:40.262Z        info    extensions/extensions.go:31     Starting extensions...</span>
+<span class="go">2024-04-24T17:07:40.263Z        warn    internal@v0.86.0/warning.go:40  Using the 0.0.0.0 address exposes this server to every network interface, which may facilitate Denial of Service attacks       {&quot;kind&quot;: &quot;receiver&quot;, &quot;name&quot;: &quot;otlp&quot;, &quot;data_type&quot;: &quot;metrics&quot;, &quot;documentation&quot;: &quot;https://github.com/open-telemetry/opentelemetry-collector/blob/main/docs/security-best-practices.md#safeguards-against-denial-of-service-attacks&quot;}</span>
+<span class="go">2024-04-24T17:07:40.263Z        info    otlpreceiver@v0.86.0/otlp.go:83 Starting GRPC server    {&quot;kind&quot;: &quot;receiver&quot;, &quot;name&quot;: &quot;otlp&quot;, &quot;data_type&quot;: &quot;metrics&quot;, &quot;endpoint&quot;: &quot;0.0.0.0:4317&quot;}</span>
+<span class="go">2024-04-24T17:07:40.263Z        info    service@v0.86.0/service.go:161  Everything is ready. Begin running and processing data.</span>
+<span class="go">2024-04-24T17:09:35.531Z        info    MetricsExporter {&quot;kind&quot;: &quot;exporter&quot;, &quot;data_type&quot;: &quot;metrics&quot;, &quot;name&quot;: &quot;debug&quot;, &quot;resource metrics&quot;: 1, &quot;metrics&quot;: 1, &quot;data points&quot;: 1}</span>
+<span class="go">2024-04-24T17:09:35.531Z        info    ResourceMetrics #0</span>
+<span class="go">Resource SchemaURL: https://opentelemetry.io/schemas/1.13.0</span>
+<span class="go">ScopeMetrics #0</span>
+<span class="go">ScopeMetrics SchemaURL:</span>
+<span class="go">InstrumentationScope</span>
+<span class="go">Metric #0</span>
+<span class="go">Descriptor:</span>
+<span class="go">     -&gt; Name: gen</span>
+<span class="go">     -&gt; Description:</span>
+<span class="go">     -&gt; Unit:</span>
+<span class="go">     -&gt; DataType: Gauge</span>
+<span class="go">NumberDataPoints #0</span>
+<span class="go">StartTimestamp: 1970-01-01 00:00:00 +0000 UTC</span>
+<span class="go">Timestamp: 2024-04-24 17:09:35.397178162 +0000 UTC</span>
+<span class="go">Value: 0</span>
+<span class="go">        {&quot;kind&quot;: &quot;exporter&quot;, &quot;data_type&quot;: &quot;metrics&quot;, &quot;name&quot;: &quot;debug&quot;}</span>
+</pre></div>
+</div>
+</section>
+<section id="metrics">
+<h2>Metrics<a class="headerlink" href="#metrics" title="Permalink to this heading"></a></h2>
+<p>Развернем <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> для хранения метрик и сконфигурируем <a class="reference external" href="https://opentelemetry.io/docs/collector/">коллектор</a>
+для отправки метрик в него. Таким образом <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> будет выглядеть так:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grpc</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+
+<span class="nt">processors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">batch</span><span class="p">:</span>
+
+<span class="nt">exporters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">verbosity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detailed</span>
+<span class="w">  </span><span class="nt">prometheusremotewrite</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://prometheus:9090/api/v1/write</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">prometheusremotewrite</span><span class="p p-Indicator">,</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">traces</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>Также добавим <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a> в <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otel-collector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">collector</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel/opentelemetry-collector-contrib:0.86.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317:4317</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config.yaml:/etc/otelcol-contrib/config.yaml</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--config.file=/etc/prometheus/prometheus.yml</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--storage.tsdb.path=/prometheus</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--web.enable-remote-write-receiver</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9090:9090</span>
+</pre></div>
+</div>
+<p>После чего запустим, отправим метрику и посмотрим через api <a class="reference external" href="https://prometheus.io/docs/introduction/overview/">prometheus</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 2/2</span>
+<span class="go"> ✔ Container collector   Started                                                    0.6s</span>
+<span class="go"> ✔ Container prometheus  Started                                                    0.6s</span>
+<span class="gp">$ </span>telemetrygen<span class="w"> </span>metrics<span class="w"> </span>--otlp-insecure<span class="w"> </span>--telemetry-attributes<span class="w"> </span><span class="s1">&#39;test_key=&quot;test_value&quot;&#39;</span>
+<span class="go">2024-04-24T17:44:47.846Z        INFO    metrics/metrics.go:30   starting the metrics generator with configuration       {&quot;config&quot;: {&quot;WorkerCount&quot;:1,&quot;Rate&quot;:0,&quot;TotalDuration&quot;:0,&quot;ReportingInterval&quot;:1000000000,&quot;SkipSettingGRPCLogger&quot;:false,&quot;CustomEndpoint&quot;:&quot;&quot;,&quot;Insecure&quot;:true,&quot;UseHTTP&quot;:false,&quot;HTTPPath&quot;:&quot;/v1/metrics&quot;,&quot;Headers&quot;:{},&quot;ResourceAttributes&quot;:{},&quot;TelemetryAttributes&quot;:{&quot;test_key&quot;:&quot;test_value&quot;},&quot;CaFile&quot;:&quot;&quot;,&quot;ClientAuth&quot;:{&quot;Enabled&quot;:false,&quot;ClientCertFile&quot;:&quot;&quot;,&quot;ClientKeyFile&quot;:&quot;&quot;},&quot;NumMetrics&quot;:1,&quot;MetricType&quot;:&quot;Gauge&quot;}}</span>
+<span class="go">2024-04-24T17:44:47.849Z        INFO    metrics/metrics.go:81   generation of metrics isn&#39;t being throttled</span>
+<span class="go">2024-04-24T17:44:47.851Z        INFO    metrics/metrics.go:49   starting gRPC exporter</span>
+<span class="go">2024-04-24T17:44:47.853Z        INFO    grpc@v1.63.2/clientconn.go:427  [core][Channel #1]Channel created       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.855Z        INFO    grpc@v1.63.2/clientconn.go:1668 [core][Channel #1]original dial target is: &quot;localhost:4317&quot;     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.857Z        INFO    grpc@v1.63.2/clientconn.go:1675 [core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:&quot;localhost&quot;, Opaque:&quot;4317&quot;, User:(*url.Userinfo)(nil), Host:&quot;&quot;, Path:&quot;&quot;, RawPath:&quot;&quot;, OmitHost:false, ForceQuery:false, RawQuery:&quot;&quot;, Fragment:&quot;&quot;, RawFragment:&quot;&quot;}}  {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.859Z        INFO    grpc@v1.63.2/clientconn.go:1694 [core][Channel #1]fallback to scheme &quot;dns&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.861Z        INFO    grpc@v1.63.2/clientconn.go:1702 [core][Channel #1]parsed dial target is: dns:///localhost:4317  {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.863Z        INFO    grpc@v1.63.2/clientconn.go:1825 [core][Channel #1]Channel authority set to &quot;localhost:4317&quot;     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.866Z        INFO    grpc@v1.63.2/clientconn.go:332  [core][Channel #1]Channel exiting idle mode     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.866Z        INFO    grpc@v1.63.2/resolver_wrapper.go:197    [core][Channel #1]Resolver state updated: {</span>
+<span class="go">  &quot;Addresses&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">      &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">      &quot;Attributes&quot;: null,</span>
+<span class="go">      &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">      &quot;Metadata&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;Endpoints&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addresses&quot;: [</span>
+<span class="go">        {</span>
+<span class="go">          &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">          &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">          &quot;Attributes&quot;: null,</span>
+<span class="go">          &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">          &quot;Metadata&quot;: null</span>
+<span class="go">        }</span>
+<span class="go">      ],</span>
+<span class="go">      &quot;Attributes&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;ServiceConfig&quot;: null,</span>
+<span class="go">  &quot;Attributes&quot;: null</span>
+<span class="go">} (resolver returned new addresses)     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.871Z        INFO    grpc@v1.63.2/balancer_wrapper.go:103    [core][Channel #1]Channel switches to new LB policy &quot;pick_first&quot;        {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.871Z        INFO    grpc@v1.63.2/balancer_wrapper.go:170    [core][Channel #1 SubChannel #2]Subchannel created      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.872Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to CONNECTING     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.872Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING    {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.872Z        INFO    grpc@v1.63.2/clientconn.go:1310 [core][Channel #1 SubChannel #2]Subchannel picks a new address &quot;127.0.0.1:4317&quot; to connect      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.874Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.874Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to READY  {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T17:44:47.875Z        INFO    metrics/worker.go:103   metrics generated       {&quot;worker&quot;: 0, &quot;metrics&quot;: 1}</span>
+<span class="go">2024-04-24T17:44:47.875Z        INFO    metrics/worker.go:41    stopping the exporter   {&quot;worker&quot;: 0}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:9090/api/v1/query?query<span class="o">=</span>gen<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;status&quot;: &quot;success&quot;,</span>
+<span class="go">  &quot;data&quot;: {</span>
+<span class="go">    &quot;resultType&quot;: &quot;vector&quot;,</span>
+<span class="go">    &quot;result&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;metric&quot;: {</span>
+<span class="go">          &quot;__name__&quot;: &quot;gen&quot;</span>
+<span class="go">        },</span>
+<span class="go">        &quot;value&quot;: [</span>
+<span class="go">          1713980703.106,</span>
+<span class="go">          &quot;0&quot;</span>
+<span class="go">        ]</span>
+<span class="go">      },</span>
+<span class="go">      {</span>
+<span class="go">        &quot;metric&quot;: {</span>
+<span class="go">          &quot;__name__&quot;: &quot;gen&quot;,</span>
+<span class="go">          &quot;test_key&quot;: &quot;test_value&quot;</span>
+<span class="go">        },</span>
+<span class="go">        &quot;value&quot;: [</span>
+<span class="go">          1713980703.106,</span>
+<span class="go">          &quot;0&quot;</span>
+<span class="go">        ]</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</section>
+<section id="logs">
+<h2>Logs<a class="headerlink" href="#logs" title="Permalink to this heading"></a></h2>
+<p>Для хранения логов развернем <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a> и сконфигурируем коллектор следующим
+образом:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grpc</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+
+<span class="nt">processors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">batch</span><span class="p">:</span>
+
+<span class="nt">exporters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">verbosity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detailed</span>
+<span class="w">  </span><span class="nt">prometheusremotewrite</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://prometheus:9090/api/v1/write</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoints</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">http</span><span class="p p-Indicator">:</span><span class="nv">//elasticsearch</span><span class="p p-Indicator">:</span><span class="nv">9200</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">logs_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-log-index</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">elasticsearch</span><span class="p p-Indicator">,</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">prometheusremotewrite</span><span class="p p-Indicator">,</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">traces</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>И добавим <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elastic</a> в <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otel-collector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">collector</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel/opentelemetry-collector-contrib:0.86.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317:4317</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config.yaml:/etc/otelcol-contrib/config.yaml</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--config.file=/etc/prometheus/prometheus.yml</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--storage.tsdb.path=/prometheus</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--web.enable-remote-write-receiver</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9090:9090</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:8.13.0</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transport.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=elasticsearch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ES_JAVA_OPTS=-Xms256m -Xmx256m</span>
+</pre></div>
+</div>
+<p>После запустим и попробуем отправить логи через коллектор, а также посмотреть их
+через api <a class="reference external" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html">elasticsearch</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container collector      Started                                                 3.1s</span>
+<span class="go"> ✔ Container prometheus     Started                                                 3.0s</span>
+<span class="go"> ✔ Container elasticsearch  Started                                                 3.1s</span>
+<span class="gp">$ </span>telemetrygen<span class="w"> </span>logs<span class="w"> </span>--otlp-insecure
+<span class="go">2024-04-24T18:00:03.576Z        INFO    grpc@v1.63.2/clientconn.go:427  [core][Channel #1]Channel created        {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.576Z        INFO    grpc@v1.63.2/clientconn.go:1668 [core][Channel #1]original dial target is: &quot;localhost:4317&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.576Z        INFO    grpc@v1.63.2/clientconn.go:1675 [core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:&quot;localhost&quot;, Opaque:&quot;4317&quot;, User:(*url.Userinfo)(nil), Host:&quot;&quot;, Path:&quot;&quot;, RawPath:&quot;&quot;, OmitHost:false, ForceQuery:false, RawQuery:&quot;&quot;, Fragment:&quot;&quot;, RawFragment:&quot;&quot;}}      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.576Z        INFO    grpc@v1.63.2/clientconn.go:1694 [core][Channel #1]fallback to scheme &quot;dns&quot;       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.576Z        INFO    grpc@v1.63.2/clientconn.go:1702 [core][Channel #1]parsed dial target is: dns:///localhost:4317   {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.576Z        INFO    grpc@v1.63.2/clientconn.go:1825 [core][Channel #1]Channel authority set to &quot;localhost:4317&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.576Z        INFO    logs/logs.go:52 generation of logs isn&#39;t being throttled</span>
+<span class="go">2024-04-24T18:00:03.580Z        INFO    grpc@v1.63.2/resolver_wrapper.go:197    [core][Channel #1]Resolver state updated: {</span>
+<span class="go">  &quot;Addresses&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">      &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">      &quot;Attributes&quot;: null,</span>
+<span class="go">      &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">      &quot;Metadata&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;Endpoints&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addresses&quot;: [</span>
+<span class="go">        {</span>
+<span class="go">          &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">          &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">          &quot;Attributes&quot;: null,</span>
+<span class="go">          &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">          &quot;Metadata&quot;: null</span>
+<span class="go">        }</span>
+<span class="go">      ],</span>
+<span class="go">      &quot;Attributes&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;ServiceConfig&quot;: null,</span>
+<span class="go">  &quot;Attributes&quot;: null</span>
+<span class="go">} (resolver returned new addresses)     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.580Z        INFO    grpc@v1.63.2/balancer_wrapper.go:103    [core][Channel #1]Channel switches to new LB policy &quot;pick_first&quot; {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.581Z        INFO    grpc@v1.63.2/balancer_wrapper.go:170    [core][Channel #1 SubChannel #2]Subchannel created       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.581Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to CONNECTING      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.581Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.581Z        INFO    grpc@v1.63.2/clientconn.go:1310 [core][Channel #1 SubChannel #2]Subchannel picks a new address &quot;127.0.0.1:4317&quot; to connect       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.583Z        INFO    grpc@v1.63.2/clientconn.go:332  [core][Channel #1]Channel exiting idle mode      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.586Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY  {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.587Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to READY   {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:00:03.595Z        INFO    logs/worker.go:71       logs generated  {&quot;worker&quot;: 0, &quot;logs&quot;: 1}</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:9200/my-log-index/_search<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq
+<span class="go">{</span>
+<span class="go">  &quot;took&quot;: 72,</span>
+<span class="go">  &quot;timed_out&quot;: false,</span>
+<span class="go">  &quot;_shards&quot;: {</span>
+<span class="go">    &quot;total&quot;: 1,</span>
+<span class="go">    &quot;successful&quot;: 1,</span>
+<span class="go">    &quot;skipped&quot;: 0,</span>
+<span class="go">    &quot;failed&quot;: 0</span>
+<span class="go">  },</span>
+<span class="go">  &quot;hits&quot;: {</span>
+<span class="go">    &quot;total&quot;: {</span>
+<span class="go">      &quot;value&quot;: 1,</span>
+<span class="go">      &quot;relation&quot;: &quot;eq&quot;</span>
+<span class="go">    },</span>
+<span class="go">    &quot;max_score&quot;: 1,</span>
+<span class="go">    &quot;hits&quot;: [</span>
+<span class="go">      {</span>
+<span class="go">        &quot;_index&quot;: &quot;my-log-index&quot;,</span>
+<span class="go">        &quot;_id&quot;: &quot;3mxDEY8Brl8cR2jNztu-&quot;,</span>
+<span class="go">        &quot;_score&quot;: 1,</span>
+<span class="go">        &quot;_source&quot;: {</span>
+<span class="go">          &quot;@timestamp&quot;: &quot;2024-04-24T18:00:03.578798630Z&quot;,</span>
+<span class="go">          &quot;Attributes&quot;: {</span>
+<span class="go">            &quot;app&quot;: &quot;server&quot;</span>
+<span class="go">          },</span>
+<span class="go">          &quot;Body&quot;: &quot;the message&quot;,</span>
+<span class="go">          &quot;SeverityNumber&quot;: 9,</span>
+<span class="go">          &quot;SeverityText&quot;: &quot;Info&quot;,</span>
+<span class="go">          &quot;TraceFlags&quot;: 0</span>
+<span class="go">        }</span>
+<span class="go">      }</span>
+<span class="go">    ]</span>
+<span class="go">  }</span>
+<span class="go">}</span>
+</pre></div>
+</div>
+</section>
+<section id="traces">
+<h2>Traces<a class="headerlink" href="#traces" title="Permalink to this heading"></a></h2>
+<p>Для хранения трейсов развернем <a class="reference external" href="https://www.jaegertracing.io/docs/1.56/">jaeger</a> и добавим в конфигурацию коллектора:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">receivers</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">protocols</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">grpc</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0:4317</span>
+
+<span class="nt">processors</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">batch</span><span class="p">:</span>
+
+<span class="nt">exporters</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">debug</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">verbosity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">detailed</span>
+<span class="w">  </span><span class="nt">prometheusremotewrite</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http://prometheus:9090/api/v1/write</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoints</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">http</span><span class="p p-Indicator">:</span><span class="nv">//elasticsearch</span><span class="p p-Indicator">:</span><span class="nv">9200</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">logs_index</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">my-log-index</span>
+<span class="w">  </span><span class="nt">otlp</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jaeger:4317</span>
+<span class="w">    </span><span class="nt">tls</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">insecure</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">pipelines</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">logs</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">elasticsearch</span><span class="p p-Indicator">,</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">metrics</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">prometheusremotewrite</span><span class="p p-Indicator">,</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+<span class="w">    </span><span class="nt">traces</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">receivers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">processors</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">batch</span><span class="p p-Indicator">]</span>
+<span class="w">      </span><span class="nt">exporters</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">otlp</span><span class="p p-Indicator">,</span><span class="nv">debug</span><span class="p p-Indicator">]</span>
+</pre></div>
+</div>
+<p>И добавим в <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otel-collector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">collector</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel/opentelemetry-collector-contrib:0.86.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317:4317</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config.yaml:/etc/otelcol-contrib/config.yaml</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--config.file=/etc/prometheus/prometheus.yml</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--storage.tsdb.path=/prometheus</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--web.enable-remote-write-receiver</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9090:9090</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:8.13.0</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transport.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=elasticsearch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ES_JAVA_OPTS=-Xms256m -Xmx256m</span>
+<span class="w">  </span><span class="nt">jaeger</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jaeger</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jaegertracing/all-in-one:1.56</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;16686:16686&quot;</span>
+</pre></div>
+</div>
+<p>После чего запустим, отправим трейс через коллектор и посмотрим его через api <a class="reference external" href="https://www.jaegertracing.io/docs/1.56/">jaeger</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 4/4</span>
+<span class="go"> ✔ Container collector      Started                                                 3.0s</span>
+<span class="go"> ✔ Container elasticsearch  Started                                                 3.0s</span>
+<span class="go"> ✔ Container jaeger         Started                                                 2.9s</span>
+<span class="go"> ✔ Container prometheus     Started                                                 3.1s</span>
+<span class="gp">$ </span>telemetrygen<span class="w"> </span>traces<span class="w"> </span>--otlp-insecure
+<span class="go">2024-04-24T18:08:43.789Z        INFO    traces/traces.go:52     starting gRPC exporter</span>
+<span class="go">2024-04-24T18:08:43.829Z        INFO    grpc@v1.63.2/clientconn.go:427  [core][Channel #1]Channel created        {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.829Z        INFO    grpc@v1.63.2/clientconn.go:1668 [core][Channel #1]original dial target is: &quot;localhost:4317&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.829Z        INFO    grpc@v1.63.2/clientconn.go:1675 [core][Channel #1]parsed dial target is: resolver.Target{URL:url.URL{Scheme:&quot;localhost&quot;, Opaque:&quot;4317&quot;, User:(*url.Userinfo)(nil), Host:&quot;&quot;, Path:&quot;&quot;, RawPath:&quot;&quot;, OmitHost:false, ForceQuery:false, RawQuery:&quot;&quot;, Fragment:&quot;&quot;, RawFragment:&quot;&quot;}}      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.829Z        INFO    grpc@v1.63.2/clientconn.go:1694 [core][Channel #1]fallback to scheme &quot;dns&quot;       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.830Z        INFO    grpc@v1.63.2/clientconn.go:1702 [core][Channel #1]parsed dial target is: dns:///localhost:4317   {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.830Z        INFO    grpc@v1.63.2/clientconn.go:1825 [core][Channel #1]Channel authority set to &quot;localhost:4317&quot;      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.830Z        INFO    traces/traces.go:114    generation of traces isn&#39;t being throttled</span>
+<span class="go">2024-04-24T18:08:43.830Z        INFO    traces/worker.go:108    traces generated        {&quot;worker&quot;: 0, &quot;traces&quot;: 1}</span>
+<span class="go">2024-04-24T18:08:43.831Z        INFO    traces/traces.go:74     stop the batch span processor</span>
+<span class="go">2024-04-24T18:08:43.831Z        INFO    grpc@v1.63.2/clientconn.go:332  [core][Channel #1]Channel exiting idle mode      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.832Z        INFO    grpc@v1.63.2/resolver_wrapper.go:197    [core][Channel #1]Resolver state updated: {</span>
+<span class="go">  &quot;Addresses&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">      &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">      &quot;Attributes&quot;: null,</span>
+<span class="go">      &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">      &quot;Metadata&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;Endpoints&quot;: [</span>
+<span class="go">    {</span>
+<span class="go">      &quot;Addresses&quot;: [</span>
+<span class="go">        {</span>
+<span class="go">          &quot;Addr&quot;: &quot;127.0.0.1:4317&quot;,</span>
+<span class="go">          &quot;ServerName&quot;: &quot;&quot;,</span>
+<span class="go">          &quot;Attributes&quot;: null,</span>
+<span class="go">          &quot;BalancerAttributes&quot;: null,</span>
+<span class="go">          &quot;Metadata&quot;: null</span>
+<span class="go">        }</span>
+<span class="go">      ],</span>
+<span class="go">      &quot;Attributes&quot;: null</span>
+<span class="go">    }</span>
+<span class="go">  ],</span>
+<span class="go">  &quot;ServiceConfig&quot;: null,</span>
+<span class="go">  &quot;Attributes&quot;: null</span>
+<span class="go">} (resolver returned new addresses)     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.833Z        INFO    grpc@v1.63.2/balancer_wrapper.go:103    [core][Channel #1]Channel switches to new LB policy &quot;pick_first&quot; {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.833Z        INFO    grpc@v1.63.2/balancer_wrapper.go:170    [core][Channel #1 SubChannel #2]Subchannel created       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.833Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to CONNECTING      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.833Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to CONNECTING     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.834Z        INFO    grpc@v1.63.2/clientconn.go:1310 [core][Channel #1 SubChannel #2]Subchannel picks a new address &quot;127.0.0.1:4317&quot; to connect       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.836Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to READY  {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.836Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to READY   {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.840Z        INFO    grpc@v1.63.2/clientconn.go:531  [core][Channel #1]Channel Connectivity change to SHUTDOWN        {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.840Z        INFO    grpc@v1.63.2/resolver_wrapper.go:100    [core][Channel #1]Closing the name resolver      {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.840Z        INFO    grpc@v1.63.2/balancer_wrapper.go:135    [core][Channel #1]ccBalancerWrapper: closing     {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.840Z        INFO    grpc@v1.63.2/clientconn.go:1195 [core][Channel #1 SubChannel #2]Subchannel Connectivity change to SHUTDOWN       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.840Z        INFO    grpc@v1.63.2/clientconn.go:1143 [core][Channel #1 SubChannel #2]Subchannel deleted       {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.841Z        INFO    grpc@v1.63.2/clientconn.go:1145 [core][Channel #1]Channel deleted        {&quot;system&quot;: &quot;grpc&quot;, &quot;grpc_log&quot;: true}</span>
+<span class="go">2024-04-24T18:08:43.841Z        INFO    traces/traces.go:64     stopping the exporter</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:16686/api/traces?service<span class="o">=</span>telemetrygen<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.data[].spans[]| &quot;\(.traceID) \(.spanID) \(.operationName)&quot;&#39;</span>
+<span class="go">&quot;7bcdc72d64b16a8c83dd668f74cd65f2 d063605ba96839d2 okey-dokey-0&quot;</span>
+<span class="go">&quot;7bcdc72d64b16a8c83dd668f74cd65f2 aba8028c6e80fbbf lets-go&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this heading"></a></h2>
+<p>Для удобного отображения данных развернем также <a class="reference external" href="https://grafana.com/docs/grafana/latest/introduction/">grafana</a>, добавив <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">otel-collector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">collector</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">otel/opentelemetry-collector-contrib:0.86.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4317:4317</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./config.yaml:/etc/otelcol-contrib/config.yaml</span>
+<span class="w">  </span><span class="nt">prometheus</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prometheus</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">prom/prometheus:v2.50.1</span>
+<span class="w">    </span><span class="nt">command</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--config.file=/etc/prometheus/prometheus.yml</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--storage.tsdb.path=/prometheus</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">--web.enable-remote-write-receiver</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9090:9090</span>
+<span class="w">  </span><span class="nt">elasticsearch</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch:8.13.0</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">elasticsearch</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;9200:9200&quot;</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">discovery.type=single-node</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">http.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">transport.host=0.0.0.0</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">xpack.security.enabled=false</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cluster.name=elasticsearch</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">bootstrap.memory_lock=true</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ES_JAVA_OPTS=-Xms256m -Xmx256m</span>
+<span class="w">  </span><span class="nt">jaeger</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jaeger</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jaegertracing/all-in-one:1.56</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;16686:16686&quot;</span>
+<span class="w">  </span><span class="nt">grafana</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana/grafana:10.4.0</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:3000</span>
+</pre></div>
+</div>
+<p>Перезапустим контейнеры и запустим одновременную отправку метрик, трейсов и логов:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--force-recreate
+<span class="go">[+] Running 5/5</span>
+<span class="go"> ✔ Container collector      Started                                                 1.4s</span>
+<span class="go"> ✔ Container elasticsearch  Started                                                 1.4s</span>
+<span class="go"> ✔ Container prometheus     Started                                                 1.3s</span>
+<span class="go"> ✔ Container grafana        Started                                                 1.5s</span>
+<span class="go"> ✔ Container jaeger         Started                                                 1.5s</span>
+<span class="gp">$ </span>telemetrygen<span class="w"> </span>traces<span class="w"> </span>--otlp-insecure<span class="w"> </span>--duration<span class="o">=</span>1h<span class="w"> </span>--rate<span class="o">=</span><span class="m">10</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>telemetrygen<span class="w"> </span>metrics<span class="w"> </span>--otlp-insecure<span class="w">  </span>--duration<span class="o">=</span>1h<span class="w"> </span>--rate<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="p">&amp;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>telemetrygen<span class="w"> </span>logs<span class="w"> </span>--otlp-insecure<span class="w"> </span>--duration<span class="o">=</span>1h<span class="w"> </span>--rate<span class="o">=</span><span class="m">5</span><span class="w"> </span><span class="p">&amp;</span>
+</pre></div>
+</div>
+<p>После чего откроем графану по адресу <a class="reference external" href="http://localhost:8888">localhost:8888</a>,
+авторизуемся под учетными данными <code class="docutils literal notranslate"><span class="pre">admin:admin</span></code> и перейдем к добавлению наших
+датасорсов <a class="reference external" href="http://localhost:8888/connections/datasources">/connections/datasources</a>.</p>
+<section id="prometheus">
+<h3>Prometheus<a class="headerlink" href="#prometheus" title="Permalink to this heading"></a></h3>
+<p>Добавим наши метрики используя тип датасорса <code class="docutils literal notranslate"><span class="pre">prometheus</span></code>:</p>
+<p><img alt="" src="_images/otel-col1.png" /></p>
+</section>
+<section id="elasticsearch">
+<h3>Elasticsearch<a class="headerlink" href="#elasticsearch" title="Permalink to this heading"></a></h3>
+<p>Логи добавим с помощью датасорса <code class="docutils literal notranslate"><span class="pre">elasticsearch</span></code>:</p>
+<p><img alt="" src="_images/otel-col2.png" /></p>
+<p><img alt="" src="_images/otel-col3.png" /></p>
+</section>
+<section id="jaeger">
+<h3>Jaeger<a class="headerlink" href="#jaeger" title="Permalink to this heading"></a></h3>
+<p>И наконец трейсы через датасорс <code class="docutils literal notranslate"><span class="pre">jaeger</span></code>:</p>
+<p><img alt="" src="_images/otel-col4.png" /></p>
+</section>
+<section id="dashboard">
+<h3>Dashboard<a class="headerlink" href="#dashboard" title="Permalink to this heading"></a></h3>
+<p>После чего можем отобразить их на дашборде, перейдя на страницу
+<a class="reference external" href="http://localhost:8888/dashboards">/dashboards</a> и создав новый дашборд
+и визуализацию в нем:</p>
+<p><img alt="" src="_images/otel-col5.png" /></p>
+<p>Также добавим наши логи используя датасорс <code class="docutils literal notranslate"><span class="pre">elasticsearch</span></code> и визуализацию <code class="docutils literal notranslate"><span class="pre">logs</span></code>:</p>
+<p><img alt="" src="_images/otel-col6.png" /></p>
+<p>И наконец добавим наши трейсы в виде двух визуализаций из датасорса <code class="docutils literal notranslate"><span class="pre">jaeger</span></code>,
+таблицы трейсов:</p>
+<p><img alt="" src="_images/otel-col7.png" /></p>
+<p>И информации по конкретному трейсу:</p>
+<p><img alt="" src="_images/otel-col8.png" /></p>
+<p>Для связи двух визуализаций создадим переменную в дашборде:</p>
+<p><img alt="" src="_images/otel-col9.png" /></p>
+<p>И добавим ссылку в визуализацию с таблицей трейсов <code class="docutils literal notranslate"><span class="pre">traces</span></code> с помощью field override:</p>
+<p><img alt="" src="_images/otel-col11.png" /></p>
+<p><img alt="" src="_images/otel-col10.png" /></p>
+<p>После чего выбирая <code class="docutils literal notranslate"><span class="pre">Trace</span> <span class="pre">ID</span></code> в таблице <code class="docutils literal notranslate"><span class="pre">traces</span></code> в таблице <code class="docutils literal notranslate"><span class="pre">trace</span> <span class="pre">detail</span></code> будет
+отображаться информация по нему:</p>
+<p><img alt="" src="_images/otel-col12.png" /></p>
+<p>Таким образом можно отобразить различные виды телеметрии на одном дашборде.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="26_practice_jaeger_e2e.html" class="btn btn-neutral float-left" title="Jaeger E2E" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="28_practice_otel_instrumentation.html" class="btn btn-neutral float-right" title="Opentelemetry Instrumentation" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

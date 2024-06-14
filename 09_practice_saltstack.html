@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salt &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Salt Beacons/Reactors and IaC" href="10_practice_saltstack_reactor.html" />
+    <link rel="prev" title="Ansible Roles and Collections" href="08_practice_ansible_roles.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Salt</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#basic-usage">Basic Usage</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#masterless">Masterless</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#grains">Grains</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#minions">Minions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#keys">Keys</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#execution">Execution</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#state">State</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jinja2">Jinja2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pillars">Pillars</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Salt</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/09_practice_saltstack.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="salt">
+<h1>Salt<a class="headerlink" href="#salt" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии познакомимся с базовым использованием
+<a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">saltstack</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">salt</a> будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;master&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;master&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg \</span>
+<span class="sh">        https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg</span>
+<span class="sh">      echo &quot;deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main&quot; \</span>
+<span class="sh">        | tee /etc/apt/sources.list.d/salt.list</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns salt-master salt-minion</span>
+<span class="sh">      systemctl enable --now salt-master.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;minion1&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minion1&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg \</span>
+<span class="sh">        https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg</span>
+<span class="sh">      echo &quot;deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main&quot; \</span>
+<span class="sh">        | tee /etc/apt/sources.list.d/salt.list</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns salt-minion</span>
+<span class="sh">      echo &#39;master: master.local&#39; &gt; /etc/salt/minion.d/master.conf</span>
+<span class="sh">      systemctl restart salt-minion.service</span>
+<span class="sh">      systemctl enable salt-minion.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;minion2&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;minion2&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      curl -fsSL -o /etc/apt/keyrings/salt-archive-keyring-2023.gpg \</span>
+<span class="sh">        https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/SALT-PROJECT-GPG-PUBKEY-2023.gpg</span>
+<span class="sh">      echo &quot;deb [signed-by=/etc/apt/keyrings/salt-archive-keyring-2023.gpg arch=amd64] https://repo.saltproject.io/salt/py3/ubuntu/22.04/amd64/latest jammy main&quot; \</span>
+<span class="sh">        | tee /etc/apt/sources.list.d/salt.list</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns salt-minion</span>
+<span class="sh">      echo &#39;master: master.local&#39; &gt; /etc/salt/minion.d/master.conf</span>
+<span class="sh">      systemctl restart salt-minion.service</span>
+<span class="sh">      systemctl enable salt-minion.service</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Команды будут выполняться на машине <code class="docutils literal notranslate"><span class="pre">master</span></code> из под пользователя <code class="docutils literal notranslate"><span class="pre">root</span></code>.
+Для этого после команды <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">ssh</span></code> можно выполнить команду <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">-i</span></code>.</p>
+</section>
+<section id="basic-usage">
+<h2>Basic Usage<a class="headerlink" href="#basic-usage" title="Permalink to this heading"></a></h2>
+<section id="masterless">
+<h3>Masterless<a class="headerlink" href="#masterless" title="Permalink to this heading"></a></h3>
+<p>После установки пакетов на машине <code class="docutils literal notranslate"><span class="pre">master</span></code> появится ряд утилит для работы
+с <a class="reference external" href="https://docs.saltproject.io/en/latest/topics/about_salt_project.html#about-salt">saltstack</a>. Для выполнения функций локально на миньоне можно воспользоваться
+командой <code class="docutils literal notranslate"><span class="pre">salt-call</span></code>. Чтобы при этом не производилось обращений к мастеру
+можно воспользоваться опцией <code class="docutils literal notranslate"><span class="pre">--local</span></code>. Таким образом можно вызвать, например,
+функцию <code class="docutils literal notranslate"><span class="pre">network.ping</span></code> без использования мастера:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>network.ping<span class="w"> </span><span class="m">1</span>.1.1.1
+<span class="go">local:</span>
+<span class="go">    PING 1.1.1.1 (1.1.1.1) 56(84) bytes of data.</span>
+<span class="go">    64 bytes from 1.1.1.1: icmp_seq=1 ttl=63 time=25.9 ms</span>
+<span class="go">    64 bytes from 1.1.1.1: icmp_seq=2 ttl=63 time=23.8 ms</span>
+<span class="go">    64 bytes from 1.1.1.1: icmp_seq=3 ttl=63 time=23.6 ms</span>
+<span class="go">    64 bytes from 1.1.1.1: icmp_seq=4 ttl=63 time=24.0 ms</span>
+
+<span class="go">    --- 1.1.1.1 ping statistics ---</span>
+<span class="go">    4 packets transmitted, 4 received, 0% packet loss, time 3005ms</span>
+<span class="go">    rtt min/avg/max/mdev = 23.608/24.338/25.946/0.940 ms</span>
+</pre></div>
+</div>
+<p>Переданная функция здесь состоит из имени модуля <code class="docutils literal notranslate"><span class="pre">network</span></code> и имени функции <code class="docutils literal notranslate"><span class="pre">ping</span></code>.</p>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h3>
+<p>Документацию по функции можно получить передав ее имя функции <code class="docutils literal notranslate"><span class="pre">sys.doc</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>sys.doc<span class="w"> </span>network.ping
+<span class="go">local:</span>
+<span class="go">    ----------</span>
+<span class="go">    network.ping:</span>
+
+<span class="go">            Performs an ICMP ping to a host</span>
+
+<span class="go">            Changed in version 2015.8.0</span>
+<span class="go">                Added support for SunOS</span>
+
+<span class="go">            CLI Example:</span>
+
+<span class="go">                salt &#39;*&#39; network.ping archlinux.org</span>
+
+<span class="go">            New in version 2015.5.0</span>
+
+<span class="go">            Return a True or False instead of ping output.</span>
+
+<span class="go">                salt &#39;*&#39; network.ping archlinux.org return_boolean=True</span>
+
+<span class="go">            Set the time to wait for a response in seconds.</span>
+
+<span class="go">                salt &#39;*&#39; network.ping archlinux.org timeout=3</span>
+</pre></div>
+</div>
+<p>Также можно получить и информацию по всему модулю:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>sys.doc<span class="w"> </span>network<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-100
+<span class="go">local:</span>
+<span class="go">    ----------</span>
+<span class="go">    network.active_tcp:</span>
+
+<span class="go">            Return a dict containing information on all of the running TCP connections (currently linux and solaris only)</span>
+
+<span class="go">            Changed in version 2015.8.4</span>
+
+<span class="go">                Added support for SunOS</span>
+
+<span class="go">            CLI Example:</span>
+
+<span class="go">                salt &#39;*&#39; network.active_tcp</span>
+
+<span class="go">    network.arp:</span>
+
+<span class="go">            Return the arp table from the minion</span>
+
+<span class="go">            Changed in version 2015.8.0</span>
+<span class="go">                Added support for SunOS</span>
+
+<span class="go">            CLI Example:</span>
+
+<span class="go">                salt &#39;*&#39; network.arp</span>
+
+<span class="go">    network.calc_net:</span>
+</pre></div>
+</div>
+<p>А список доступных модулей и функций можно получить вызовом <code class="docutils literal notranslate"><span class="pre">sys.list_modules</span></code>
+и <code class="docutils literal notranslate"><span class="pre">sys.list_functions</span></code> соответственно:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>sys.list_modules<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="go">local:</span>
+<span class="go">    - aliases</span>
+<span class="go">    - alternatives</span>
+<span class="go">    - archive</span>
+<span class="go">    - artifactory</span>
+<span class="go">    - baredoc</span>
+<span class="go">    - bcache</span>
+<span class="go">    - beacons</span>
+<span class="go">    - bigip</span>
+<span class="go">    - btrfs</span>
+<span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>sys.list_functions<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="go">local:</span>
+<span class="go">    - aliases.get_target</span>
+<span class="go">    - aliases.has_target</span>
+<span class="go">    - aliases.list_aliases</span>
+<span class="go">    - aliases.rm_alias</span>
+<span class="go">    - aliases.set_target</span>
+<span class="go">    - alternatives.auto</span>
+<span class="go">    - alternatives.check_exists</span>
+<span class="go">    - alternatives.check_installed</span>
+<span class="go">    - alternatives.display</span>
+</pre></div>
+</div>
+<p>А также можно просто запустить функцию <code class="docutils literal notranslate"><span class="pre">sys.doc</span></code> без аргументов, чтобы получить
+документацию по всем функциям выполняемых модулей.</p>
+</section>
+<section id="grains">
+<h3>Grains<a class="headerlink" href="#grains" title="Permalink to this heading"></a></h3>
+<p>Salt позволяет получить информацию о системе миньона с помощью механизма называемого
+<a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/grains.html">grains</a>. Список параметров, которые возможно получить можно посмотреть вызовом
+функции <code class="docutils literal notranslate"><span class="pre">grains.ls</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>grains.ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>head
+<span class="go">local:</span>
+<span class="go">    - biosreleasedate</span>
+<span class="go">    - biosvendor</span>
+<span class="go">    - biosversion</span>
+<span class="go">    - boardname</span>
+<span class="go">    - cpu_flags</span>
+<span class="go">    - cpu_model</span>
+<span class="go">    - cpuarch</span>
+<span class="go">    - cwd</span>
+<span class="go">    - disks</span>
+</pre></div>
+</div>
+<p>Информацию же можно посмотреть функцией <code class="docutils literal notranslate"><span class="pre">grains.items</span></code> для всех параметров или
+<code class="docutils literal notranslate"><span class="pre">grains.item</span></code> с указанием конкретного:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-call<span class="w"> </span>--local<span class="w"> </span>grains.item<span class="w"> </span>id
+<span class="go">local:</span>
+<span class="go">    ----------</span>
+<span class="go">    id:</span>
+<span class="go">        master</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="minions">
+<h2>Minions<a class="headerlink" href="#minions" title="Permalink to this heading"></a></h2>
+<section id="keys">
+<h3>Keys<a class="headerlink" href="#keys" title="Permalink to this heading"></a></h3>
+<p>После запуска машин <code class="docutils literal notranslate"><span class="pre">minion1</span></code> и <code class="docutils literal notranslate"><span class="pre">minion2</span></code> они должны были подключиться к мастеру,
+но на этом этапе еще нельзя вызывать команды на них, так как не были подтверждены
+их ключи. Для просмотра списка ключей можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">salt-key</span> <span class="pre">-L</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-key<span class="w"> </span>-L
+<span class="go">Accepted Keys:</span>
+<span class="go">Denied Keys:</span>
+<span class="go">Unaccepted Keys:</span>
+<span class="go">minion1</span>
+<span class="go">minion2</span>
+<span class="go">Rejected Keys:</span>
+</pre></div>
+</div>
+<p>Как видно ключи миньонов находятся в <code class="docutils literal notranslate"><span class="pre">Unaccepted</span> <span class="pre">Keys</span></code>. Для того чтобы принять
+ключи миньонов можно воспользоваться командами <code class="docutils literal notranslate"><span class="pre">salt-key</span> <span class="pre">-a</span></code> для конкретного ключа
+или <code class="docutils literal notranslate"><span class="pre">salt-key</span> <span class="pre">-A</span></code>, чтобы принять все ключи в разделе <code class="docutils literal notranslate"><span class="pre">Unaccepted</span> <span class="pre">Keys</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt-key<span class="w"> </span>-a<span class="w"> </span>minion1
+<span class="go">The following keys are going to be accepted:</span>
+<span class="go">Unaccepted Keys:</span>
+<span class="go">minion1</span>
+<span class="go">Proceed? [n/Y]</span>
+<span class="go">Key for minion minion1 accepted.</span>
+<span class="gp"># </span>salt-key<span class="w"> </span>-A
+<span class="go">The following keys are going to be accepted:</span>
+<span class="go">Unaccepted Keys:</span>
+<span class="go">minion2</span>
+<span class="go">Proceed? [n/Y]</span>
+<span class="go">Key for minion minion2 accepted.</span>
+</pre></div>
+</div>
+</section>
+<section id="execution">
+<h3>Execution<a class="headerlink" href="#execution" title="Permalink to this heading"></a></h3>
+<p>Теперь выполнять функции на миньонах можно с помощью команды <code class="docutils literal notranslate"><span class="pre">salt</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w"> </span>grains.item<span class="w"> </span>id
+<span class="go">minion2:</span>
+<span class="go">    ----------</span>
+<span class="go">    id:</span>
+<span class="go">        minion2</span>
+<span class="go">minion1:</span>
+<span class="go">    ----------</span>
+<span class="go">    id:</span>
+<span class="go">        minion1</span>
+</pre></div>
+</div>
+<p>Здесь мы получили <code class="docutils literal notranslate"><span class="pre">grains</span></code> с информацией о <code class="docutils literal notranslate"><span class="pre">minion_id</span></code>, вторым аргументом команды <code class="docutils literal notranslate"><span class="pre">salt</span></code>
+указывается на каких миньонах должна выполниться команда. <code class="docutils literal notranslate"><span class="pre">*</span></code> - означает выполнение на
+всех миньонах. Задавать цели для исполнения функции можно различными способами,
+например явно указывать имя миньона или с опцией <code class="docutils literal notranslate"><span class="pre">-G</span></code> можно указать его <code class="docutils literal notranslate"><span class="pre">grains</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span>minion1<span class="w"> </span>grains.item<span class="w"> </span>ip4_interfaces:enp0s8
+<span class="go">minion1:</span>
+<span class="go">    ----------</span>
+<span class="go">    ip4_interfaces:enp0s8:</span>
+<span class="go">        - 192.168.56.42</span>
+<span class="gp"># </span>salt<span class="w"> </span>-G<span class="w"> </span><span class="s1">&#39;ip4_interfaces:enp0s8:0:192.168.56.42&#39;</span><span class="w"> </span>grains.item<span class="w"> </span>id
+<span class="go">minion1:</span>
+<span class="go">    ----------</span>
+<span class="go">    id:</span>
+<span class="go">        minion1</span>
+</pre></div>
+</div>
+</section>
+<section id="state">
+<h3>State<a class="headerlink" href="#state" title="Permalink to this heading"></a></h3>
+<p>Salt также позволяет описывать состояния в <code class="docutils literal notranslate"><span class="pre">sls</span></code>(Salt State) файлах в <code class="docutils literal notranslate"><span class="pre">yaml</span></code> формате.
+По-умолчанию используется каталог <code class="docutils literal notranslate"><span class="pre">/srv/salt</span></code>, в котором находится верхнеуровневый файл
+состояния - <code class="docutils literal notranslate"><span class="pre">top.sls</span></code>, который описывает каким миньонам в каких состояниях необходимо
+находиться. Создадим директорию <code class="docutils literal notranslate"><span class="pre">/srv/salt</span></code> и файл <code class="docutils literal notranslate"><span class="pre">top.sls</span></code> со следующим содержимым:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">base</span><span class="p">:</span>
+<span class="w">  </span><span class="s">&#39;*&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+</pre></div>
+</div>
+<p>Что означает, что ко всем миньоном будет применено состояние описанное в файле <code class="docutils literal notranslate"><span class="pre">nginx.sls</span></code>
+в этой же директории. Опишем этот файл:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx_pkg</span><span class="p">:</span><span class="w">        </span><span class="c1"># идентификатор состояния</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w">  </span><span class="c1"># функция состояни</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span><span class="w">   </span><span class="c1"># аргументы функции</span>
+</pre></div>
+</div>
+<p>Данный файл описывает состояние с установленным пакетом <code class="docutils literal notranslate"><span class="pre">nginx</span></code> на миньонах, для
+применения состояния можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">salt</span></code> с функцией <code class="docutils literal notranslate"><span class="pre">state.apply</span></code>.
+Для запуска без внесения изменений для проверки производимых операций можно добавить
+аргумент <code class="docutils literal notranslate"><span class="pre">test=True</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w"> </span>state.apply<span class="w"> </span><span class="nv">test</span><span class="o">=</span>True
+<span class="go">minion2:</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_pkg</span>
+<span class="go">    Function: pkg.installed</span>
+<span class="go">        Name: nginx</span>
+<span class="go">      Result: None</span>
+<span class="go">     Comment: The following packages would be installed/updated: nginx</span>
+<span class="go">     Started: 21:52:28.189534</span>
+<span class="go">    Duration: 101.366 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              nginx:</span>
+<span class="go">                  ----------</span>
+<span class="go">                  new:</span>
+<span class="go">                      installed</span>
+<span class="go">                  old:</span>
+
+<span class="go">Summary for minion2</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 1 (unchanged=1, changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     1</span>
+<span class="go">Total run time: 101.366 ms</span>
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_pkg</span>
+<span class="go">    Function: pkg.installed</span>
+<span class="go">        Name: nginx</span>
+<span class="go">      Result: None</span>
+<span class="go">     Comment: The following packages would be installed/updated: nginx</span>
+<span class="go">     Started: 21:52:28.275752</span>
+<span class="go">    Duration: 95.124 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              nginx:</span>
+<span class="go">                  ----------</span>
+<span class="go">                  new:</span>
+<span class="go">                      installed</span>
+<span class="go">                  old:</span>
+
+<span class="go">Summary for minion1</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 1 (unchanged=1, changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     1</span>
+<span class="go">Total run time:  95.124 ms</span>
+</pre></div>
+</div>
+<p>Данная команда выводит информацию о том какие изменения будут применены. Попробуем
+применить состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_pkg</span>
+<span class="go">    Function: pkg.installed</span>
+<span class="go">        Name: nginx</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: The following packages were installed/updated: nginx</span>
+<span class="go">     Started: 21:57:15.678622</span>
+<span class="go">    Duration: 12706.167 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              fontconfig-config:</span>
+<span class="go">                  ----------</span>
+<span class="go">                  new:</span>
+<span class="go">                      2.14.1-3ubuntu3</span>
+<span class="go">                  old:</span>
+<span class="go">              fonts-dejavu-core:</span>
+<span class="go">                  ----------</span>
+<span class="go">                  new:</span>
+<span class="go">                      2.37-6</span>
+<span class="go">                  old:</span>
+<span class="go">...</span>
+<span class="go">Summary for minion2</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 1 (changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     1</span>
+<span class="go">Total run time:  13.452 s</span>
+</pre></div>
+</div>
+<p>Добавим собственную конфигурацию <code class="docutils literal notranslate"><span class="pre">nginx</span></code> в <code class="docutils literal notranslate"><span class="pre">/srv/salt/default.conf</span></code>:</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">       </span><span class="mi">80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w">  </span><span class="s">localhost</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w">   </span><span class="s">/var/www/html</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">index</span><span class="w">  </span><span class="s">index.html</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>А также добавим состояние для применения данной конфигурации и перезапуска сервиса
+при ее изменении в файл <code class="docutils literal notranslate"><span class="pre">nginx.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx_pkg</span><span class="p">:</span><span class="w">        </span><span class="c1"># идентификатор состояния</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w">  </span><span class="c1"># функция состояни</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span><span class="w">   </span><span class="c1"># аргументы функции</span>
+
+<span class="nt">nginx_service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">service.running</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">reload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">watch</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/sites-available/default</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/sites-available/default</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">salt://default.conf</span>
+</pre></div>
+</div>
+<p>И применим новое состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion2:</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_pkg</span>
+<span class="go">    Function: pkg.installed</span>
+<span class="go">        Name: nginx</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: All specified packages are already installed</span>
+<span class="go">     Started: 22:16:23.382729</span>
+<span class="go">    Duration: 25.124 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">...</span>
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_pkg</span>
+<span class="go">    Function: pkg.installed</span>
+<span class="go">        Name: nginx</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: All specified packages are already installed</span>
+<span class="go">     Started: 22:16:23.467122</span>
+<span class="go">    Duration: 25.565 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_service</span>
+<span class="go">    Function: file.managed</span>
+<span class="go">        Name: /etc/nginx/sites-available/default</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: File /etc/nginx/sites-available/default updated</span>
+<span class="go">     Started: 22:16:23.495544</span>
+<span class="go">    Duration: 42.962 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              diff:</span>
+<span class="go">                  ---</span>
+<span class="go">                  +++</span>
+<span class="go">                  @@ -1,91 +1,9 @@</span>
+<span class="go">                  -##</span>
+<span class="go">                  -# You should look at the following URL&#39;s in order to grasp a solid understanding</span>
+<span class="go">                  -# of Nginx configuration files in order to fully unleash the power of Nginx.</span>
+<span class="go">                  -# https://www.nginx.com/resources/wiki/start/</span>
+<span class="go">                  -# https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/</span>
+<span class="go">                  -# https://wiki.debian.org/Nginx/DirectoryStructure</span>
+<span class="go">                  -#</span>
+<span class="go">                  -# In most cases, administrators will remove this file from sites-enabled/ and</span>
+<span class="go">                  -# leave it as reference inside of sites-available where it will continue to be</span>
+<span class="go">                  -# updated by the nginx packaging team.</span>
+<span class="go">                  -#</span>
+<span class="go">                  -# This file will automatically load configuration files provided by other</span>
+<span class="go">                  -# applications, such as Drupal or Wordpress. These applications will be made</span>
+<span class="go">                  -# available underneath a path with that package name, such as /drupal8.</span>
+<span class="go">                  -#</span>
+<span class="go">                  -# Please see /usr/share/doc/nginx-doc/examples/ for more detailed examples.</span>
+<span class="go">                  -##</span>
+<span class="go">                  +server {</span>
+<span class="go">                  +    listen       80;</span>
+<span class="go">                  +    server_name  localhost;</span>
+
+<span class="go">                  -# Default server configuration</span>
+<span class="go">                  -#</span>
+<span class="go">                  -server {</span>
+<span class="go">                  -     listen 80 default_server;</span>
+<span class="go">                  -     listen [::]:80 default_server;</span>
+<span class="go">                  -</span>
+<span class="go">                  -     # SSL configuration</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     # listen 443 ssl default_server;</span>
+<span class="go">                  -     # listen [::]:443 ssl default_server;</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     # Note: You should disable gzip for SSL traffic.</span>
+<span class="go">                  -     # See: https://bugs.debian.org/773332</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     # Read up on ssl_ciphers to ensure a secure configuration.</span>
+<span class="go">                  -     # See: https://bugs.debian.org/765782</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     # Self signed certs generated by the ssl-cert package</span>
+<span class="go">                  -     # Don&#39;t use them in a production server!</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     # include snippets/snakeoil.conf;</span>
+<span class="go">                  -</span>
+<span class="go">                  -     root /var/www/html;</span>
+<span class="go">                  -</span>
+<span class="go">                  -     # Add index.php to the list if you are using PHP</span>
+<span class="go">                  -     index index.html index.htm index.nginx-debian.html;</span>
+<span class="go">                  -</span>
+<span class="go">                  -     server_name _;</span>
+<span class="go">                  -</span>
+<span class="go">                  -     location / {</span>
+<span class="go">                  -             # First attempt to serve request as file, then</span>
+<span class="go">                  -             # as directory, then fall back to displaying a 404.</span>
+<span class="go">                  -             try_files $uri $uri/ =404;</span>
+<span class="go">                  -     }</span>
+<span class="go">                  -</span>
+<span class="go">                  -     # pass PHP scripts to FastCGI server</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     #location ~ \.php$ {</span>
+<span class="go">                  -     #       include snippets/fastcgi-php.conf;</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     #       # With php-fpm (or other unix sockets):</span>
+<span class="go">                  -     #       fastcgi_pass unix:/run/php/php7.4-fpm.sock;</span>
+<span class="go">                  -     #       # With php-cgi (or other tcp sockets):</span>
+<span class="go">                  -     #       fastcgi_pass 127.0.0.1:9000;</span>
+<span class="go">                  -     #}</span>
+<span class="go">                  -</span>
+<span class="go">                  -     # deny access to .htaccess files, if Apache&#39;s document root</span>
+<span class="go">                  -     # concurs with nginx&#39;s one</span>
+<span class="go">                  -     #</span>
+<span class="go">                  -     #location ~ /\.ht {</span>
+<span class="go">                  -     #       deny all;</span>
+<span class="go">                  -     #}</span>
+<span class="go">                  +    location / {</span>
+<span class="go">                  +        root   /var/www/html;</span>
+<span class="go">                  +        index  index.html;</span>
+<span class="go">                  +    }</span>
+<span class="go">                   }</span>
+<span class="go">                  -</span>
+<span class="go">                  -</span>
+<span class="go">                  -# Virtual Host configuration for example.com</span>
+<span class="go">                  -#</span>
+<span class="go">                  -# You can move that to a different file under sites-available/ and symlink that</span>
+<span class="go">                  -# to sites-enabled/ to enable it.</span>
+<span class="go">                  -#</span>
+<span class="go">                  -#server {</span>
+<span class="go">                  -#    listen 80;</span>
+<span class="go">                  -#    listen [::]:80;</span>
+<span class="go">                  -#</span>
+<span class="go">                  -#    server_name example.com;</span>
+<span class="go">                  -#</span>
+<span class="go">                  -#    root /var/www/example.com;</span>
+<span class="go">                  -#    index index.html;</span>
+<span class="go">                  -#</span>
+<span class="go">                  -#    location / {</span>
+<span class="go">                  -#            try_files $uri $uri/ =404;</span>
+<span class="go">                  -#    }</span>
+<span class="go">                  -#}</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_service</span>
+<span class="go">    Function: service.running</span>
+<span class="go">        Name: nginx</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: Service reloaded</span>
+<span class="go">     Started: 22:16:23.561905</span>
+<span class="go">    Duration: 100.347 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              nginx:</span>
+<span class="go">                  True</span>
+
+<span class="go">Summary for minion1</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 3 (changed=2)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     3</span>
+<span class="go">Total run time: 168.874 ms</span>
+</pre></div>
+</div>
+</section>
+<section id="jinja2">
+<h3>Jinja2<a class="headerlink" href="#jinja2" title="Permalink to this heading"></a></h3>
+<p>Как в передаваемых файлах так и в самих файлах состояний <code class="docutils literal notranslate"><span class="pre">sls</span></code> можно использовать шаблоны,
+в качестве движка шаблонизации по-умолчанию используется <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/jinja.html"><code class="docutils literal notranslate"><span class="pre">jinja2</span></code></a>. Добавим в файл
+<code class="docutils literal notranslate"><span class="pre">nginx.sls</span></code> передачу на миньоны файла <code class="docutils literal notranslate"><span class="pre">index.html</span></code> из шаблона:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">nginx_pkg</span><span class="p">:</span><span class="w">        </span><span class="c1"># идентификатор состояния</span>
+<span class="w">  </span><span class="nt">pkg.installed</span><span class="p">:</span><span class="w">  </span><span class="c1"># функция состояни</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span><span class="w">   </span><span class="c1"># аргументы функции</span>
+
+<span class="nt">nginx_service</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">service.running</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">reload</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">True</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">watch</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/sites-available/default</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/sites-available/default</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">salt://default.conf</span>
+
+<span class="nt">nginx_index</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">file.managed</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/www/html/index.html</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">salt://index.html</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jinja</span>
+</pre></div>
+</div>
+<p>Сам же файл <code class="docutils literal notranslate"><span class="pre">index.html</span></code> добавим в директорию <code class="docutils literal notranslate"><span class="pre">/srv/salt</span></code> со следующим содержимым:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">hello from </span><span class="cp">{{</span> <span class="nv">grains</span><span class="o">[</span><span class="s1">&#39;id&#39;</span><span class="o">]</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>Как видно в шаблоне мы используем переменную <code class="docutils literal notranslate"><span class="pre">grains</span></code>, содержащая данные, которые мы
+наблюдали при вызове функции <code class="docutils literal notranslate"><span class="pre">grains.items</span></code>. Применим новое состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_index</span>
+<span class="go">    Function: file.managed</span>
+<span class="go">        Name: /var/www/html/index.html</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: File /var/www/html/index.html updated</span>
+<span class="go">     Started: 22:29:12.440232</span>
+<span class="go">    Duration: 45.531 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              diff:</span>
+<span class="go">                  New file</span>
+<span class="go">              mode:</span>
+<span class="go">                  0644</span>
+
+<span class="go">Summary for minion2</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 4 (changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     4</span>
+<span class="go">Total run time: 193.739 ms</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion1.local
+<span class="go">hello from minion1</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion2.local
+<span class="go">hello from minion2</span>
+</pre></div>
+</div>
+</section>
+<section id="pillars">
+<h3>Pillars<a class="headerlink" href="#pillars" title="Permalink to this heading"></a></h3>
+<p>Помимо того, что мы можем использовать переменные в <code class="docutils literal notranslate"><span class="pre">jinja</span></code> шаблонах с самих миньонов
+через переменную <code class="docutils literal notranslate"><span class="pre">grains</span></code>, мы также можем передавать переменные с мастера на миньоны
+через механизм <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/pillar.html"><code class="docutils literal notranslate"><span class="pre">pillars</span></code></a>. Для этого по умолчанию используется директория
+<code class="docutils literal notranslate"><span class="pre">/srv/pillar</span></code>, в которой также должен находиться файл <code class="docutils literal notranslate"><span class="pre">top.sls</span></code>, указывающий каким
+миньонам какие переменные необходимо отправлять. Создадим директорию и опишем файл
+<code class="docutils literal notranslate"><span class="pre">top.sls</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">base</span><span class="p">:</span>
+<span class="w">  </span><span class="s">&#39;*&#39;</span><span class="p p-Indicator">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">data</span>
+</pre></div>
+</div>
+<p>Таким образом на все миньоны будут отправляться <a class="reference external" href="https://docs.saltproject.io/salt/user-guide/en/latest/topics/pillar.html"><code class="docutils literal notranslate"><span class="pre">pillars</span></code></a> из файла <code class="docutils literal notranslate"><span class="pre">data.sls</span></code>
+в этой же директории. Зададим содержимое этого файла следующим образом:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">html</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">123</span>
+<span class="w">    </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minion1</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">321</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2</span>
+<span class="w">    </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">minion2</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">hello</span>
+</pre></div>
+</div>
+<p>Теперь попробуем шаблонизировать наш файл состояния <code class="docutils literal notranslate"><span class="pre">nginx.sls</span></code> используя эти переменные:</p>
+<div class="highlight-jinja notranslate"><div class="highlight"><pre><span></span><span class="x">nginx_pkg:        # идентификатор состояния</span>
+<span class="x">  pkg.installed:  # функция состояни</span>
+<span class="x">  - name: nginx   # аргументы функции</span>
+
+<span class="x">nginx_service:</span>
+<span class="x">  service.running:</span>
+<span class="x">  - name: nginx</span>
+<span class="x">  - reload: True</span>
+<span class="x">  - watch:</span>
+<span class="x">    - file: /etc/nginx/sites-available/default</span>
+<span class="x">  file.managed:</span>
+<span class="x">  - name: /etc/nginx/sites-available/default</span>
+<span class="x">  - source: salt://default.conf</span>
+
+<span class="x">nginx_index:</span>
+<span class="x">  file.managed:</span>
+<span class="x">  - name: /var/www/html/index.html</span>
+<span class="x">  - source: salt://index.html</span>
+<span class="x">  - template: jinja</span>
+
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">file</span> <span class="k">in</span> <span class="nv">pillar</span><span class="o">[</span><span class="s1">&#39;html&#39;</span><span class="o">]</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">file</span><span class="o">[</span><span class="s1">&#39;target&#39;</span><span class="o">]</span> <span class="o">==</span> <span class="nv">grains</span><span class="o">[</span><span class="s1">&#39;id&#39;</span><span class="o">]</span> <span class="cp">%}</span>
+<span class="x">nginx_html_</span><span class="cp">{{</span> <span class="nv">file</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span> <span class="cp">}}</span><span class="x">:</span>
+<span class="x">  file.managed:</span>
+<span class="x">  - name: /var/www/html/</span><span class="cp">{{</span> <span class="nv">file</span><span class="o">[</span><span class="s1">&#39;name&#39;</span><span class="o">]</span> <span class="cp">}}</span>
+<span class="x">  - contents: </span><span class="cp">{{</span> <span class="nv">file</span><span class="o">[</span><span class="s1">&#39;value&#39;</span><span class="o">]</span> <span class="cp">}}</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Как видно в шаблоне используется цикл и проверка условия, так что на первом миньоне
+должен появиться путь <code class="docutils literal notranslate"><span class="pre">/123</span></code> с содержимым <code class="docutils literal notranslate"><span class="pre">321</span></code>, а на втором путь <code class="docutils literal notranslate"><span class="pre">/2</span></code> с содержимым
+<code class="docutils literal notranslate"><span class="pre">hello</span></code>. Применим новое состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp"># </span>salt<span class="w"> </span><span class="s1">&#39;*&#39;</span><span class="w"> </span>state.apply
+<span class="go">minion2:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_html_2</span>
+<span class="go">    Function: file.managed</span>
+<span class="go">        Name: /var/www/html/2</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: File /var/www/html/2 updated</span>
+<span class="go">     Started: 22:54:42.659035</span>
+<span class="go">    Duration: 2.291 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              diff:</span>
+<span class="go">                  New file</span>
+
+<span class="go">Summary for minion2</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 5 (changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     5</span>
+<span class="go">Total run time: 107.908 ms</span>
+<span class="go">minion1:</span>
+<span class="go">----------</span>
+<span class="go">...</span>
+<span class="go">----------</span>
+<span class="go">          ID: nginx_html_123</span>
+<span class="go">    Function: file.managed</span>
+<span class="go">        Name: /var/www/html/123</span>
+<span class="go">      Result: True</span>
+<span class="go">     Comment: File /var/www/html/123 updated</span>
+<span class="go">     Started: 22:54:42.682458</span>
+<span class="go">    Duration: 2.967 ms</span>
+<span class="go">     Changes:</span>
+<span class="go">              ----------</span>
+<span class="go">              diff:</span>
+<span class="go">                  New file</span>
+
+<span class="go">Summary for minion1</span>
+<span class="go">------------</span>
+<span class="go">Succeeded: 5 (changed=1)</span>
+<span class="go">Failed:    0</span>
+<span class="go">------------</span>
+<span class="go">Total states run:     5</span>
+<span class="go">Total run time: 116.716 ms</span>
+
+<span class="gp"># </span>curl<span class="w"> </span>minion1.local/123
+<span class="go">321</span>
+<span class="gp"># </span>curl<span class="w"> </span>minion2.local/2
+<span class="go">hello</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="08_practice_ansible_roles.html" class="btn btn-neutral float-left" title="Ansible Roles and Collections" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="10_practice_saltstack_reactor.html" class="btn btn-neutral float-right" title="Salt Beacons/Reactors and IaC" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

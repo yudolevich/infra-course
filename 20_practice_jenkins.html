@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jenkins &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Prometheus" href="21_practice_prometheus.html" />
+    <link rel="prev" title="Gitlab CI" href="19_practice_gitlab.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Jenkins</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#new-project">New Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pipeline-from-scm">Pipeline from SCM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#webhook">Webhook</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-stage">Test Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#build-stage">Build Stage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-stage">Deploy stage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Jenkins</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/20_practice_jenkins.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="jenkins">
+<h1>Jenkins<a class="headerlink" href="#jenkins" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии рассмотрим построение CI/CD конвейера аналогичного
+предыдущему занятию, но с использованием инструмента <a class="reference external" href="https://www.jenkins.io/doc/">jenkins</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;jenkins&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="s2">&quot;virtualbox&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">v</span><span class="o">|</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;jenkins&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8889</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq golang-go docker.io</span>
+<span class="sh">      chmod o+rw /var/run/docker.sock</span>
+<span class="sh">      docker run --name gitea -p 8889:3000 -d --restart on-failure \</span>
+<span class="sh">        -e GITEA__security__INSTALL_LOCK=true -e GITEA__webhook__ALLOWED_HOST_LIST=private gitea/gitea</span>
+<span class="sh">      docker run --name jenkins -p 8888:8080 -d --restart on-failure \</span>
+<span class="sh">        -v /var/run/docker.sock:/var/run/docker.sock \</span>
+<span class="sh">        -e JAVA_OPTS=-Djenkins.install.runSetupWizard=false jenkins/jenkins:2.448-jdk17</span>
+<span class="sh">      docker exec jenkins jenkins-plugin-cli --verbose \</span>
+<span class="sh">        -p workflow-aggregator git generic-webhook-trigger</span>
+<span class="sh">      docker exec jenkins sh -c &#39;cd /var/jenkins_home/ &amp;&amp; curl -LO https://go.dev/dl/go1.21.8.linux-amd64.tar.gz &amp;&amp; tar xf go1.21.8.linux-amd64.tar.gz&#39;</span>
+<span class="sh">      docker exec jenkins sh -c &#39;cd /var/jenkins_home/ &amp;&amp; curl -LO https://download.docker.com/linux/static/stable/x86_64/docker-25.0.3.tgz &amp;&amp; tar xf docker-25.0.3.tgz &amp;&amp; mv docker/docker go/bin/&#39;</span>
+<span class="sh">      docker restart jenkins</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация развернет виртуальную машину с контейнерами <a class="reference external" href="https://www.jenkins.io/doc/">jenkins</a>
+<a class="reference external" href="http://localhost:8888/">localhost:8888</a> с рядом плагинов
+и <a class="reference external" href="https://docs.gitea.com/">gitea</a> <a class="reference external" href="http://localhost:8889/">localhost:8889</a>.</p>
+</section>
+<section id="new-project">
+<h2>New Project<a class="headerlink" href="#new-project" title="Permalink to this heading"></a></h2>
+<p>Необходимо создать нового пользователя в gitea
+<a class="reference external" href="http://localhost:8889/user/sign_up">user/sign_up</a>, а после новый репозиторий
+<a class="reference external" href="http://localhost:8889/repo/create">repo/create</a> с именем <code class="docutils literal notranslate"><span class="pre">test</span></code>.</p>
+<p><img alt="" src="_images/jenkins1.png" /></p>
+<p>В jenkins создадим пайплайн кликнув <code class="docutils literal notranslate"><span class="pre">New</span> <span class="pre">Item</span></code> или по ссылке
+<a class="reference external" href="http://localhost:8888/view/all/newJob">view/all/newjob</a>, выбрав тип <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>
+и задав имя <code class="docutils literal notranslate"><span class="pre">test</span></code>.</p>
+<p><img alt="" src="_images/jenkins2.png" /></p>
+<p>После чего в появившейся конфигурации в разделе <code class="docutils literal notranslate"><span class="pre">Pipeline</span></code>
+в поле <code class="docutils literal notranslate"><span class="pre">Script</span></code> слева выберем <code class="docutils literal notranslate"><span class="pre">Hello</span> <span class="pre">World</span></code> и сохраним кнопкой <code class="docutils literal notranslate"><span class="pre">Save</span></code>.</p>
+<p><img alt="" src="_images/jenkins3.png" /></p>
+<p>Запустим сборку нажав <a class="reference external" href="http://localhost:8888/job/test/build"><code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">Now</span></code></a>,
+чтобы проверить работу пайплайна. После чего результат можно будет увидеть
+в панели <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">History</span></code>:
+<img alt="" src="_images/jenkins4.png" /></p>
+<p>Из которой можно открыть сам билд или его консольный вывод:
+<img alt="" src="_images/jenkins5.png" /></p>
+</section>
+<section id="pipeline-from-scm">
+<h2>Pipeline from SCM<a class="headerlink" href="#pipeline-from-scm" title="Permalink to this heading"></a></h2>
+<p>Свяжем наш git проект с пайплайном в jenkins. Для этого опишем код пайплайна
+в <code class="docutils literal notranslate"><span class="pre">Jenkinsfile</span></code>:</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">agent</span><span class="w"> </span><span class="n">any</span>
+<span class="w">    </span><span class="n">stages</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;Hello&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">echo</span><span class="w"> </span><span class="s1">&#39;Hello World&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>И отправим в наш репозиторий:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>http://localhost:8889/alex/test.git
+<span class="go">Cloning into &#39;test&#39;...</span>
+<span class="go">warning: You appear to have cloned an empty repository.</span>
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>test/
+<span class="gp">$ </span>cat<span class="w"> </span>&lt;&lt;EOF&gt;Jenkinsfile
+<span class="go">&gt; pipeline {</span>
+<span class="go">    agent any</span>
+
+<span class="go">    stages {</span>
+<span class="go">        stage(&#39;Hello&#39;) {</span>
+<span class="go">            steps {</span>
+<span class="go">                echo &#39;Hello World&#39;</span>
+<span class="go">            }</span>
+<span class="go">        }</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+<span class="go">EOF</span>
+<span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>Jenkinsfile
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s1">&#39;init&#39;</span>
+<span class="go">[main (root-commit) d2b8ed9] init</span>
+<span class="go"> 1 file changed, 11 insertions(+)</span>
+<span class="go"> create mode 100644 Jenkinsfile</span>
+<span class="gp">$ </span>git<span class="w"> </span>push
+<span class="go">Username for &#39;http://localhost:8889&#39;: alex</span>
+<span class="go">Password for &#39;http://alex@localhost:8889&#39;:</span>
+<span class="go">Enumerating objects: 3, done.</span>
+<span class="go">Counting objects: 100% (3/3), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (2/2), done.</span>
+<span class="go">Writing objects: 100% (3/3), 276 bytes | 276.00 KiB/s, done.</span>
+<span class="go">Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">remote: . Processing 1 references</span>
+<span class="go">remote: Processed 1 references in total</span>
+<span class="go">To http://localhost:8889/alex/test.git</span>
+<span class="go"> * [new branch]      main -&gt; main</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/jenkins6.png" /></p>
+<p>Теперь сконфигурируем наш пайплайн в jenkins, задав тип
+<code class="docutils literal notranslate"><span class="pre">Pipeline</span> <span class="pre">script</span> <span class="pre">from</span> <span class="pre">SCM</span></code>, указав систему контроля версий - <code class="docutils literal notranslate"><span class="pre">git</span></code>,
+в качестве адреса - адрес докер интерфейса и путь к репозиторию
+<code class="docutils literal notranslate"><span class="pre">http://172.17.0.1:8889/alex/test.git</span></code>, а также ветку <code class="docutils literal notranslate"><span class="pre">*/main</span></code>.</p>
+<p><img alt="" src="_images/jenkins7.png" /></p>
+<p>После чего можно повторно запустить сборку и посмотреть результат:</p>
+<p><img alt="" src="_images/jenkins8.png" /></p>
+</section>
+<section id="webhook">
+<h2>Webhook<a class="headerlink" href="#webhook" title="Permalink to this heading"></a></h2>
+<p>Запускать сборку каждый раз вручную не очень удобно,
+сделаем триггер для запуска сборки через webhook,
+который будет реагировать на события пуша в гит репозиторий.
+В jenkins в <a class="reference external" href="http://localhost:8888/job/test/configure">конфигурации пайплайна</a>
+в разделе <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">Triggers</span></code> выберем <code class="docutils literal notranslate"><span class="pre">Generic</span> <span class="pre">Webhook</span> <span class="pre">Trigger</span></code>,
+где в появившейся конфигурации определим токен,
+который будет идентифицировать наш пайплайн, например <code class="docutils literal notranslate"><span class="pre">test</span></code>.</p>
+<p><img alt="" src="_images/jenkins9.png" /></p>
+<p>В gitea в <code class="docutils literal notranslate"><span class="pre">Settings</span></code> проекта в разделе <code class="docutils literal notranslate"><span class="pre">Webhooks</span></code> создадим новый хук кнопкой
+<code class="docutils literal notranslate"><span class="pre">Add</span> <span class="pre">Webhook</span></code> и выберем тип <code class="docutils literal notranslate"><span class="pre">Gitea</span></code>.</p>
+<p><img alt="" src="_images/jenkins10.png" /></p>
+<p>В конфигурации заполним адрес хука:
+<code class="docutils literal notranslate"><span class="pre">http://172.17.0.1:8888/generic-webhook-trigger/invoke?token=test</span></code></p>
+<p><img alt="" src="_images/jenkins11.png" /></p>
+<p>После создания хука можно открыть в него и сделать тестовый запуск кнопкой
+<code class="docutils literal notranslate"><span class="pre">Test</span> <span class="pre">Delivery</span></code>.</p>
+<p><img alt="" src="_images/jenkins12.png" /></p>
+<p>В jenkins же увидим запущенный билд, в котором будет указано, что запуск был
+инициирован плагином <code class="docutils literal notranslate"><span class="pre">generic</span> <span class="pre">webhook</span></code>.</p>
+<p><img alt="" src="_images/jenkins13.png" /></p>
+<p>Теперь попробуем запустить триггер пушем в репозиторий, для этого добавим
+новый файл <code class="docutils literal notranslate"><span class="pre">go.mod</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span><span class="nb">test</span>
+<span class="go">go: creating new go.mod: module test</span>
+<span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>go.mod
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s1">&#39;add go.mod&#39;</span>
+<span class="go">[main 27891cc] add go.mod</span>
+<span class="go"> 1 file changed, 3 insertions(+)</span>
+<span class="go"> create mode 100644 go.mod</span>
+<span class="gp">$ </span>git<span class="w"> </span>push
+<span class="go">Username for &#39;http://localhost:8889&#39;: alex</span>
+<span class="go">Password for &#39;http://alex@localhost:8889&#39;:</span>
+<span class="go">Enumerating objects: 4, done.</span>
+<span class="go">Counting objects: 100% (4/4), done.</span>
+<span class="go">Delta compression using up to 2 threads</span>
+<span class="go">Compressing objects: 100% (2/2), done.</span>
+<span class="go">Writing objects: 100% (3/3), 286 bytes | 286.00 KiB/s, done.</span>
+<span class="go">Total 3 (delta 0), reused 0 (delta 0), pack-reused 0</span>
+<span class="go">remote: . Processing 1 references</span>
+<span class="go">remote: Processed 1 references in total</span>
+<span class="go">To http://localhost:8889/alex/test.git</span>
+<span class="go">   d2b8ed9..27891cc  main -&gt; main</span>
+</pre></div>
+</div>
+<p>После чего в jenkins запустится сборка, а также видно какие изменения произошли
+в репозитории.</p>
+<p><img alt="" src="_images/jenkins14.png" /></p>
+</section>
+<section id="test-stage">
+<h2>Test Stage<a class="headerlink" href="#test-stage" title="Permalink to this heading"></a></h2>
+<p>Наконец добавим код приложения <code class="docutils literal notranslate"><span class="pre">main.go</span></code> и тесты к нему <code class="docutils literal notranslate"><span class="pre">main_test.go</span></code>,
+чтобы запускать при каждом пуше.</p>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;log&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">Handler</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">WriteHeader</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">)</span>
+<span class="w">        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">([]</span><span class="nb">byte</span><span class="p">(</span><span class="s">&quot;Hello!\n&quot;</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;0.0.0.0:8080&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span><span class="nx">Handler</span><span class="p">));</span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">log</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-golang notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http/httptest&quot;</span>
+<span class="w">        </span><span class="s">&quot;testing&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">TestHandler</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">NewRequest</span><span class="p">(</span><span class="s">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Fatal</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nx">rec</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">httptest</span><span class="p">.</span><span class="nx">NewRecorder</span><span class="p">()</span>
+
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span><span class="nx">Handler</span><span class="p">).</span><span class="nx">ServeHTTP</span><span class="p">(</span><span class="nx">rec</span><span class="p">,</span><span class="w"> </span><span class="nx">req</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Code</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span>
+<span class="w">                        </span><span class="s">&quot;wrong status code: want %v got %v&quot;</span><span class="p">,</span>
+<span class="w">                        </span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusOK</span><span class="p">,</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Code</span><span class="p">,</span>
+<span class="w">                </span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">String</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="s">&quot;Hello!\n&quot;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">t</span><span class="p">.</span><span class="nx">Errorf</span><span class="p">(</span><span class="s">&quot;wrong body: got %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">rec</span><span class="p">.</span><span class="nx">Body</span><span class="p">.</span><span class="nx">String</span><span class="p">())</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>А также изменим <code class="docutils literal notranslate"><span class="pre">Jenkinsfile</span></code>:</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">agent</span><span class="w"> </span><span class="n">any</span>
+<span class="w">    </span><span class="n">environment</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="n">PATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/jenkins_home/go/bin:${env.PATH}&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">stages</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;test&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;go test&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>В jenkins запустится новая сборка со следующим результатом:</p>
+<p><img alt="" src="_images/jenkins15.png" /></p>
+</section>
+<section id="build-stage">
+<h2>Build Stage<a class="headerlink" href="#build-stage" title="Permalink to this heading"></a></h2>
+<p>Добавим сборку приложения новым шагом.</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">agent</span><span class="w"> </span><span class="n">any</span>
+<span class="w">    </span><span class="n">environment</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="n">PATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/jenkins_home/go/bin:${env.PATH}&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">stages</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;test&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;go test&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;build&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;go build&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>После пуша появится новая сборка:</p>
+<p><img alt="" src="_images/jenkins16.png" /></p>
+<p>Для деплоя нам будет удобнее работать с docker образами, так что изменим сборку:</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">agent</span><span class="w"> </span><span class="n">any</span>
+<span class="w">    </span><span class="n">environment</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="n">PATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/jenkins_home/go/bin:${env.PATH}&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">stages</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;test&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;go test&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;build&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker build -t test:$(git rev-parse --short HEAD) .&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>А также добавим <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.22-alpine</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">builder</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/usr/src</span>
+
+<span class="k">COPY</span><span class="w"> </span>.<span class="w"> </span>.
+<span class="k">RUN</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>/usr/src/app
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">scratch</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>builder<span class="w"> </span>/usr/src/app<span class="w"> </span>/app
+
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/app&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>После отправки в репозиторий в jenkins запустится новый билд, в котором
+соберется docker образ:</p>
+<p><img alt="" src="_images/jenkins17.png" /></p>
+<p>И на нашей виртуальной машине появится новый образ:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>images<span class="w"> </span><span class="nb">test</span>
+<span class="go">REPOSITORY   TAG       IMAGE ID       CREATED         SIZE</span>
+<span class="go">test         1e2775f   4311123c6ee4   5 minutes ago   6.95MB</span>
+</pre></div>
+</div>
+</section>
+<section id="deploy-stage">
+<h2>Deploy stage<a class="headerlink" href="#deploy-stage" title="Permalink to this heading"></a></h2>
+<p>В конечном итоге нам необходимо произвести деплой образа, для этого добавим
+стадию <code class="docutils literal notranslate"><span class="pre">deploy</span></code> в наш пайплайн:</p>
+<div class="highlight-groovy notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">agent</span><span class="w"> </span><span class="n">any</span>
+<span class="w">    </span><span class="n">environment</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="n">PATH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;/var/jenkins_home/go/bin:${env.PATH}&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">    </span><span class="n">stages</span><span class="w"> </span><span class="o">{</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;test&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;go test&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;build&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker build -t test:$(git rev-parse --short HEAD) .&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">        </span><span class="n">stage</span><span class="o">(</span><span class="s1">&#39;deploy&#39;</span><span class="o">)</span><span class="w"> </span><span class="o">{</span>
+<span class="w">            </span><span class="n">steps</span><span class="w"> </span><span class="o">{</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker rm -f test&#39;</span>
+<span class="w">                </span><span class="n">sh</span><span class="w"> </span><span class="s1">&#39;docker run -p 9000:8080 -d --name test test:$(git rev-parse --short HEAD)&#39;</span>
+<span class="w">            </span><span class="o">}</span>
+<span class="w">        </span><span class="o">}</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>После очередного пуша в результате сборки увидим, что контейнер запустился:</p>
+<p><img alt="" src="_images/jenkins18.png" /></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>ps
+<span class="go">CONTAINER ID   IMAGE                         COMMAND                  CREATED          STATUS          PORTS                                                  NAMES</span>
+<span class="go">59586e5d8983   test:c70828c                  &quot;/app&quot;                   18 seconds ago   Up 17 seconds   0.0.0.0:9000-&gt;8080/tcp, :::9000-&gt;8080/tcp              test</span>
+<span class="gp">$ </span>curl<span class="w"> </span>localhost:9000
+<span class="go">Hello!</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="19_practice_gitlab.html" class="btn btn-neutral float-left" title="Gitlab CI" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="21_practice_prometheus.html" class="btn btn-neutral float-right" title="Prometheus" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

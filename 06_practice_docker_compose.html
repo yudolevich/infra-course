@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Compose &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Ansible" href="07_practice_ansible.html" />
+    <link rel="prev" title="Docker Volume/Network" href="05_practice_docker_volume_network.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Docker Compose</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#project">Project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#front">Front</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#db">DB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#back">Back</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#volume">Volume</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#network">Network</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Docker Compose</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/06_practice_docker_compose.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="docker-compose">
+<h1>Docker Compose<a class="headerlink" href="#docker-compose" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии предлагается ознакомиться с возможностью сборки и
+развертывания среды из нескольких связанных контейнеров при помощи <a class="reference external" href="https://docs.docker.com/compose/">docker-compose</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <code class="docutils literal notranslate"><span class="pre">docker</span></code> можно воспользоваться следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;docker&quot;</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Используя <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">provisioner</span></code> на машину также установится <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span></code> в виде плагина.
+Либо можно воспользоваться <a class="reference external" href="https://docs.docker.com/compose/install/linux/#install-the-plugin-manually">инструкцией с официального сайта</a>.</p>
+</section>
+<section id="project">
+<h2>Project<a class="headerlink" href="#project" title="Permalink to this heading"></a></h2>
+<p>Создадим файл <code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code> с простой <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/">конфигурацией</a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx:1.25</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:80</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+</pre></div>
+</div>
+<p>Здесь мы указали:</p>
+<ul class="simple">
+<li><p>name - имя нашего проекта, которое будет использоваться в качестве префикса к
+созданным нами ресурсам(по-умолчанию используется имя директории)</p></li>
+<li><p>services - список сервисов для которых требуется запускать контейнеры</p></li>
+<li><p>front - имя нашего первого сервиса</p></li>
+<li><p>image - образ контейнера</p></li>
+<li><p>ports - список пробрасываемых портов</p></li>
+<li><p>restart - политика перезапуска при завершении</p></li>
+</ul>
+<p>Для запуска достаточно выполнить команду <a class="reference external" href="https://docs.docker.com/compose/reference/"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code></a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 8/8</span>
+<span class="go"> ✔ front 7 layers [⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled             10.8s</span>
+<span class="go">   ✔ a803e7c4b030 Pull complete                                 5.6s</span>
+<span class="go">   ✔ 8b625c47d697 Pull complete                                 6.3s</span>
+<span class="go">   ✔ 4d3239651a63 Pull complete                                 0.7s</span>
+<span class="go">   ✔ 0f816efa513d Pull complete                                 1.7s</span>
+<span class="go">   ✔ 01d159b8db2f Pull complete                                 2.2s</span>
+<span class="go">   ✔ 5fb9a81470f3 Pull complete                                 3.0s</span>
+<span class="go">   ✔ 9b1e1e7164db Pull complete                                 3.6s</span>
+<span class="go">[+] Running 2/2</span>
+<span class="go"> ✔ Network app_default    Created                               0.1s</span>
+<span class="go"> ✔ Container app-front-1  Started                               0.2s</span>
+</pre></div>
+</div>
+<p>Ключ <code class="docutils literal notranslate"><span class="pre">-d</span></code> запускает контейнеры в фоновом режиме. Как видно из вывода - автоматически
+скачалася необходимый образ, а также создалась кастомная сеть <code class="docutils literal notranslate"><span class="pre">app_default</span></code>. Если
+сейчас сделать запрос на адрес <code class="docutils literal notranslate"><span class="pre">localhost:8888</span></code>, то мы получим стандартное приглашение
+от <code class="docutils literal notranslate"><span class="pre">nginx</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8888<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>title
+<span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span>
+</pre></div>
+</div>
+<p>Информацию же по запущенным контейнерам для сервисов в <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a> файле можно
+получить с помощью подкоманд <a class="reference external" href="https://docs.docker.com/compose/reference/"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span></code></a>, таких как <code class="docutils literal notranslate"><span class="pre">ls</span></code>, <code class="docutils literal notranslate"><span class="pre">ps</span></code> и <code class="docutils literal notranslate"><span class="pre">top</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>ls
+<span class="go">NAME                STATUS              CONFIG FILES</span>
+<span class="go">app                 running(1)          /home/vagrant/compose.yaml</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>ps
+<span class="go">NAME          IMAGE        COMMAND                                          SERVICE   CREATED          STATUS          PORTS</span>
+<span class="go">app-front-1   nginx:1.25   &quot;/docker-entrypoint.sh nginx -g &#39;daemon off;&#39;&quot;   front     10 minutes ago   Up 10 minutes   0.0.0.0:8888-&gt;80/tcp, :::8888-&gt;80/tcp</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>top
+<span class="go">app-front-1</span>
+<span class="go">UID      PID    PPID   C    STIME   TTY   TIME       CMD</span>
+<span class="go">root     3909   3888   0    21:18   ?     00:00:00   nginx: master process nginx -g daemon off;</span>
+<span class="go">syslog   3963   3909   0    21:18   ?     00:00:00   nginx: worker process</span>
+<span class="go">syslog   3964   3909   0    21:18   ?     00:00:00   nginx: worker process</span>
+</pre></div>
+</div>
+</section>
+<section id="front">
+<h2>Front<a class="headerlink" href="#front" title="Permalink to this heading"></a></h2>
+<p>Сделаем в сервисе <code class="docutils literal notranslate"><span class="pre">front</span></code> отдачу статичной html страницы, которая будет располагаться
+в директории проекта, а также добавим конфигурацию для проксирования в будущий <code class="docutils literal notranslate"><span class="pre">back</span></code>.
+Страница будет выглядеть таким образом:</p>
+<div class="highlight-html notranslate"><div class="highlight"><pre><span></span><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Users table:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;users&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="kd">var</span><span class="w"> </span><span class="nx">req</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">http</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="ow">new</span><span class="w"> </span><span class="nx">XMLHttpRequest</span><span class="p">();</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">onload</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">responseText</span><span class="p">);</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;table border=&#39;1&#39;&gt;&quot;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kd">let</span><span class="w"> </span><span class="nx">x</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="nx">users</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;tr&gt;&lt;td&gt;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">name</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;&lt;/td&gt;&quot;</span><span class="p">;</span>
+<span class="w">      </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;td&gt;&quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">users</span><span class="p">[</span><span class="nx">x</span><span class="p">].</span><span class="nx">email</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">&quot;&lt;/td&gt;&lt;/tr&gt;&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="nx">text</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="s2">&quot;&lt;/table&gt;&quot;</span>
+<span class="w">    </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;users&quot;</span><span class="p">).</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">text</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;/back&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">http</span><span class="p">.</span><span class="nx">send</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="nx">setInterval</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span><span class="w"> </span><span class="mf">1000</span><span class="p">);</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>А конфигурация для <code class="docutils literal notranslate"><span class="pre">nginx</span></code> так:</p>
+<div class="highlight-nginx notranslate"><div class="highlight"><pre><span></span><span class="k">server</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">       </span><span class="mi">80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">listen</span><span class="w">  </span><span class="s">[::]:80</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">server_name</span><span class="w">  </span><span class="s">localhost</span><span class="p">;</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w">   </span><span class="s">/usr/share/nginx/html</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">index</span><span class="w">  </span><span class="s">index.html</span><span class="w"> </span><span class="s">index.htm</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kn">error_page</span><span class="w">   </span><span class="mi">500</span><span class="w"> </span><span class="mi">502</span><span class="w"> </span><span class="mi">503</span><span class="w"> </span><span class="mi">504</span><span class="w">  </span><span class="s">/50x.html</span><span class="p">;</span>
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">/50x.html</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">root</span><span class="w">   </span><span class="s">/usr/share/nginx/html</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kn">location</span><span class="w"> </span><span class="s">/back</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kn">resolver</span><span class="w"> </span><span class="mi">127</span><span class="s">.0.0.11</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">set</span><span class="w"> </span><span class="nv">$backend</span><span class="w"> </span><span class="s">http://back</span><span class="p">;</span>
+<span class="w">        </span><span class="kn">proxy_pass</span><span class="w"> </span><span class="nv">$backend</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Сохраним их в файлах <code class="docutils literal notranslate"><span class="pre">index.html</span></code> и <code class="docutils literal notranslate"><span class="pre">default.conf</span></code> соответственно в директорию проекта.
+Сам же <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a> дополним следующим образом:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:80</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./index.html:/usr/share/nginx/html/index.html</span>
+<span class="w">    </span><span class="nt">configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/conf.d/default.conf</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="nt">configs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default.conf</span>
+</pre></div>
+</div>
+<p>Здесь мы используем параметр <code class="docutils literal notranslate"><span class="pre">volumes</span></code> для проброса файла <code class="docutils literal notranslate"><span class="pre">index.html</span></code> внутрь контейнера,
+а также параметры <code class="docutils literal notranslate"><span class="pre">configs</span></code> для определения конфигурационного файла и передачи его
+также внутрь контейнера. Для применения данной конфигурации также запустим команду
+<a class="reference external" href="https://docs.docker.com/compose/reference/"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code></a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 1/1</span>
+<span class="go"> ✔ Container app-front-1  Started                                              0.2s</span>
+<span class="gp"> $ </span>curl<span class="w"> </span>-s<span class="w"> </span>localhost:8888<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>h2
+<span class="go">&lt;h2&gt;Users table:&lt;/h2&gt;</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/compose-practice1.png" /></p>
+</section>
+<section id="db">
+<h2>DB<a class="headerlink" href="#db" title="Permalink to this heading"></a></h2>
+<p>Добавим сервис в наш <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a> с базой данных, которая будет содержать
+таблицу с пользователями. Чтобы не хранить данные для авторизации в <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a>
+можно использовать файл <code class="docutils literal notranslate"><span class="pre">.env</span></code>, в котором можно сохранить чувствительные данные, а также,
+например, исключить из системы контроля версий. Создадим <code class="docutils literal notranslate"><span class="pre">.env</span></code> файл с данными для
+авторизации в субд:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DB_USER</span><span class="o">=</span><span class="s2">&quot;app&quot;</span>
+<span class="nv">DB_PASS</span><span class="o">=</span><span class="s2">&quot;pass&quot;</span>
+</pre></div>
+</div>
+<p>Также создадим файл <code class="docutils literal notranslate"><span class="pre">users.sql</span></code> для инициализации базы:</p>
+<div class="highlight-psql notranslate"><div class="highlight"><pre><span></span><span class="k">grant</span><span class="w"> </span><span class="k">all</span><span class="w"> </span><span class="k">on</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="n">app</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">app</span><span class="p">;</span>
+<span class="go">\connect app;</span>
+<span class="go">create table users(</span>
+<span class="go">  id serial primary key,</span>
+<span class="go">  name varchar(50),</span>
+<span class="go">  email varchar(100)</span>
+<span class="go">);</span>
+<span class="go">grant all on all tables in schema public to app;</span>
+</pre></div>
+</div>
+<p>Теперь дополним <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a> новым сервисом <code class="docutils literal notranslate"><span class="pre">db</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:80</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./index.html:/usr/share/nginx/html/index.html</span>
+<span class="w">    </span><span class="nt">configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/conf.d/default.conf</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_USER}&quot;</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_PASS}&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./users.sql:/docker-entrypoint-initdb.d/users.sql</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="nt">configs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default.conf</span>
+</pre></div>
+</div>
+<p>Применим новую конфигурацию:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 14/14</span>
+<span class="go"> ✔ db 13 layers [⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿]      0B/0B      Pulled                   19.0s</span>
+<span class="go">   ✔ a803e7c4b030 Already exists                                          0.0s</span>
+<span class="go">   ✔ 009c876521a0 Pull complete                                           0.5s</span>
+<span class="go">   ✔ 9c412905cca2 Pull complete                                           0.9s</span>
+<span class="go">   ✔ 6463d4bf467a Pull complete                                           1.0s</span>
+<span class="go">   ✔ bd8b983728ed Pull complete                                           3.0s</span>
+<span class="go">   ✔ febc167f3560 Pull complete                                           1.5s</span>
+<span class="go">   ✔ d73c81c4ade3 Pull complete                                           2.1s</span>
+<span class="go">   ✔ 34b3b0ac6e9e Pull complete                                           1.9s</span>
+<span class="go">   ✔ 9bd86d074f4e Pull complete                                          12.7s</span>
+<span class="go">   ✔ 406f63329750 Pull complete                                           3.7s</span>
+<span class="go">   ✔ ec40772694b7 Pull complete                                           3.9s</span>
+<span class="go">   ✔ 7d3dfa1637e9 Pull complete                                           4.4s</span>
+<span class="go">   ✔ e217ca41159f Pull complete                                           4.4s</span>
+<span class="go">[+] Running 2/2</span>
+<span class="go"> ✔ Container app-db-1     Started                                         0.3s</span>
+<span class="go"> ✔ Container app-front-1  Running                                         0.0s</span>
+<span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>app-db-1<span class="w"> </span>su<span class="w"> </span>-<span class="w"> </span>postgres<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;psql -U app app -c \\d&#39;</span>
+<span class="go">            List of relations</span>
+<span class="go"> Schema |     Name     |   Type   | Owner</span>
+<span class="go">--------+--------------+----------+-------</span>
+<span class="go"> public | users        | table    | app</span>
+<span class="go"> public | users_id_seq | sequence | app</span>
+<span class="gp gp-VirtualEnv">(2 rows)</span>
+</pre></div>
+</div>
+<p>Теперь у нас есть два работающих сервиса <code class="docutils literal notranslate"><span class="pre">front</span></code> и <code class="docutils literal notranslate"><span class="pre">db</span></code>. Как видно база была
+инициализирована за счет монтирования файла <code class="docutils literal notranslate"><span class="pre">users.sql</span></code> по пути
+<code class="docutils literal notranslate"><span class="pre">docker-entrypoint-initdb.d</span></code> - это происходит только если она пуста.</p>
+</section>
+<section id="back">
+<h2>Back<a class="headerlink" href="#back" title="Permalink to this heading"></a></h2>
+<p>Осталось добавить сервис <code class="docutils literal notranslate"><span class="pre">back</span></code>, который будет принимать запросы из <code class="docutils literal notranslate"><span class="pre">front</span></code> по http
+и возвращать список пользователей из <code class="docutils literal notranslate"><span class="pre">db</span></code>. Можете использовать свой любимый язык, на
+<code class="docutils literal notranslate"><span class="pre">golang</span></code> приложение может выглядеть так:</p>
+<div class="highlight-go notranslate"><div class="highlight"><pre><span></span><span class="kn">package</span><span class="w"> </span><span class="nx">main</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="s">&quot;context&quot;</span>
+<span class="w">        </span><span class="s">&quot;encoding/json&quot;</span>
+<span class="w">        </span><span class="s">&quot;fmt&quot;</span>
+<span class="w">        </span><span class="s">&quot;net/http&quot;</span>
+<span class="w">        </span><span class="s">&quot;os&quot;</span>
+
+<span class="w">        </span><span class="s">&quot;github.com/jackc/pgx/v5&quot;</span>
+<span class="p">)</span>
+
+<span class="kd">type</span><span class="w"> </span><span class="nx">users</span><span class="w"> </span><span class="kd">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ID</span><span class="w">    </span><span class="kt">int</span><span class="w">    </span><span class="s">`json:&quot;id&quot;`</span>
+<span class="w">        </span><span class="nx">Name</span><span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;name&quot;`</span>
+<span class="w">        </span><span class="nx">Email</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="s">`json:&quot;email&quot;`</span>
+<span class="p">}</span>
+
+<span class="kd">func</span><span class="w"> </span><span class="nx">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nx">ctx</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">context</span><span class="p">.</span><span class="nx">Background</span><span class="p">()</span>
+
+<span class="w">        </span><span class="nx">connStr</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">os</span><span class="p">.</span><span class="nx">ReadFile</span><span class="p">(</span><span class="s">&quot;/run/secrets/connection_string&quot;</span><span class="p">)</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Error read connection secret: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nx">conn</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">Connect</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">connStr</span><span class="p">))</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Fprintf</span><span class="p">(</span><span class="nx">os</span><span class="p">.</span><span class="nx">Stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Unable to connect to database: %v\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                </span><span class="nx">os</span><span class="p">.</span><span class="nx">Exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">defer</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">Close</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span>
+
+<span class="w">        </span><span class="nx">http</span><span class="p">.</span><span class="nx">ListenAndServe</span><span class="p">(</span><span class="s">&quot;0.0.0.0:80&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">HandlerFunc</span><span class="p">(</span>
+<span class="w">                </span><span class="kd">func</span><span class="p">(</span><span class="nx">w</span><span class="w"> </span><span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span><span class="w"> </span><span class="nx">r</span><span class="w"> </span><span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="nx">rows</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">conn</span><span class="p">.</span><span class="nx">Query</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;select * from users&quot;</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error db query: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                                </span><span class="k">return</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">users</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">CollectRows</span><span class="p">(</span><span class="nx">rows</span><span class="p">,</span><span class="w"> </span><span class="nx">pgx</span><span class="p">.</span><span class="nx">RowToStructByName</span><span class="p">[</span><span class="nx">users</span><span class="p">])</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error collect rows: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                                </span><span class="k">return</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">jsonUsers</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">json</span><span class="p">.</span><span class="nx">Marshal</span><span class="p">(</span><span class="nx">users</span><span class="p">)</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                                </span><span class="nx">fmt</span><span class="p">.</span><span class="nx">Printf</span><span class="p">(</span><span class="s">&quot;error marshal json: %s&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span>
+<span class="w">                        </span><span class="p">}</span>
+
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Header</span><span class="p">().</span><span class="nx">Add</span><span class="p">(</span><span class="s">&quot;Access-Control-Allow-Origin&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;*&quot;</span><span class="p">)</span>
+<span class="w">                        </span><span class="nx">w</span><span class="p">.</span><span class="nx">Write</span><span class="p">(</span><span class="nx">jsonUsers</span><span class="p">)</span>
+<span class="w">                </span><span class="p">}),</span>
+<span class="w">        </span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Приложение будет прослушивать порт <code class="docutils literal notranslate"><span class="pre">80</span></code> и подключаться к базе взяв данные для подключения
+из файла <code class="docutils literal notranslate"><span class="pre">/run/secrets/connection_string</span></code>. Сами параметры подключения также занесем
+в файл <code class="docutils literal notranslate"><span class="pre">.env</span></code>, так они содержат имя пользователя и пароль:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">DB_USER</span><span class="o">=</span><span class="s2">&quot;app&quot;</span>
+<span class="nv">DB_PASS</span><span class="o">=</span><span class="s2">&quot;pass&quot;</span>
+<span class="nv">DB_CONN</span><span class="o">=</span><span class="s2">&quot;postgres://app:pass@db:5432/app?sslmode=disable&quot;</span>
+</pre></div>
+</div>
+<p>Для сборки потребуется следующий <code class="docutils literal notranslate"><span class="pre">Dockerfile</span></code>:</p>
+<div class="highlight-dockerfile notranslate"><div class="highlight"><pre><span></span><span class="k">FROM</span><span class="w"> </span><span class="s">golang:1.21</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="s">build</span>
+
+<span class="k">WORKDIR</span><span class="w"> </span><span class="s">/src</span>
+
+<span class="k">COPY</span><span class="w"> </span>main.go<span class="w"> </span>/src/main.go
+<span class="k">RUN</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>init<span class="w"> </span>example<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span>go<span class="w"> </span>mod<span class="w"> </span>tidy<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>go<span class="w"> </span>build<span class="w"> </span>-o<span class="w"> </span>/bin/app<span class="w"> </span>./main.go
+
+<span class="k">FROM</span><span class="w"> </span><span class="s">scratch</span>
+<span class="k">COPY</span><span class="w"> </span>--from<span class="o">=</span>build<span class="w"> </span>/bin/app<span class="w"> </span>/app
+<span class="k">CMD</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;/app&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Добавим сервис <code class="docutils literal notranslate"><span class="pre">back</span></code> в <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:80</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./index.html:/usr/share/nginx/html/index.html</span>
+<span class="w">    </span><span class="nt">configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/conf.d/default.conf</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">back</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connection_string</span>
+
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_USER}&quot;</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_PASS}&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./users.sql:/docker-entrypoint-initdb.d/users.sql</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="nt">configs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default.conf</span>
+
+<span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection_string</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DB_CONN&quot;</span>
+</pre></div>
+</div>
+<p>Для данного сервиса мы указали путь для сборки образа, также указали его зависимость от
+сервиса <code class="docutils literal notranslate"><span class="pre">db</span></code>, а параметры подключения к субд вынесли в отдельный блок <code class="docutils literal notranslate"><span class="pre">secrets</span></code>.</p>
+<p>После запуска команды <a class="reference external" href="https://docs.docker.com/compose/reference/"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">up</span></code></a> при отсутствии образа происходит сборка,
+либо можно явно указать опцию <code class="docutils literal notranslate"><span class="pre">--build</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d<span class="w"> </span>--build
+<span class="go">[+] Running 1/1</span>
+<span class="go"> ! back Warning                                                                         1.6s</span>
+<span class="go">[+] Building 66.7s (10/10) FINISHED                                           docker:default</span>
+<span class="go"> =&gt; [back internal] load build definition from Dockerfile                               0.0s</span>
+<span class="go"> =&gt; =&gt; transferring dockerfile: 260B                                                    0.0s</span>
+<span class="go"> =&gt; [back internal] load .dockerignore                                                  0.0s</span>
+<span class="go"> =&gt; =&gt; transferring context: 2B                                                         0.0s</span>
+<span class="go"> =&gt; [back internal] load metadata for docker.io/library/golang:1.21                     1.8s</span>
+<span class="go"> =&gt; [back build 1/4] FROM docker.io/library/golang:1.21@sha256:e9ebfe932adeff65af5338  34.5s</span>
+<span class="go"> =&gt; =&gt; resolve docker.io/library/golang:1.21@sha256:e9ebfe932adeff65af5338236f0b0604c8  0.0s</span>
+<span class="go"> =&gt; =&gt; sha256:b47a222d28fa95680198398973d0a29b82a968f03e7ef361cc8ded 24.03MB / 24.03MB  6.4s</span>
+<span class="go"> =&gt; =&gt; sha256:debce5f9f3a9709885f7f2ad3cf41f036a3b57b406b27ba3a8839 64.11MB / 64.11MB  16.0s</span>
+<span class="go"> =&gt; =&gt; sha256:e9ebfe932adeff65af5338236f0b0604c86b143c1bff3e1d0551d8f6 2.36kB / 2.36kB  0.0s</span>
+<span class="go"> =&gt; =&gt; sha256:e63f8cf91f5b59ce217f2804936132b2964b04bb5b06c0a79b9e3799 1.58kB / 1.58kB  0.0s</span>
+<span class="go"> =&gt; =&gt; sha256:6285f5529f1ba8755fd2469d255fa9e0429d5fa8c6003d52da5ea098 7.22kB / 7.22kB  0.0s</span>
+<span class="go"> =&gt; =&gt; sha256:167b8a53ca4504bc6aa3182e336fa96f4ef76875d158c1933d3e2 49.56MB / 49.56MB  13.8s</span>
+<span class="go"> =&gt; =&gt; sha256:91b457aaf04f424db4f223ea7aad4b196d4a62da58d6f45938233 92.30MB / 92.30MB  25.5s</span>
+<span class="go"> =&gt; =&gt; sha256:ab90286b1543edaec4dd9402a487a164307c216d646369c8e5924 66.99MB / 66.99MB  27.1s</span>
+<span class="go"> =&gt; =&gt; extracting sha256:167b8a53ca4504bc6aa3182e336fa96f4ef76875d158c1933d3e2fa19c57e  2.9s</span>
+<span class="go"> =&gt; =&gt; sha256:1bcec06b980f5d54c94a469aeb286627475f645205140fb3ed0514e32ce 156B / 156B  16.2s</span>
+<span class="go"> =&gt; =&gt; extracting sha256:b47a222d28fa95680198398973d0a29b82a968f03e7ef361cc8ded562e4d8  0.9s</span>
+<span class="go"> =&gt; =&gt; extracting sha256:debce5f9f3a9709885f7f2ad3cf41f036a3b57b406b27ba3a883928315787  3.7s</span>
+<span class="go"> =&gt; =&gt; extracting sha256:91b457aaf04f424db4f223ea7aad4b196d4a62da58d6f45938233e0f54bd1  3.3s</span>
+<span class="go"> =&gt; =&gt; extracting sha256:ab90286b1543edaec4dd9402a487a164307c216d646369c8e59248fb92da4  5.2s</span>
+<span class="go"> =&gt; =&gt; extracting sha256:1bcec06b980f5d54c94a469aeb286627475f645205140fb3ed0514e32cebe  0.0s</span>
+<span class="go"> =&gt; [back internal] load build context                                                  0.0s</span>
+<span class="go"> =&gt; =&gt; transferring context: 1.22kB                                                     0.0s</span>
+<span class="go"> =&gt; [back build 2/4] WORKDIR /src                                                       0.2s</span>
+<span class="go"> =&gt; [back build 3/4] COPY main.go /src/main.go                                          0.0s</span>
+<span class="go"> =&gt; [back build 4/4] RUN go mod init example   &amp;&amp; go mod tidy   &amp;&amp; CGO_ENABLED=0 go b  29.7s</span>
+<span class="go"> =&gt; [back stage-1 1/1] COPY --from=build /bin/app /app                                  0.1s</span>
+<span class="go"> =&gt; [back] exporting to image                                                           0.1s</span>
+<span class="go"> =&gt; =&gt; exporting layers                                                                 0.1s</span>
+<span class="go"> =&gt; =&gt; writing image sha256:c255013929d1de7c54527cbd2dd09cdb03a2cc0a932cfc44b62d924ada  0.0s</span>
+<span class="go"> =&gt; =&gt; naming to docker.io/library/back                                                 0.0s</span>
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container app-front-1  Running                                                       0.0s</span>
+<span class="go"> ✔ Container app-db-1     Running                                                       0.0s</span>
+<span class="go"> ✔ Container app-back-1   Started                                                       0.0s</span>
+</pre></div>
+</div>
+<p>Теперь у нас подняты все сервисы для полноценного функционирования нашего проекта,
+добавим пользователя в нашу базу:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">docker exec -it app-db-1 su - postgres -c &quot;psql -U app app -c \&quot;insert into users (name,email) values (&#39;alex&#39;, &#39;alex@mail.ru&#39;);\&quot;&quot;</span>
+</pre></div>
+</div>
+<p>Убедимся в работе на страницы нашего проекта:
+<img alt="" src="_images/compose-practice2.png" /></p>
+</section>
+<section id="volume">
+<h2>Volume<a class="headerlink" href="#volume" title="Permalink to this heading"></a></h2>
+<p>На текущий момент при пересоздании контейнеров проекта данные в базе будут стираться,
+для этого можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">compose</span> <span class="pre">rm</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>rm<span class="w"> </span>-sf
+<span class="go">[+] Stopping 3/3</span>
+<span class="go"> ✔ Container app-back-1   Stopped                                                   0.1s</span>
+<span class="go"> ✔ Container app-front-1  Stopped                                                   0.2s</span>
+<span class="go"> ✔ Container app-db-1     Stopped                                                   0.2s</span>
+<span class="go">Going to remove app-back-1, app-db-1, app-front-1</span>
+<span class="go">[+] Removing 3/0</span>
+<span class="go"> ✔ Container app-front-1  Removed                                                   0.0s</span>
+<span class="go"> ✔ Container app-back-1   Removed                                                   0.0s</span>
+<span class="go"> ✔ Container app-db-1     Removed                                                   0.0s</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container app-db-1     Started                                                   0.0s</span>
+<span class="go"> ✔ Container app-front-1  Started                                                   0.0s</span>
+<span class="go"> ✔ Container app-back-1   Started                                                   0.0s</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/compose-practice3.png" /></p>
+<p>Добавим именованный том для хранения данных в <a class="reference external" href="https://docs.docker.com/compose/compose-file/03-compose-file/"><code class="docutils literal notranslate"><span class="pre">compose.yaml</span></code></a>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:80</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./index.html:/usr/share/nginx/html/index.html</span>
+<span class="w">    </span><span class="nt">configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/conf.d/default.conf</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">back</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connection_string</span>
+
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_USER}&quot;</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_PASS}&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db-data:/var/lib/postgresql/data</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./users.sql:/docker-entrypoint-initdb.d/users.sql</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+
+<span class="nt">configs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default.conf</span>
+
+<span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection_string</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DB_CONN&quot;</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db-data</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Убедимся что данные сохранятся:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>rm<span class="w"> </span>-sf
+<span class="go">[+] Stopping 3/3</span>
+<span class="go"> ✔ Container app-back-1   Stopped                                                    0.2s</span>
+<span class="go"> ✔ Container app-front-1  Stopped                                                    0.2s</span>
+<span class="go"> ✔ Container app-db-1     Stopped                                                    0.2s</span>
+<span class="go">Going to remove app-back-1, app-db-1, app-front-1</span>
+<span class="go">[+] Removing 3/0</span>
+<span class="go"> ✔ Container app-front-1  Removed                                                    0.0s</span>
+<span class="go"> ✔ Container app-back-1   Removed                                                    0.0s</span>
+<span class="go"> ✔ Container app-db-1     Removed                                                    0.0s</span>
+<span class="gp">$ </span>fg^C
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 4/4</span>
+<span class="go"> ✔ Volume &quot;app_db-data&quot;   Created                                                    0.0s</span>
+<span class="go"> ✔ Container app-db-1     Started                                                    0.0s</span>
+<span class="go"> ✔ Container app-front-1  Started                                                    0.0s</span>
+<span class="go"> ✔ Container app-back-1   Started                                                    0.0s</span>
+<span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>app-db-1<span class="w"> </span>su<span class="w"> </span>-<span class="w"> </span>postgres<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;psql -U app app -c \&quot;insert into users (name,email) values (&#39;alex&#39;, &#39;alex@mail.ru&#39;);\&quot;&quot;</span>
+<span class="go">INSERT 0 1</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>rm<span class="w"> </span>-sf
+<span class="go">[+] Stopping 3/3</span>
+<span class="go"> ✔ Container app-back-1   Stopped                                                    0.2s</span>
+<span class="go"> ✔ Container app-front-1  Stopped                                                    0.2s</span>
+<span class="go"> ✔ Container app-db-1     Stopped                                                    0.2s</span>
+<span class="go">Going to remove app-back-1, app-db-1, app-front-1</span>
+<span class="go">[+] Removing 3/0</span>
+<span class="go"> ✔ Container app-front-1  Removed                                                    0.0s</span>
+<span class="go"> ✔ Container app-back-1   Removed                                                    0.0s</span>
+<span class="go"> ✔ Container app-db-1     Removed                                                    0.0s</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 3/3</span>
+<span class="go"> ✔ Container app-front-1  Started                                                    0.0s</span>
+<span class="go"> ✔ Container app-db-1     Started                                                    0.0s</span>
+<span class="go"> ✔ Container app-back-1   Started                                                    0.0s</span>
+</pre></div>
+</div>
+<p><img alt="" src="_images/compose-practice4.png" /></p>
+</section>
+<section id="network">
+<h2>Network<a class="headerlink" href="#network" title="Permalink to this heading"></a></h2>
+<p>По умолчанию созданные сервисы находятся в общей сети и контейнеры могут обращаться
+друг к другу по именам сервисов. В целях безопасности изолируем сервис <code class="docutils literal notranslate"><span class="pre">db</span></code>, чтобы
+к нему можно было обратиться только из сервиса <code class="docutils literal notranslate"><span class="pre">back</span></code>. Для этого создадим две сети
+<code class="docutils literal notranslate"><span class="pre">front</span></code> и <code class="docutils literal notranslate"><span class="pre">db</span></code> и подключим сервисы к ним:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8888:80</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./index.html:/usr/share/nginx/html/index.html</span>
+<span class="w">    </span><span class="nt">configs</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">nginx</span>
+<span class="w">        </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/etc/nginx/conf.d/default.conf</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">front</span>
+
+<span class="w">  </span><span class="nt">back</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">back</span>
+<span class="w">    </span><span class="nt">build</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">.</span>
+<span class="w">    </span><span class="nt">depends_on</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="w">    </span><span class="nt">secrets</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">connection_string</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">front</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_USER}&quot;</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;${DB_PASS}&quot;</span>
+<span class="w">    </span><span class="nt">volumes</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db-data:/var/lib/postgresql/data</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./users.sql:/docker-entrypoint-initdb.d/users.sql</span>
+<span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">always</span>
+<span class="w">    </span><span class="nt">networks</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">db</span>
+
+<span class="nt">configs</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">nginx</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">file</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">./default.conf</span>
+
+<span class="nt">secrets</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">connection_string</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">environment</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;DB_CONN&quot;</span>
+
+<span class="nt">networks</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">front</span><span class="p">:</span>
+
+<span class="nt">volumes</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">db-data</span><span class="p">:</span>
+</pre></div>
+</div>
+<p>Убедимся в этом:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app-front-1<span class="w"> </span>curl<span class="w"> </span>-sS<span class="w"> </span>db:5432
+<span class="go">curl: (52) Empty reply from server</span>
+<span class="gp">$ </span>docker<span class="w"> </span>compose<span class="w"> </span>up<span class="w"> </span>-d
+<span class="go">[+] Running 5/5</span>
+<span class="go"> ✔ Network app_front      Created                                                    0.1s</span>
+<span class="go"> ✔ Network app_db         Created                                                    0.1s</span>
+<span class="go"> ✔ Container app-db-1     Started                                                    0.2s</span>
+<span class="go"> ✔ Container app-front-1  Started                                                    0.3s</span>
+<span class="go"> ✔ Container app-back-1   Started                                                    0.2s</span>
+<span class="gp">$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>app-front-1<span class="w"> </span>curl<span class="w"> </span>-sS<span class="w"> </span>db:5432
+<span class="go">curl: (6) Could not resolve host: db</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="05_practice_docker_volume_network.html" class="btn btn-neutral float-left" title="Docker Volume/Network" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="07_practice_ansible.html" class="btn btn-neutral float-right" title="Ansible" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

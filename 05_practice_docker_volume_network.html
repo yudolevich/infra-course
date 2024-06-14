@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docker Volume/Network &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Docker Compose" href="06_practice_docker_compose.html" />
+    <link rel="prev" title="Docker Images" href="04_practice_docker_images.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Docker Volume/Network</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#volume">Volume</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#local">Local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#remote">Remote</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#network">Network</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bridge">Bridge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#host">Host</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#ipvlan">IPVLAN</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Docker Volume/Network</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/05_practice_docker_volume_network.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="docker-volume-network">
+<h1>Docker Volume/Network<a class="headerlink" href="#docker-volume-network" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии рассматривается работа с <a class="reference external" href="https://docs.docker.com/storage/volumes/">томами(volume)</a>,
+а также различные конфигурации <a class="reference external" href="https://docs.docker.com/network/">сети(network)</a>.</p>
+<section id="volume">
+<h2>Volume<a class="headerlink" href="#volume" title="Permalink to this heading"></a></h2>
+<section id="local">
+<h3>Local<a class="headerlink" href="#local" title="Permalink to this heading"></a></h3>
+<p>Для работы с локальными томами используем следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;storage&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;storage&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      mkdir /data;chmod 777 /data</span>
+<span class="sh">      echo &#39;/data *(rw)&#39; &gt; /etc/exports</span>
+<span class="sh">      export DEBIAN_FRONTEND=noninteractive</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns nfs-server docker.io</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Для простого монтирования локальной директории внутрь контейнера можно указать путь в
+опции <code class="docutils literal notranslate"><span class="pre">-v</span></code> команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>/data:/usr/share/nginx/html<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">Unable to find image &#39;nginx:latest&#39; locally</span>
+<span class="go">latest: Pulling from library/nginx</span>
+<span class="go">a803e7c4b030: Pull complete</span>
+<span class="go">8b625c47d697: Pull complete</span>
+<span class="go">4d3239651a63: Pull complete</span>
+<span class="go">0f816efa513d: Pull complete</span>
+<span class="go">01d159b8db2f: Pull complete</span>
+<span class="go">5fb9a81470f3: Pull complete</span>
+<span class="go">9b1e1e7164db: Pull complete</span>
+<span class="go">Digest: sha256:32da30332506740a2f7c34d5dc70467b7f14ec67d912703568daff790ab3f755</span>
+<span class="go">Status: Downloaded newer image for nginx:latest</span>
+<span class="go">95dcf19937c35d8525c5ccf1ca527cb89903df1e4c5f80c175243da00dcb5d8b</span>
+<span class="gp">vagrant@storage:~$ </span><span class="nb">echo</span><span class="w"> </span>data<span class="w"> </span>&gt;<span class="w"> </span>/data/index.html
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">data</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>nginx
+<span class="go">nginx</span>
+</pre></div>
+</div>
+<p>Чтобы использовать том вместо монтирования существующей директории можно создать его
+явно командой <a class="reference external" href="https://docs.docker.com/storage/volumes/#create-and-manage-volumes"><code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">volume</span> <span class="pre">create</span></code></a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>empty
+<span class="go">empty</span>
+</pre></div>
+</div>
+<p>При создании можно указать набор меток в метаданных, которые можно потом использовать
+для фильтрации:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>new<span class="w"> </span>--label<span class="w"> </span><span class="nv">test</span><span class="o">=</span><span class="nb">true</span>
+<span class="go">new</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>new1<span class="w"> </span>--label<span class="w"> </span><span class="nv">test</span><span class="o">=</span><span class="nb">true</span>
+<span class="go">new1</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>ls
+<span class="go">DRIVER    VOLUME NAME</span>
+<span class="go">local     empty</span>
+<span class="go">local     new</span>
+<span class="go">local     new1</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>ls<span class="w"> </span>-f<span class="w"> </span><span class="nv">label</span><span class="o">=</span><span class="nv">test</span><span class="o">=</span><span class="nb">true</span>
+<span class="go">DRIVER    VOLUME NAME</span>
+<span class="go">local     new</span>
+<span class="go">local     new1</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>prune<span class="w"> </span>--filter<span class="w"> </span><span class="nv">label</span><span class="o">=</span><span class="nv">test</span><span class="o">=</span><span class="nb">true</span><span class="w"> </span>-af
+<span class="go">Deleted Volumes:</span>
+<span class="go">new</span>
+<span class="go">new1</span>
+
+<span class="go">Total reclaimed space: 0B</span>
+</pre></div>
+</div>
+<p>Также можно указать имя несуществующего тома в опции <code class="docutils literal notranslate"><span class="pre">-v</span></code> команды <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>html:/usr/share/nginx/html<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">1c9c70a664504e1e05973e11933ffadda0e7d0ac34cbc712fe2c3db5790b5abc</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>ls
+<span class="go">DRIVER    VOLUME NAME</span>
+<span class="go">local     empty</span>
+<span class="go">local     html</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">&lt;!DOCTYPE html&gt;</span>
+<span class="go">&lt;html&gt;</span>
+<span class="go">&lt;head&gt;</span>
+<span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Если мы используем пустой том и монтируем его по пути в контейнере, где уже имеются
+какие-либо файлы, то данные файлы будут скопированы в этот том.</p>
+</div>
+<p>Для получения информации о томе можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">volume</span> <span class="pre">inspect</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>inspect<span class="w"> </span>html
+<span class="go">[</span>
+<span class="go">    {</span>
+<span class="go">        &quot;CreatedAt&quot;: &quot;2023-10-04T12:40:45Z&quot;,</span>
+<span class="go">        &quot;Driver&quot;: &quot;local&quot;,</span>
+<span class="go">        &quot;Labels&quot;: null,</span>
+<span class="go">        &quot;Mountpoint&quot;: &quot;/var/lib/docker/volumes/html/_data&quot;,</span>
+<span class="go">        &quot;Name&quot;: &quot;html&quot;,</span>
+<span class="go">        &quot;Options&quot;: null,</span>
+<span class="go">        &quot;Scope&quot;: &quot;local&quot;</span>
+<span class="go">    }</span>
+<span class="go">]</span>
+<span class="gp">vagrant@storage:~$ </span>sudo<span class="w"> </span>ls<span class="w"> </span>/var/lib/docker/volumes/html/_data
+<span class="go">50x.html  index.html</span>
+</pre></div>
+</div>
+<p>С содержимым в томе можно взаимодействовать также по указанному пути:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>sudo<span class="w"> </span>sh<span class="w"> </span>-c<span class="w"> </span><span class="s1">&#39;echo html &gt; /var/lib/docker/volumes/html/_data/index.html&#39;</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">html</span>
+</pre></div>
+</div>
+<p>Можно комбинировать монтирование томов и директорий внутрь контейнера, также можно
+использовать вложенность:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>html:/usr/share/nginx/html<span class="w"> </span>-v<span class="w"> </span>/data:/usr/share/nginx/html/data<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">1afbbeee97533280a87480f9f051029c310548c1a33a4599449d6824227f78c2</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">html</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888/data/
+<span class="go">data</span>
+</pre></div>
+</div>
+<p>Содержимое томов не будет стираться после удаления контейнера, а также может
+использоваться одновременно несколькими контейнерами:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>nginx
+<span class="go">nginx</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>html:/usr/share/nginx/html<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx1<span class="w"> </span>nginx
+<span class="go">a603c5e903d8dd4ed894d7dd5cced89e0a8018efbbaef29b19f2183ce7f0933b</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>html:/usr/share/nginx/html<span class="w"> </span>-p<span class="w"> </span><span class="m">8889</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx2<span class="w"> </span>nginx
+<span class="go">e5c41a798a90ee298204ff38431972cf6be3ada9fc140331458bd0580ff7f5d9</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">html</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8889
+<span class="go">html</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>nginx1<span class="w"> </span>nginx2
+<span class="go">nginx1</span>
+<span class="go">nginx2</span>
+</pre></div>
+</div>
+</section>
+<section id="remote">
+<h3>Remote<a class="headerlink" href="#remote" title="Permalink to this heading"></a></h3>
+<p>Хоть по-умолчанию в качестве драйвера для создания тома можно использовать только <code class="docutils literal notranslate"><span class="pre">local</span></code>,
+в <code class="docutils literal notranslate"><span class="pre">linux</span></code> использование этого драйвера подразумевает возможность использования любой
+файловой системы известной ядру и монтируемой командой <code class="docutils literal notranslate"><span class="pre">mount</span></code>. <a class="reference external" href="https://docs.docker.com/storage/volumes/#share-data-between-machines">Таким образом можно
+использовать сетевые файловые системы, например <code class="docutils literal notranslate"><span class="pre">NFS</span></code>.</a>
+Дополним наш <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> двумя машинами для демонстрации и запустим их:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;storage&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;storage&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      mkdir /data;chmod 777 /data</span>
+<span class="sh">      echo &#39;/data *(rw)&#39; &gt; /etc/exports</span>
+<span class="sh">      export DEBIAN_FRONTEND=noninteractive</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns nfs-server docker.io</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;docker1&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;docker1&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns nfs-common docker.io</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;docker2&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;docker2&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns nfs-common docker.io</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Создадим на машинах <code class="docutils literal notranslate"><span class="pre">docker1</span></code> и <code class="docutils literal notranslate"><span class="pre">docker2</span></code> тома, которые будут использовать сетевую
+файловую систему с машины <code class="docutils literal notranslate"><span class="pre">storage</span></code> и запустим с ними контейнер <code class="docutils literal notranslate"><span class="pre">nginx</span></code> на каждой машине:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>docker1
+<span class="gp">vagrant@docker1:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">type</span><span class="o">=</span>nfs<span class="w"> </span>-o<span class="w"> </span><span class="nv">device</span><span class="o">=</span>:/data<span class="w"> </span>-o<span class="w"> </span><span class="nv">o</span><span class="o">=</span><span class="nv">addr</span><span class="o">=</span>storage.local<span class="w"> </span>storage
+<span class="go">storage</span>
+<span class="gp">vagrant@docker1:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>storage:/usr/share/nginx/html<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">7d9068e47ad0e6ab70f84ec528a756f2aab14db6b55c62356923d5a0697a26c7</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>docker2
+<span class="gp">vagrant@docker2:~$ </span>docker<span class="w"> </span>volume<span class="w"> </span>create<span class="w"> </span>-o<span class="w"> </span><span class="nv">type</span><span class="o">=</span>nfs<span class="w"> </span>-o<span class="w"> </span><span class="nv">device</span><span class="o">=</span>:/data<span class="w"> </span>-o<span class="w"> </span><span class="nv">o</span><span class="o">=</span><span class="nv">addr</span><span class="o">=</span>storage.local<span class="w"> </span>storage
+<span class="go">storage</span>
+<span class="gp">vagrant@docker2:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>storage:/usr/share/nginx/html<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">348b13f53d1f18498265c1dcb57329ba404e43ee0ccc91b4d020638699d8434a</span>
+</pre></div>
+</div>
+<p>Зайдем на машину <code class="docutils literal notranslate"><span class="pre">storage</span></code> и убедимся, что контейнеры на машинах <code class="docutils literal notranslate"><span class="pre">docker1</span></code> и <code class="docutils literal notranslate"><span class="pre">docker2</span></code>
+используют сетевую файловую систему:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>storage
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>docker1.local:8888
+<span class="go">data</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>docker2.local:8888
+<span class="go">data</span>
+<span class="gp">vagrant@storage:~$ </span><span class="nb">echo</span><span class="w"> </span>nfs-data<span class="w"> </span>&gt;<span class="w"> </span>/data/index.html
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>docker1.local:8888
+<span class="go">nfs-data</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>docker2.local:8888
+<span class="go">nfs-data</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="network">
+<h2>Network<a class="headerlink" href="#network" title="Permalink to this heading"></a></h2>
+<p>Для <a class="reference external" href="https://docs.docker.com/network/network-tutorial-standalone/">управления сетевой конфигурацией</a> существует команда <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span></code>,
+чтобы отобразить список доступный сетей можно выполнить команду <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span> <span class="pre">ls</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>ls
+<span class="go">NETWORK ID     NAME      DRIVER    SCOPE</span>
+<span class="go">ebe779724911   bridge    bridge    local</span>
+<span class="go">100b3a82985d   host      host      local</span>
+<span class="go">9676646e1660   none      null      local</span>
+</pre></div>
+</div>
+<section id="bridge">
+<h3>Bridge<a class="headerlink" href="#bridge" title="Permalink to this heading"></a></h3>
+<p>По-умолчанию для запущенных контейнеров <a class="reference external" href="https://docs.docker.com/network/drivers/bridge/">используется сеть <code class="docutils literal notranslate"><span class="pre">bridge</span></code></a>,
+для создание новой сети с собственной конфигурацией можно воспользоваться командой
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span> <span class="pre">create</span></code>. Если при создании не указать параметр <code class="docutils literal notranslate"><span class="pre">--driver</span></code>, то новая
+сеть также будет типа <code class="docutils literal notranslate"><span class="pre">bridge</span></code>. Создадим новую сеть и посмотрим ее конфигурацию
+командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span> <span class="pre">inspect</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>br<span class="w"> </span>--subnet<span class="w"> </span><span class="m">10</span>.0.0.0/24
+<span class="go">feb2d1e6a7ef18fef4b3edf81aaac94b70410c4f7b6c1a7a60fcda8a3fd48b67</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>inspect<span class="w"> </span>br
+<span class="go">[</span>
+<span class="go">    {</span>
+<span class="go">        &quot;Name&quot;: &quot;br&quot;,</span>
+<span class="go">        &quot;Id&quot;: &quot;feb2d1e6a7ef18fef4b3edf81aaac94b70410c4f7b6c1a7a60fcda8a3fd48b67&quot;,</span>
+<span class="go">        &quot;Created&quot;: &quot;2023-10-04T20:05:54.017090666Z&quot;,</span>
+<span class="go">        &quot;Scope&quot;: &quot;local&quot;,</span>
+<span class="go">        &quot;Driver&quot;: &quot;bridge&quot;,</span>
+<span class="go">        &quot;EnableIPv6&quot;: false,</span>
+<span class="go">        &quot;IPAM&quot;: {</span>
+<span class="go">            &quot;Driver&quot;: &quot;default&quot;,</span>
+<span class="go">            &quot;Options&quot;: {},</span>
+<span class="go">            &quot;Config&quot;: [</span>
+<span class="go">                {</span>
+<span class="go">                    &quot;Subnet&quot;: &quot;10.0.0.0/24&quot;</span>
+<span class="go">                }</span>
+<span class="go">            ]</span>
+<span class="go">        },</span>
+<span class="go">        &quot;Internal&quot;: false,</span>
+<span class="go">        &quot;Attachable&quot;: false,</span>
+<span class="go">        &quot;Ingress&quot;: false,</span>
+<span class="go">        &quot;ConfigFrom&quot;: {</span>
+<span class="go">            &quot;Network&quot;: &quot;&quot;</span>
+<span class="go">        },</span>
+<span class="go">        &quot;ConfigOnly&quot;: false,</span>
+<span class="go">        &quot;Containers&quot;: {},</span>
+<span class="go">        &quot;Options&quot;: {},</span>
+<span class="go">        &quot;Labels&quot;: {}</span>
+<span class="go">    }</span>
+<span class="go">]</span>
+</pre></div>
+</div>
+<p>При использовании пользовательской сети типа <code class="docutils literal notranslate"><span class="pre">bridge</span></code>, в отличии от сети используемой
+по-умолчанию, также добавляется функционал разрешения имен контейнеров внутри этой сети.
+Для указания сети при запуске контейнера необходимо указать опцию <code class="docutils literal notranslate"><span class="pre">--network</span></code> в команде
+<code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span></code>, сравним запуск контейнеров в сети по-умолчанию и в нашей созданной:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>first<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span>inf
+<span class="go">495e509f4f9c62a68b3501d7eabd0bd1989a8feb0736cf0cb9c415bb6c83bdd6</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>second<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span>inf
+<span class="go">d7960ea8f4ed5f4006a333ca24c830fdd062beefa10d56b9e13dbc8c39fe6f3c</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>first<span class="w"> </span>sh
+<span class="gp"># </span>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>dev<span class="w"> </span>eth0
+<span class="go">56: eth0@if57: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:ac:11:00:03 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 172.17.0.3/16 brd 172.17.255.255 scope global eth0</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="gp"># </span>ping<span class="w"> </span>-c1<span class="w"> </span>first
+<span class="go">ping: bad address &#39;first&#39;</span>
+<span class="gp">#</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>second<span class="w"> </span>sh
+<span class="gp"># </span>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>dev<span class="w"> </span>eth0
+<span class="go">58: eth0@if59: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:ac:11:00:04 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 172.17.0.4/16 brd 172.17.255.255 scope global eth0</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="gp"># </span>ping<span class="w"> </span>-c1<span class="w"> </span>second
+<span class="go">ping: bad address &#39;second&#39;</span>
+<span class="gp">#</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>first<span class="w"> </span>second
+<span class="go">first</span>
+<span class="go">second</span>
+
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--network<span class="w"> </span>br<span class="w"> </span>--name<span class="w"> </span>first<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span>inf
+<span class="go">2479516cf26e2af9df4e158df691695ca20d8ca92c02c35ba438ef89eb18d976</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--network<span class="w"> </span>br<span class="w"> </span>--name<span class="w"> </span>second<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span>inf
+<span class="go">a6eeefe1997e114e563a92e5930858815f147ce64f2c08b3f7dd1fabd33532d5</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>first<span class="w"> </span>sh
+<span class="gp"># </span>ip<span class="w"> </span>addr<span class="w"> </span>show<span class="w"> </span>dev<span class="w"> </span>eth0
+<span class="go">60: eth0@if61: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:0a:00:00:02 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 10.0.0.2/24 brd 10.0.0.255 scope global eth0</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="gp"># </span>ping<span class="w"> </span>-c1<span class="w"> </span>first
+<span class="go">PING first (10.0.0.2): 56 data bytes</span>
+<span class="go">64 bytes from 10.0.0.2: seq=0 ttl=64 time=0.029 ms</span>
+
+<span class="go">--- first ping statistics ---</span>
+<span class="go">1 packets transmitted, 1 packets received, 0% packet loss</span>
+<span class="go">round-trip min/avg/max = 0.029/0.029/0.029 ms</span>
+<span class="gp"># </span>ping<span class="w"> </span>-c1<span class="w"> </span>second
+<span class="go">PING second (10.0.0.3): 56 data bytes</span>
+<span class="go">64 bytes from 10.0.0.3: seq=0 ttl=64 time=0.091 ms</span>
+
+<span class="go">--- second ping statistics ---</span>
+<span class="go">1 packets transmitted, 1 packets received, 0% packet loss</span>
+<span class="go">round-trip min/avg/max = 0.091/0.091/0.091 ms</span>
+<span class="gp">#</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>first<span class="w"> </span>second
+<span class="go">first</span>
+<span class="go">second</span>
+</pre></div>
+</div>
+<p>Как видно из вывода - при использовании созданной нами сети используется заданная нами
+адресация и работает разрешение имен контейнеров.</p>
+<p>Контейнер может быть подключен одновременно к нескольким сетям, для этого после запуска
+можно воспользоваться командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span> <span class="pre">connect</span></code>, а для отключения от сети
+командой <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">network</span> <span class="pre">disconnect</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--name<span class="w"> </span>first<span class="w"> </span>alpine<span class="w"> </span>sleep<span class="w"> </span>inf
+<span class="go">4a9da4cf9b0b959298b29da8b59a920531a9fa53769525a99d22bac58eda12bb</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>first<span class="w"> </span>ip<span class="w"> </span>a
+<span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN qlen 1000</span>
+<span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span>
+<span class="go">    inet 127.0.0.1/8 scope host lo</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="go">68: eth0@if69: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span>br<span class="w"> </span>first
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>first<span class="w"> </span>ip<span class="w"> </span>a
+<span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN qlen 1000</span>
+<span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span>
+<span class="go">    inet 127.0.0.1/8 scope host lo</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="go">68: eth0@if69: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="go">70: eth1@if71: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:0a:00:00:02 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 10.0.0.2/24 brd 10.0.0.255 scope global eth1</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>disconnect<span class="w"> </span>bridge<span class="w"> </span>first
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-it<span class="w"> </span>first<span class="w"> </span>ip<span class="w"> </span>a
+<span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN qlen 1000</span>
+<span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span>
+<span class="go">    inet 127.0.0.1/8 scope host lo</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+<span class="go">70: eth1@if71: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UP</span>
+<span class="go">    link/ether 02:42:0a:00:00:02 brd ff:ff:ff:ff:ff:ff</span>
+<span class="go">    inet 10.0.0.2/24 brd 10.0.0.255 scope global eth1</span>
+<span class="go">       valid_lft forever preferred_lft forever</span>
+</pre></div>
+</div>
+</section>
+<section id="host">
+<h3>Host<a class="headerlink" href="#host" title="Permalink to this heading"></a></h3>
+<p>Контейнер также можно запустить в <a class="reference external" href="https://docs.docker.com/network/drivers/host/">сети хоста</a>, так что процессы внутри
+контейнера будут прослушивать порты непосредственно на адресе хоста:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>/data:/usr/share/nginx/html<span class="w"> </span>--network<span class="w"> </span>host<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">88dec80591b12144824b739177b1133af526ccd4074b3d752044d1a7fe9e347b</span>
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost
+<span class="go">nfs-data</span>
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>nginx
+<span class="go">nginx</span>
+</pre></div>
+</div>
+</section>
+<section id="ipvlan">
+<h3>IPVLAN<a class="headerlink" href="#ipvlan" title="Permalink to this heading"></a></h3>
+<p>Попробуем объединить сети докера из нескольких виртуальных машин воспользовавшись
+<a class="reference external" href="https://docs.docker.com/network/drivers/ipvlan/">драйвером <code class="docutils literal notranslate"><span class="pre">ipvlan</span></code></a>. Данный драйвер позволяет разделить один сетевой
+интерфейс хоста между несколькими контейнерами, так что при создании сети нам нужно
+указать <code class="docutils literal notranslate"><span class="pre">parent</span></code> интерфейс из внутренней сети, которую создает <code class="docutils literal notranslate"><span class="pre">vagrant</span></code>, для того
+чтобы контейнеры могли общаться в ней между собой. При использовании по-умолчанию
+virtualbox provider в vagrant для внутренней сети используется сеть 192.168.56.0/24,
+имя сетевого интерфейса можно получить командой:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>ip<span class="w"> </span>-br<span class="w"> </span>a<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;/192.168.56/{print $1}&#39;</span>
+<span class="go">enp0s8</span>
+</pre></div>
+</div>
+<p>Создадим на каждой машине сеть типа <code class="docutils literal notranslate"><span class="pre">ipvlan</span></code> указав для каждой машины свой <code class="docutils literal notranslate"><span class="pre">ip-range</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>storage
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>-d<span class="w"> </span>ipvlan<span class="w"> </span>--subnet<span class="o">=</span><span class="m">10</span>.1.1.0/24<span class="w"> </span>--ip-range<span class="o">=</span><span class="m">10</span>.1.1.0/28<span class="w"> </span>-o<span class="w"> </span><span class="nv">parent</span><span class="o">=</span>enp0s8<span class="w"> </span>internal
+<span class="go">91a0d8b2235c7851fe1f90eb7cd1924d5be3b9f631f5dc6b95407523e6d8397c</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>docker1
+<span class="gp">vagrant@docker1:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>-d<span class="w"> </span>ipvlan<span class="w"> </span>--subnet<span class="o">=</span><span class="m">10</span>.1.1.0/24<span class="w"> </span>--ip-range<span class="o">=</span><span class="m">10</span>.1.1.16/28<span class="w"> </span>-o<span class="w"> </span><span class="nv">parent</span><span class="o">=</span>enp0s8<span class="w"> </span>internal
+<span class="go">c618b6d42b63ce1f0af54de147e2ed4c28e62f1ed9bed0e9c7101aae160e1e04</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>docker2
+<span class="gp">vagrant@docker2:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>create<span class="w"> </span>-d<span class="w"> </span>ipvlan<span class="w"> </span>--subnet<span class="o">=</span><span class="m">10</span>.1.1.0/24<span class="w"> </span>--ip-range<span class="o">=</span><span class="m">10</span>.1.1.32/28<span class="w"> </span>-o<span class="w"> </span><span class="nv">parent</span><span class="o">=</span>enp0s8<span class="w"> </span>internal
+<span class="go">28e646c7404ff3fc6341c19fd6c9a57512d07f8c9ca5050ce370180f8954274a</span>
+</pre></div>
+</div>
+<p>Запустим на машинах <code class="docutils literal notranslate"><span class="pre">docker1</span></code> и <code class="docutils literal notranslate"><span class="pre">docker2</span></code> контейнеры с <code class="docutils literal notranslate"><span class="pre">nginx</span></code> и убедимся, что
+полученные контейнерами адреса находятся в заданных сетях:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>docker1
+<span class="gp">vagrant@docker1:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--restart<span class="o">=</span>always<span class="w"> </span>-v<span class="w"> </span>storage:/usr/share/nginx/html<span class="w"> </span>--network<span class="w"> </span>internal<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">455186759d7c6ea8374034b7aad68067c570807a61d315c31e897b3783803f18</span>
+<span class="gp">vagrant@docker1:~$ </span>docker<span class="w"> </span>inspect<span class="w"> </span>nginx<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;{{json .NetworkSettings.Networks.internal.IPAddress}}&#39;</span>
+<span class="go">&quot;10.1.1.17&quot;</span>
+
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>docker2
+<span class="gp">vagrant@docker2:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>--restart<span class="o">=</span>always<span class="w"> </span>-v<span class="w"> </span>storage:/usr/share/nginx/html<span class="w"> </span>--network<span class="w"> </span>internal<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="go">1460ce30d5a8ed1267e261c29097c8970e9327088a3ba831066ffe38bffa57c8</span>
+<span class="gp">vagrant@docker2:~$ </span>docker<span class="w"> </span>inspect<span class="w"> </span>nginx<span class="w"> </span>-f<span class="w"> </span><span class="s1">&#39;{{json .NetworkSettings.Networks.internal.IPAddress}}&#39;</span>
+<span class="go">&quot;10.1.1.33&quot;</span>
+</pre></div>
+</div>
+<p>Также запустим <code class="docutils literal notranslate"><span class="pre">nginx</span></code> на машине <code class="docutils literal notranslate"><span class="pre">storage</span></code> создав конфигурацию, которая будет проксировать
+запросы балансируя между контейнерами на машинах <code class="docutils literal notranslate"><span class="pre">docker1</span></code> и <code class="docutils literal notranslate"><span class="pre">docker2</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>cat<span class="w"> </span>&lt;&lt;EOF&gt;&gt;default.conf
+<span class="go">  server {</span>
+<span class="go">    listen       80;</span>
+<span class="go">    server_name  localhost;</span>
+<span class="go">    location / {</span>
+<span class="go">        proxy_pass http://docker;</span>
+<span class="go">    }</span>
+<span class="go">}</span>
+
+<span class="go">upstream docker {</span>
+<span class="go">    server 10.1.1.17 fail_timeout=1s;</span>
+<span class="go">    server 10.1.1.33 fail_timeout=1s;</span>
+<span class="go">}</span>
+<span class="go">EOF</span>
+</pre></div>
+</div>
+<p>Запустим контейнер с данной конфигурацией и подключим к нашей сети:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>run<span class="w"> </span>-d<span class="w"> </span>-v<span class="w"> </span>./default.conf:/etc/nginx/conf.d/default.conf<span class="w"> </span>-p<span class="w"> </span><span class="m">8888</span>:80<span class="w"> </span>--name<span class="w"> </span>nginx<span class="w"> </span>nginx
+<span class="gp">vagrant@storage:~$ </span>docker<span class="w"> </span>network<span class="w"> </span>connect<span class="w"> </span>internal<span class="w"> </span>nginx
+</pre></div>
+</div>
+<p>Теперь мы можем проверить связность из данного контейнера до контейнеров на машинах
+<code class="docutils literal notranslate"><span class="pre">docker1</span></code> и <code class="docutils literal notranslate"><span class="pre">docker2</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">nfs-data</span>
+</pre></div>
+</div>
+<p>Даже если мы остановим машину <code class="docutils literal notranslate"><span class="pre">docker1</span></code>, то <code class="docutils literal notranslate"><span class="pre">nginx</span></code> на машине <code class="docutils literal notranslate"><span class="pre">storage</span></code> будет
+направлять запросы на оставшуюся машину <code class="docutils literal notranslate"><span class="pre">docker2</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>vagrant<span class="w"> </span>halt<span class="w"> </span>docker1
+<span class="go">==&gt; docker1: Attempting graceful shutdown of VM...</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>storage
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">nfs-data</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>halt<span class="w"> </span>docker2
+<span class="go">==&gt; docker2: Attempting graceful shutdown of VM...</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>storage
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">&lt;html&gt;</span>
+<span class="go">&lt;head&gt;&lt;title&gt;502 Bad Gateway&lt;/title&gt;&lt;/head&gt;</span>
+<span class="go">&lt;body&gt;</span>
+<span class="go">&lt;center&gt;&lt;h1&gt;502 Bad Gateway&lt;/h1&gt;&lt;/center&gt;</span>
+<span class="go">&lt;hr&gt;&lt;center&gt;nginx/1.25.2&lt;/center&gt;</span>
+<span class="go">&lt;/body&gt;</span>
+<span class="go">&lt;/html&gt;</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>up<span class="w"> </span>docker1
+<span class="go">Bringing machine &#39;docker1&#39; up with &#39;virtualbox&#39; provider...</span>
+<span class="go">==&gt; docker1: Machine booted and ready!</span>
+<span class="gp">$ </span>vagrant<span class="w"> </span>ssh<span class="w"> </span>storage
+<span class="gp">vagrant@storage:~$ </span>curl<span class="w"> </span>localhost:8888
+<span class="go">nfs-data</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="04_practice_docker_images.html" class="btn btn-neutral float-left" title="Docker Images" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="06_practice_docker_compose.html" class="btn btn-neutral float-right" title="Docker Compose" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

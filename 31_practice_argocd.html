@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ArgoCD &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="ArgoCD GitOps" href="32_practice_argocd_gitops.html" />
+    <link rel="prev" title="Kiali" href="30_practice_istio_kiali.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2"><a class="reference internal" href="16_practice_kafka_cluster.html">Apache Kafka Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">ArgoCD</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#argocd-cli">ArgoCD CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#argocd-ui">ArgoCD UI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">ArgoCD</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/31_practice_argocd.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="argocd">
+<h1>ArgoCD<a class="headerlink" href="#argocd" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии познакомимся с инструментом доставки приложений -
+<a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы будем использовать следующий <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;argocd&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="s2">&quot;virtualbox&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">v</span><span class="o">|</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">cpus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span>
+<span class="w">      </span><span class="n">v</span><span class="o">.</span><span class="n">memory</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;argocd&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;forwarded_port&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">guest</span><span class="p">:</span><span class="w"> </span><span class="mi">80</span><span class="p">,</span><span class="w"> </span><span class="ss">host</span><span class="p">:</span><span class="w"> </span><span class="mi">8888</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq docker.io docker-compose-v2</span>
+<span class="sh">      usermod -a -G docker vagrant</span>
+<span class="sh">      echo &#39;{&quot;registry-mirrors&quot;:[&quot;https:\\/\\/mirror.gcr.io&quot;]}&#39; &gt; /etc/docker/daemon.json</span>
+<span class="sh">      systemctl restart docker</span>
+<span class="sh">      curl -LO https://dl.k8s.io/release/v1.30.0/bin/linux/amd64/kubectl</span>
+<span class="sh">      curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.22.0/kind-linux-amd64</span>
+<span class="sh">      curl -Lo ./argocd https://github.com/argoproj/argo-cd/releases/download/v2.11.2/argocd-linux-amd64</span>
+<span class="sh">      install -m 755 kubectl kind argocd /usr/local/bin/</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>Данная конфигурация установит на виртуальную машину <a class="reference external" href="https://docs.docker.com/engine/">docker</a>, <a class="reference external" href="https://kubernetes.io/ru/docs/reference/kubectl/kubectl/">kubectl</a> и
+<a class="reference external" href="https://kind.sigs.k8s.io/">kind</a>, с помощью которых будет производиться развертывание и управление
+кластером <a class="reference external" href="https://kubernetes.io/ru/">kubernetes</a>, а также утилита <code class="docutils literal notranslate"><span class="pre">argocd</span></code> для управления <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a>.</p>
+</section>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
+<p>Создадим новый кластер с помощью утилиты <code class="docutils literal notranslate"><span class="pre">kind</span></code> передав конфигурацию, в которой
+указаны дополнительные порты для доступа снаружи:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cat<span class="w"> </span><span class="s">&lt;&lt;EOF | kind create cluster --config=-</span>
+<span class="s">kind: Cluster</span>
+<span class="s">apiVersion: kind.x-k8s.io/v1alpha4</span>
+<span class="s">nodes:</span>
+<span class="s">- role: control-plane</span>
+<span class="s">  kubeadmConfigPatches:</span>
+<span class="s">  - |</span>
+<span class="s">    kind: InitConfiguration</span>
+<span class="s">    nodeRegistration:</span>
+<span class="s">      kubeletExtraArgs:</span>
+<span class="s">        node-labels: &quot;ingress-ready=true&quot;</span>
+<span class="s">  extraPortMappings:</span>
+<span class="s">  - containerPort: 80</span>
+<span class="s">    hostPort: 80</span>
+<span class="s">    protocol: TCP</span>
+<span class="s">  - containerPort: 443</span>
+<span class="s">    hostPort: 443</span>
+<span class="s">    protocol: TCP</span>
+<span class="s">EOF</span>
+</pre></div>
+</div>
+<p>И убедимся что он функционирует:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Creating cluster &quot;kind&quot; ...</span>
+<span class="go"> ✓ Ensuring node image (kindest/node:v1.29.2) 🖼</span>
+<span class="go"> ✓ Preparing nodes 📦</span>
+<span class="go"> ✓ Writing configuration 📜</span>
+<span class="go"> ✓ Starting control-plane 🕹️</span>
+<span class="go"> ✓ Installing CNI 🔌</span>
+<span class="go"> ✓ Installing StorageClass 💾</span>
+<span class="go">Set kubectl context to &quot;kind-kind&quot;</span>
+<span class="go">You can now use your cluster with:</span>
+
+<span class="go">kubectl cluster-info --context kind-kind</span>
+
+<span class="go">Not sure what to do next? 😅  Check out https://kind.sigs.k8s.io/docs/user/quick-start/</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>cluster-info
+<span class="go">Kubernetes control plane is running at https://127.0.0.1:34853</span>
+<span class="go">CoreDNS is running at https://127.0.0.1:34853/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy</span>
+
+<span class="go">To further debug and diagnose cluster problems, use &#39;kubectl cluster-info dump&#39;.</span>
+</pre></div>
+</div>
+<p>Создадим неймспейс и установим в него <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>create<span class="w"> </span>namespace<span class="w"> </span>argocd
+<span class="go">namespace/argocd created</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+<span class="go">customresourcedefinition.apiextensions.k8s.io/applications.argoproj.io created</span>
+<span class="go">customresourcedefinition.apiextensions.k8s.io/applicationsets.argoproj.io created</span>
+<span class="go">customresourcedefinition.apiextensions.k8s.io/appprojects.argoproj.io created</span>
+<span class="go">serviceaccount/argocd-application-controller created</span>
+<span class="go">serviceaccount/argocd-applicationset-controller created</span>
+<span class="go">serviceaccount/argocd-dex-server created</span>
+<span class="go">serviceaccount/argocd-notifications-controller created</span>
+<span class="go">serviceaccount/argocd-redis created</span>
+<span class="go">serviceaccount/argocd-repo-server created</span>
+<span class="go">serviceaccount/argocd-server created</span>
+<span class="go">role.rbac.authorization.k8s.io/argocd-application-controller created</span>
+<span class="go">role.rbac.authorization.k8s.io/argocd-applicationset-controller created</span>
+<span class="go">role.rbac.authorization.k8s.io/argocd-dex-server created</span>
+<span class="go">role.rbac.authorization.k8s.io/argocd-notifications-controller created</span>
+<span class="go">role.rbac.authorization.k8s.io/argocd-redis created</span>
+<span class="go">role.rbac.authorization.k8s.io/argocd-server created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/argocd-application-controller created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/argocd-applicationset-controller created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/argocd-server created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/argocd-application-controller created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/argocd-applicationset-controller created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/argocd-dex-server created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/argocd-notifications-controller created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/argocd-redis created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/argocd-server created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/argocd-application-controller created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/argocd-applicationset-controller created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/argocd-server created</span>
+<span class="go">configmap/argocd-cm created</span>
+<span class="go">configmap/argocd-cmd-params-cm created</span>
+<span class="go">configmap/argocd-gpg-keys-cm created</span>
+<span class="go">configmap/argocd-notifications-cm created</span>
+<span class="go">configmap/argocd-rbac-cm created</span>
+<span class="go">configmap/argocd-ssh-known-hosts-cm created</span>
+<span class="go">configmap/argocd-tls-certs-cm created</span>
+<span class="go">secret/argocd-notifications-secret created</span>
+<span class="go">secret/argocd-secret created</span>
+<span class="go">service/argocd-applicationset-controller created</span>
+<span class="go">service/argocd-dex-server created</span>
+<span class="go">service/argocd-metrics created</span>
+<span class="go">service/argocd-notifications-controller-metrics created</span>
+<span class="go">service/argocd-redis created</span>
+<span class="go">service/argocd-repo-server created</span>
+<span class="go">service/argocd-server created</span>
+<span class="go">service/argocd-server-metrics created</span>
+<span class="go">deployment.apps/argocd-applicationset-controller created</span>
+<span class="go">deployment.apps/argocd-dex-server created</span>
+<span class="go">deployment.apps/argocd-notifications-controller created</span>
+<span class="go">deployment.apps/argocd-redis created</span>
+<span class="go">deployment.apps/argocd-repo-server created</span>
+<span class="go">deployment.apps/argocd-server created</span>
+<span class="go">statefulset.apps/argocd-application-controller created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-application-controller-network-policy created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-applicationset-controller-network-policy created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-dex-server-network-policy created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-notifications-controller-network-policy created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-redis-network-policy created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-repo-server-network-policy created</span>
+<span class="go">networkpolicy.networking.k8s.io/argocd-server-network-policy created</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>patch<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>deploy<span class="w"> </span>argocd-server<span class="w"> </span>--type<span class="w"> </span>json<span class="w"> </span>-p<span class="w"> </span><span class="s1">&#39;[{&quot;op&quot;:&quot;add&quot;,&quot;path&quot;:&quot;/spec/template/spec/containers/0/args/-&quot;,&quot;value&quot;:&quot;--insecure&quot;}]&#39;</span>
+<span class="go">deployment.apps/argocd-server patched</span>
+</pre></div>
+</div>
+<p>Также задеплоим <code class="docutils literal notranslate"><span class="pre">ingress-nginx</span></code> и создадим ресурс <code class="docutils literal notranslate"><span class="pre">ingress</span></code> для доступа к <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>apply<span class="w"> </span>-f<span class="w"> </span>https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+<span class="go">namespace/ingress-nginx created</span>
+<span class="go">serviceaccount/ingress-nginx created</span>
+<span class="go">serviceaccount/ingress-nginx-admission created</span>
+<span class="go">role.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">role.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created</span>
+<span class="go">clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created</span>
+<span class="go">configmap/ingress-nginx-controller created</span>
+<span class="go">service/ingress-nginx-controller created</span>
+<span class="go">service/ingress-nginx-controller-admission created</span>
+<span class="go">deployment.apps/ingress-nginx-controller created</span>
+<span class="go">job.batch/ingress-nginx-admission-create created</span>
+<span class="go">job.batch/ingress-nginx-admission-patch created</span>
+<span class="go">ingressclass.networking.k8s.io/nginx created</span>
+<span class="go">validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>create<span class="w"> </span>ingress<span class="w"> </span>-n<span class="w"> </span>argocd<span class="w"> </span>argocd<span class="w"> </span>--rule<span class="o">=</span>argo.traefik.me/*<span class="o">=</span>argocd-server:80
+<span class="go">ingress.networking.k8s.io/argocd created</span>
+</pre></div>
+</div>
+<p>И убедимся, что <code class="docutils literal notranslate"><span class="pre">argocd</span></code> стал доступен:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>curl<span class="w"> </span>argo.traefik.me<span class="w"> </span>-so<span class="w"> </span>/dev/null<span class="w"> </span>-w<span class="w"> </span><span class="s1">&#39;%{http_code}&#39;</span>
+<span class="go">200</span>
+</pre></div>
+</div>
+</section>
+<section id="argocd-cli">
+<h2>ArgoCD CLI<a class="headerlink" href="#argocd-cli" title="Permalink to this heading"></a></h2>
+<p>Получим временный пароль, который сгенерировался после установки:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>argocd<span class="w"> </span>admin<span class="w"> </span>initial-password<span class="w"> </span>-n<span class="w"> </span>argocd
+<span class="go">5N8ph9wIc2UjagNq</span>
+
+<span class="go"> This password must be only used for first time login. We strongly recommend you update the password using `argocd account update-password`.</span>
+</pre></div>
+</div>
+<p>После чего авторизуемся под пользователем <code class="docutils literal notranslate"><span class="pre">admin</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>argocd<span class="w"> </span>login<span class="w"> </span>argo.traefik.me
+<span class="go">WARNING: server certificate had error: tls: failed to verify certificate: x509: certificate is valid for ingress.local, not argo.traefik.me. Proceed insecurely (y/n)? y</span>
+<span class="go">Username: admin</span>
+<span class="go">Password:</span>
+<span class="go">&#39;admin:login&#39; logged in successfully</span>
+<span class="go">Context &#39;argo.traefik.me&#39; updated</span>
+</pre></div>
+</div>
+<p>Воспользуемся <code class="docutils literal notranslate"><span class="pre">argocd</span></code> для доставки тестового приложения, которое находится в
+git репозитории <a class="reference external" href="https://github.com/argoproj/argocd-example-apps.git">argocd-example-apps</a>, для этого выполним команду:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>argocd<span class="w"> </span>app<span class="w"> </span>create<span class="w"> </span>guestbook<span class="w"> </span>--repo<span class="w"> </span>https://github.com/argoproj/argocd-example-apps.git<span class="w"> </span>--path<span class="w"> </span>guestbook<span class="w"> </span>--dest-server<span class="w"> </span>https://kubernetes.default.svc<span class="w"> </span>--dest-namespace<span class="w"> </span>default
+<span class="go">application &#39;guestbook&#39; created</span>
+</pre></div>
+</div>
+<p>Данная команда создаст ресурс <code class="docutils literal notranslate"><span class="pre">application</span></code> в кластере, где будет указан
+репозиторий <a class="reference external" href="https://github.com/argoproj/argocd-example-apps.git">argocd-example-apps</a>, путь до директории <code class="docutils literal notranslate"><span class="pre">guestbook</span></code> в данном
+репозитории, где находятся описания <code class="docutils literal notranslate"><span class="pre">kubernetes</span></code> ресурсов для деплоя, а также
+текущий кластер и неймспейс, в которые развернется приложение.</p>
+<p>Посмотреть информацию можно утилитой <code class="docutils literal notranslate"><span class="pre">kubectl</span></code> или <code class="docutils literal notranslate"><span class="pre">argocd</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>application<span class="w"> </span>-n<span class="w"> </span>argocd
+<span class="go">NAME        SYNC STATUS   HEALTH STATUS</span>
+<span class="go">guestbook   OutOfSync     Missing</span>
+<span class="gp">$ </span>argocd<span class="w"> </span>app<span class="w"> </span>list
+<span class="go">NAME              CLUSTER                         NAMESPACE  PROJECT  STATUS     HEALTH   SYNCPOLICY  CONDITIONS  REPO                                                 PATH       TARGET</span>
+<span class="go">argocd/guestbook  https://kubernetes.default.svc  default    default  OutOfSync  Missing  Manual      &lt;none&gt;      https://github.com/argoproj/argocd-example-apps.git  guestbook</span>
+<span class="gp">$ </span>argocd<span class="w"> </span>app<span class="w"> </span>get<span class="w"> </span>guestbook
+<span class="go">Name:               argocd/guestbook</span>
+<span class="go">Project:            default</span>
+<span class="go">Server:             https://kubernetes.default.svc</span>
+<span class="go">Namespace:          default</span>
+<span class="go">URL:                https://argo.traefik.me/applications/guestbook</span>
+<span class="go">Source:</span>
+<span class="go">- Repo:             https://github.com/argoproj/argocd-example-apps.git</span>
+<span class="go">  Target:</span>
+<span class="go">  Path:             guestbook</span>
+<span class="go">SyncWindow:         Sync Allowed</span>
+<span class="go">Sync Policy:        Manual</span>
+<span class="go">Sync Status:        OutOfSync from  (d7927a2)</span>
+<span class="go">Health Status:      Missing</span>
+
+<span class="go">GROUP  KIND        NAMESPACE  NAME          STATUS     HEALTH   HOOK  MESSAGE</span>
+<span class="go">       Service     default    guestbook-ui  OutOfSync  Missing</span>
+<span class="go">apps   Deployment  default    guestbook-ui  OutOfSync  Missing</span>
+</pre></div>
+</div>
+<p>На текущий момент приложение создано, но состояние в кластере не
+синхронизировано с состоянием git репозитория. Для синхронизации можно выполнить
+команду:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>argocd<span class="w"> </span>app<span class="w"> </span>sync<span class="w"> </span>guestbook
+<span class="go">TIMESTAMP                  GROUP        KIND   NAMESPACE                  NAME    STATUS    HEALTH        HOOK  MESSAGE</span>
+<span class="go">2024-05-28T21:41:35+00:00            Service     default          guestbook-ui  OutOfSync  Missing</span>
+<span class="go">2024-05-28T21:41:35+00:00   apps  Deployment     default          guestbook-ui  OutOfSync  Missing</span>
+<span class="go">2024-05-28T21:41:35+00:00            Service     default          guestbook-ui  OutOfSync  Missing              service/guestbook-ui created</span>
+<span class="go">2024-05-28T21:41:35+00:00   apps  Deployment     default          guestbook-ui  OutOfSync  Missing              deployment.apps/guestbook-ui created</span>
+<span class="go">2024-05-28T21:41:35+00:00            Service     default          guestbook-ui    Synced  Healthy                  service/guestbook-ui created</span>
+<span class="go">2024-05-28T21:41:35+00:00   apps  Deployment     default          guestbook-ui    Synced  Progressing              deployment.apps/guestbook-ui created</span>
+
+<span class="go">Name:               argocd/guestbook</span>
+<span class="go">Project:            default</span>
+<span class="go">Server:             https://kubernetes.default.svc</span>
+<span class="go">Namespace:          default</span>
+<span class="go">URL:                https://argo.traefik.me/applications/guestbook</span>
+<span class="go">Source:</span>
+<span class="go">- Repo:             https://github.com/argoproj/argocd-example-apps.git</span>
+<span class="go">  Target:</span>
+<span class="go">  Path:             guestbook</span>
+<span class="go">SyncWindow:         Sync Allowed</span>
+<span class="go">Sync Policy:        Manual</span>
+<span class="go">Sync Status:        Synced to  (d7927a2)</span>
+<span class="go">Health Status:      Progressing</span>
+
+<span class="go">Operation:          Sync</span>
+<span class="go">Sync Revision:      d7927a27b4533926b7d86b5f249cd9ebe7625e90</span>
+<span class="go">Phase:              Succeeded</span>
+<span class="go">Start:              2024-05-28 21:41:34 +0000 UTC</span>
+<span class="go">Finished:           2024-05-28 21:41:35 +0000 UTC</span>
+<span class="go">Duration:           1s</span>
+<span class="go">Message:            successfully synced (all tasks run)</span>
+
+<span class="go">GROUP  KIND        NAMESPACE  NAME          STATUS  HEALTH       HOOK  MESSAGE</span>
+<span class="go">       Service     default    guestbook-ui  Synced  Healthy            service/guestbook-ui created</span>
+<span class="go">apps   Deployment  default    guestbook-ui  Synced  Progressing        deployment.apps/guestbook-ui created</span>
+</pre></div>
+</div>
+<p>Через некоторое время все ресурсы развернутся и будут находиться в статусе
+<code class="docutils literal notranslate"><span class="pre">Healthy</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>argocd<span class="w"> </span>app<span class="w"> </span>get<span class="w"> </span>guestbook
+<span class="go">Name:               argocd/guestbook</span>
+<span class="go">Project:            default</span>
+<span class="go">Server:             https://kubernetes.default.svc</span>
+<span class="go">Namespace:          default</span>
+<span class="go">URL:                https://argo.traefik.me/applications/guestbook</span>
+<span class="go">Source:</span>
+<span class="go">- Repo:             https://github.com/argoproj/argocd-example-apps.git</span>
+<span class="go">  Target:</span>
+<span class="go">  Path:             guestbook</span>
+<span class="go">SyncWindow:         Sync Allowed</span>
+<span class="go">Sync Policy:        Manual</span>
+<span class="go">Sync Status:        Synced to  (d7927a2)</span>
+<span class="go">Health Status:      Healthy</span>
+
+<span class="go">GROUP  KIND        NAMESPACE  NAME          STATUS  HEALTH   HOOK  MESSAGE</span>
+<span class="go">       Service     default    guestbook-ui  Synced  Healthy        service/guestbook-ui created</span>
+<span class="go">apps   Deployment  default    guestbook-ui  Synced  Healthy        deployment.apps/guestbook-ui created</span>
+
+<span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>deploy,svc,pod
+<span class="go">NAME                           READY   UP-TO-DATE   AVAILABLE   AGE</span>
+<span class="go">deployment.apps/guestbook-ui   1/1     1            1           2m33s</span>
+
+<span class="go">NAME                   TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE</span>
+<span class="go">service/guestbook-ui   ClusterIP   10.96.187.88   &lt;none&gt;        80/TCP    2m33s</span>
+
+<span class="go">NAME                                READY   STATUS    RESTARTS   AGE</span>
+<span class="go">pod/guestbook-ui-56c646849b-j7wf2   1/1     Running   0          2m33s</span>
+</pre></div>
+</div>
+<p>Добавим также ресурс <code class="docutils literal notranslate"><span class="pre">ingress</span></code> для доступа к приложению <code class="docutils literal notranslate"><span class="pre">guestbook-ui</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kubectl<span class="w"> </span>create<span class="w"> </span>ingress<span class="w"> </span>guestbook-ui<span class="w"> </span>--rule<span class="o">=</span>guestbook.traefik.me/*<span class="o">=</span>guestbook-ui:80
+<span class="go">ingress.networking.k8s.io/guestbook-ui created</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>guestbook.traefik.me<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>title
+<span class="go">    &lt;title&gt;Guestbook&lt;/title&gt;</span>
+</pre></div>
+</div>
+<p>После чего можем удалить приложение:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>argocd<span class="w"> </span>app<span class="w"> </span>delete<span class="w"> </span>guestbook
+<span class="go">Are you sure you want to delete &#39;guestbook&#39; and all its resources? [y/n] y</span>
+<span class="go">application &#39;guestbook&#39; deleted</span>
+<span class="gp">$ </span>kubectl<span class="w"> </span>get<span class="w"> </span>pod
+<span class="go">No resources found in default namespace.</span>
+<span class="gp">$ </span>curl<span class="w"> </span>-s<span class="w"> </span>guestbook.traefik.me<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>title
+<span class="go">&lt;head&gt;&lt;title&gt;503 Service Temporarily Unavailable&lt;/title&gt;&lt;/head&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="argocd-ui">
+<h2>ArgoCD UI<a class="headerlink" href="#argocd-ui" title="Permalink to this heading"></a></h2>
+<p>В <a class="reference external" href="https://argo-cd.readthedocs.io/en/stable/">argocd</a> также есть удобный web интерфейс, который будет доступен по адресу
+<a class="reference external" href="http://argo.traefik.me:8888/">argo.traefik.me:8888</a>. Авторизуемся в нем под
+пользователем <code class="docutils literal notranslate"><span class="pre">admin</span></code> и паролем, который получили после инсталляции:</p>
+<p><img alt="" src="_images/argocd1.png" /></p>
+<p>После чего проделаем в нем тот же путь, что сделали с помощью <code class="docutils literal notranslate"><span class="pre">cli</span></code>.
+Нажмем <code class="docutils literal notranslate"><span class="pre">Create</span> <span class="pre">Application</span></code> и заполним основные поля:</p>
+<p><img alt="" src="_images/argocd2.png" /></p>
+<p>В источнике укажем репозиторий
+<a class="reference external" href="https://github.com/argoproj/argocd-example-apps.git">https://github.com/argoproj/argocd-example-apps.git</a>
+и путь до директории <code class="docutils literal notranslate"><span class="pre">guestbook</span></code>:</p>
+<p><img alt="" src="_images/argocd3.png" /></p>
+<p>А в качестве <code class="docutils literal notranslate"><span class="pre">destination</span></code> укажем наш текущий кластер и неймспейс <code class="docutils literal notranslate"><span class="pre">default</span></code>:</p>
+<p><img alt="" src="_images/argocd4.png" /></p>
+<p>После чего нажмем кнопку <code class="docutils literal notranslate"><span class="pre">Create</span></code> и увидим состояние нашего приложения:</p>
+<p><img alt="" src="_images/argocd5.png" /></p>
+<p><img alt="" src="_images/argocd6.png" /></p>
+<p>Нажав на кнопку <code class="docutils literal notranslate"><span class="pre">Sync</span></code> и далее <code class="docutils literal notranslate"><span class="pre">Synchronize</span></code> запустится синхронизация ресурсов
+в кластере с git репозиторием:</p>
+<p><img alt="" src="_images/argocd7.png" /></p>
+<p>После чего по адресу <a class="reference external" href="http://guestbook.traefik.me:8888/">guestbook.traefik.me:8888</a>
+будет доступно данное приложение:</p>
+<p><img alt="" src="_images/argocd8.png" /></p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="30_practice_istio_kiali.html" class="btn btn-neutral float-left" title="Kiali" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="32_practice_argocd_gitops.html" class="btn btn-neutral float-right" title="ArgoCD GitOps" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

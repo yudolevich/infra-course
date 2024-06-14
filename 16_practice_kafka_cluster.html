@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Apache Kafka Cluster &mdash; документация infra-course </title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/translations.js"></script>
+        <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
+        <script>mermaid.initialize({startOnLoad:true});</script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Terraform" href="17_practice_terraform.html" />
+    <link rel="prev" title="Apache Kafka" href="15_practice_kafka.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            infra-course
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="practice.html">Практика</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="01_practice_vagrant.html">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_practice_vagrant.html">Vagrant Multi-Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="03_practice_docker.html">Docker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="04_practice_docker_images.html">Docker Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="05_practice_docker_volume_network.html">Docker Volume/Network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="06_practice_docker_compose.html">Docker Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="07_practice_ansible.html">Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="08_practice_ansible_roles.html">Ansible Roles and Collections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="09_practice_saltstack.html">Salt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="10_practice_saltstack_reactor.html">Salt Beacons/Reactors and IaC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="11_practice_secrets.html">Secret Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="12_practice_vault.html">Vault</a></li>
+<li class="toctree-l2"><a class="reference internal" href="13_practice_rabbit.html">RabbitMQ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="14_practice_rabbit_routing.html">RabbitMQ Routing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="15_practice_kafka.html">Apache Kafka</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Apache Kafka Cluster</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#vagrant">Vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#consumer-groups">Consumer Groups</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#single-consumer">Single Consumer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#multiple-consumers">Multiple Consumers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#consumer-offsets">Consumer Offsets</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#cluster">Cluster</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prepare">Prepare</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#consume">Consume</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stop-broker">Stop Broker</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="17_practice_terraform.html">Terraform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="18_practice_terraform_ansible.html">Terraform + Ansible</a></li>
+<li class="toctree-l2"><a class="reference internal" href="19_practice_gitlab.html">Gitlab CI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="20_practice_jenkins.html">Jenkins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="21_practice_prometheus.html">Prometheus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="22_practice_alertmanager.html">Alertmanager</a></li>
+<li class="toctree-l2"><a class="reference internal" href="23_practice_elasticsearch.html">ELK Stack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="24_practice_elk_app_logs.html">ELK Log Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="25_practice_jaeger.html">Jaeger</a></li>
+<li class="toctree-l2"><a class="reference internal" href="26_practice_jaeger_e2e.html">Jaeger E2E</a></li>
+<li class="toctree-l2"><a class="reference internal" href="27_practice_opentelemetry.html">Opentelemetry Collector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="28_practice_otel_instrumentation.html">Opentelemetry Instrumentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="29_practice_istio.html">Istio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="30_practice_istio_kiali.html">Kiali</a></li>
+<li class="toctree-l2"><a class="reference internal" href="31_practice_argocd.html">ArgoCD</a></li>
+<li class="toctree-l2"><a class="reference internal" href="32_practice_argocd_gitops.html">ArgoCD GitOps</a></li>
+<li class="toctree-l2"><a class="reference internal" href="33_practice_final.html">Самостоятельная работа</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">infra-course</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="practice.html">Практика</a></li>
+      <li class="breadcrumb-item active">Apache Kafka Cluster</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/16_practice_kafka_cluster.md.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="apache-kafka-cluster">
+<h1>Apache Kafka Cluster<a class="headerlink" href="#apache-kafka-cluster" title="Permalink to this heading"></a></h1>
+<p>В данном практическом занятии рассмотрим работу Consumer Groups, а также
+распределение партиций между брокерами в кластере <a class="reference external" href="https://kafka.apache.org/">Apache Kafka</a>.</p>
+<section id="vagrant">
+<h2>Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this heading"></a></h2>
+<p>Для работы с <a class="reference external" href="https://kafka.apache.org/">kafka</a> воспользуемся следующим <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>:</p>
+<div class="highlight-ruby notranslate"><div class="highlight"><pre><span></span><span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">config</span><span class="o">|</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;broker1&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;broker1&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns python3-kafka openjdk-17-jre</span>
+<span class="sh">      mkdir /opt/kafka</span>
+<span class="sh">      curl https://dlcdn.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz \</span>
+<span class="sh">        | tar xz --strip-components=1 -C /opt/kafka</span>
+<span class="sh">      sed -i &quot;/^node.id=/s/=.*/=${HOSTNAME: -1}/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^advertised.listeners=/s/localhost/${HOSTNAME}.local/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^controller.quorum.voters=/s/=.*/=1@broker1.local:9093,2@broker2.local:9093,3@broker3.local:9093/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^offsets.topic.replication.factor=/s/=.*/=2/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      /opt/kafka/bin/kafka-storage.sh format \</span>
+<span class="sh">        -t &quot;qk89etSXRw6bZhzLg6QWKA&quot; \</span>
+<span class="sh">        -c /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      systemd-run -p Restart=always -u kafka -E KAFKA_HEAP_OPTS=&quot;-Xmx256M -Xms128M&quot; \</span>
+<span class="sh">        /opt/kafka/bin/kafka-server-start.sh \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      echo &#39;PATH=&quot;$PATH:/opt/kafka/bin&quot;&#39; &gt; /etc/profile.d/kafka.sh</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;broker2&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;broker2&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns python3-kafka openjdk-17-jre</span>
+<span class="sh">      mkdir /opt/kafka</span>
+<span class="sh">      curl https://dlcdn.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz \</span>
+<span class="sh">        | tar xz --strip-components=1 -C /opt/kafka</span>
+<span class="sh">      sed -i &quot;/^node.id=/s/=.*/=${HOSTNAME: -1}/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^advertised.listeners=/s/localhost/${HOSTNAME}.local/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^controller.quorum.voters=/s/=.*/=1@broker1.local:9093,2@broker2.local:9093,3@broker3.local:9093/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^offsets.topic.replication.factor=/s/=.*/=2/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      /opt/kafka/bin/kafka-storage.sh format \</span>
+<span class="sh">        -t &quot;qk89etSXRw6bZhzLg6QWKA&quot; \</span>
+<span class="sh">        -c /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      systemd-run -p Restart=always -u kafka -E KAFKA_HEAP_OPTS=&quot;-Xmx256M -Xms128M&quot; \</span>
+<span class="sh">        /opt/kafka/bin/kafka-server-start.sh \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      echo &#39;PATH=&quot;$PATH:/opt/kafka/bin&quot;&#39; &gt; /etc/profile.d/kafka.sh</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="w">  </span><span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">define</span><span class="w"> </span><span class="s2">&quot;broker3&quot;</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">c</span><span class="o">|</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ubuntu/lunar64&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;broker3&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span><span class="w"> </span><span class="s2">&quot;private_network&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;dhcp&quot;</span>
+<span class="w">    </span><span class="n">c</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">provision</span><span class="w"> </span><span class="s2">&quot;shell&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">inline</span><span class="p">:</span><span class="w"> </span><span class="o">&lt;&lt;-</span><span class="dl">SHELL</span>
+<span class="sh">      apt-get update -q</span>
+<span class="sh">      apt-get install -yq libnss-mdns python3-kafka openjdk-17-jre</span>
+<span class="sh">      mkdir /opt/kafka</span>
+<span class="sh">      curl https://dlcdn.apache.org/kafka/3.6.1/kafka_2.13-3.6.1.tgz \</span>
+<span class="sh">        | tar xz --strip-components=1 -C /opt/kafka</span>
+<span class="sh">      sed -i &quot;/^node.id=/s/=.*/=${HOSTNAME: -1}/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^advertised.listeners=/s/localhost/${HOSTNAME}.local/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^controller.quorum.voters=/s/=.*/=1@broker1.local:9093,2@broker2.local:9093,3@broker3.local:9093/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      sed -i &quot;/^offsets.topic.replication.factor=/s/=.*/=2/&quot; \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      /opt/kafka/bin/kafka-storage.sh format \</span>
+<span class="sh">        -t &quot;qk89etSXRw6bZhzLg6QWKA&quot; \</span>
+<span class="sh">        -c /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      systemd-run -p Restart=always -u kafka -E KAFKA_HEAP_OPTS=&quot;-Xmx256M -Xms128M&quot; \</span>
+<span class="sh">        /opt/kafka/bin/kafka-server-start.sh \</span>
+<span class="sh">        /opt/kafka/config/kraft/server.properties</span>
+<span class="sh">      echo &#39;PATH=&quot;$PATH:/opt/kafka/bin&quot;&#39; &gt; /etc/profile.d/kafka.sh</span>
+<span class="dl">    SHELL</span>
+<span class="w">  </span><span class="k">end</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>После развертывания мы получим кластер из трех узлов. Базово операции будем
+производить на машине <code class="docutils literal notranslate"><span class="pre">broker1</span></code>.</p>
+</section>
+<section id="consumer-groups">
+<h2>Consumer Groups<a class="headerlink" href="#consumer-groups" title="Permalink to this heading"></a></h2>
+<p>Для чтения из топика с несколькими партициями множеством консьюмеров существует
+удобный механизм Consumer Groups, который позволяет распределить партиции между
+консьюмерами в рамках группы.</p>
+<section id="single-consumer">
+<h3>Single Consumer<a class="headerlink" href="#single-consumer" title="Permalink to this heading"></a></h3>
+<p>Создадим топик с двумя партициями:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--create<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--partitions<span class="w"> </span><span class="m">2</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Created topic test.</span>
+<span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--describe<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Topic: test     TopicId: 0AT7xhxMSU6Iu4sXKmGilA PartitionCount: 2       ReplicationFactor: 1    Configs: segment.bytes=1073741824</span>
+<span class="go">        Topic: test     Partition: 0    Leader: 3       Replicas: 3     Isr: 3</span>
+<span class="go">        Topic: test     Partition: 1    Leader: 1       Replicas: 1     Isr: 1</span>
+</pre></div>
+</div>
+<p>Запустим в отдельном терминале консьюмера, указав для него группу, и отдельно
+запустим продюсера, который будет отправлять сообщения по разным партициям:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">0</span>
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--property<span class="w"> </span>parse.key<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--property<span class="w"> </span>key.separator<span class="o">=</span>:<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;0:0</span>
+<span class="go">&gt;1:1</span>
+<span class="go">&gt;0:2</span>
+<span class="go">&gt;1:3</span>
+<span class="go">&gt;</span>
+<span class="gp">$ </span>kafka-get-offsets.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">test:0:2</span>
+<span class="go">test:1:2</span>
+</pre></div>
+</div>
+<p>Как видно в каждой партиции по 2 сообщения и консьюмер считал их все.</p>
+</section>
+<section id="multiple-consumers">
+<h3>Multiple Consumers<a class="headerlink" href="#multiple-consumers" title="Permalink to this heading"></a></h3>
+<p>Попробуем запустить еще одного консьюмера в этой же группе в отдельном терминале,
+оставив запущенным старый и запишем еще несколько сообщений:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">0</span>
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+<span class="go">5</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">4</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--property<span class="w"> </span>parse.key<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--property<span class="w"> </span>key.separator<span class="o">=</span>:<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;0:4</span>
+<span class="go">&gt;1:5</span>
+<span class="go">&gt;0:6</span>
+<span class="go">&gt;1:7</span>
+<span class="go">&gt;</span>
+<span class="gp">$ </span>kafka-get-offsets.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">test:0:4</span>
+<span class="go">test:1:4</span>
+</pre></div>
+</div>
+<p>Как видно, после добавления консьюмера в группу сообщения из разных партиций
+стали распределяться по разным консьюмерам. Дальнейшее добавление консьюмеров
+в группу не даст никакого эффекта, так как в топике всего две партиции, а для
+исключения множественной обработки одних данных разными консьюмерами,
+предусмотрено чтение из одной партиции только одним консьюмером. Для увеличения
+числа консьюмеров необходимо иметь большее число партиций.</p>
+</section>
+<section id="consumer-offsets">
+<h3>Consumer Offsets<a class="headerlink" href="#consumer-offsets" title="Permalink to this heading"></a></h3>
+<p>Также для групп консьюмеров создается специальный топик <code class="docutils literal notranslate"><span class="pre">__consumer_offsets</span></code>,
+в котором сохраняется информация от консьюмеров об обработанных сообщениях.
+Информацию о группе можно получить командой <code class="docutils literal notranslate"><span class="pre">kafka-consumer-groups.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-consumer-groups.sh<span class="w"> </span>--describe<span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                           HOST            CLIENT-ID</span>
+<span class="go">test            test            0          4               4               0               console-consumer-6156fc4c-3e3c-4c25-b818-b43153dc6878 /192.168.56.79  console-consumer</span>
+<span class="go">test            test            1          4               4               0               console-consumer-916bf0ae-2b17-44fd-b6ef-1e6b8cd71526 /192.168.56.79  console-consumer</span>
+</pre></div>
+</div>
+<p>Как видно у нас в группе два консьюмера и текущий offset обработанных сообщений
+консьюмерами совпадает с концом в партиции. Отключим теперь наших консьюмеров,
+если они еще запущены и попробуем записать еще несколько сообщений в топик:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-consumer-groups.sh<span class="w"> </span>--describe<span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Consumer group &#39;test&#39; has no active members.</span>
+
+<span class="go">GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID</span>
+<span class="go">test            test            0          4               4               0               -               -               -</span>
+<span class="go">test            test            1          4               4               0               -               -               -</span>
+<span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--property<span class="w"> </span>parse.key<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--property<span class="w"> </span>key.separator<span class="o">=</span>:<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;0:0</span>
+<span class="go">&gt;1:1</span>
+<span class="go">&gt;</span>
+<span class="gp">$ </span>kafka-conumer-groups.sh<span class="w"> </span>--describe<span class="w"> </span>--group<span class="w"> </span>test:<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Consumer group &#39;test&#39; has no active members.</span>
+
+<span class="go">GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID</span>
+<span class="go">test            test            0          4               5               1               -               -               -</span>
+<span class="go">test            test            1          4               5               1               -               -               -</span>
+</pre></div>
+</div>
+<p>Теперь в выводе видно, что в партиции топика добавлены еще по одному сообщению
+и текущий offset консьюмеров начал отставать. Запустим консьюмер в этой группе
+и убедимся, что он вычитает сообщения с заданного offset:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">0</span>
+<span class="go">1</span>
+<span class="go">^CProcessed a total of 2 messages</span>
+<span class="gp">$ </span>kafka-consumer-groups.sh<span class="w"> </span>--describe<span class="w"> </span>--group<span class="w"> </span><span class="nb">test</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Consumer group &#39;test&#39; has no active members.</span>
+
+<span class="go">GROUP           TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID</span>
+<span class="go">test            test            0          5               5               0               -               -               -</span>
+<span class="go">test            test            1          5               5               0               -               -               -</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="cluster">
+<h2>Cluster<a class="headerlink" href="#cluster" title="Permalink to this heading"></a></h2>
+<p><a class="reference external" href="https://kafka.apache.org/">Apache Kafka</a> изначально проектировался как распределенная масштабируемая
+система, которая работает на множестве узлов и позволяет реплицировать данные
+между ними для отказоустойчивости. С помощью <code class="docutils literal notranslate"><span class="pre">vagrant</span></code> мы развернули кластер на
+трех узлах, попробуем воспроизвести отказ одного из них и посмотреть на результат.</p>
+<section id="prepare">
+<h3>Prepare<a class="headerlink" href="#prepare" title="Permalink to this heading"></a></h3>
+<p>Информацию о узлах кластера можем посмотреть командой
+<code class="docutils literal notranslate"><span class="pre">kafka-broker-api-versions.sh</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-broker-api-versions.sh<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;^\w&#39;</span>
+<span class="go">broker2.local:9092 (id: 2 rack: null) -&gt; (</span>
+<span class="go">broker1.local:9092 (id: 1 rack: null) -&gt; (</span>
+<span class="go">broker3.local:9092 (id: 3 rack: null) -&gt; (</span>
+</pre></div>
+</div>
+<p>Для репликации партиций создадим новый топик, указав параметр <code class="docutils literal notranslate"><span class="pre">replication</span> <span class="pre">factor</span></code> в 2:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--create<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--partitions<span class="w"> </span><span class="m">2</span><span class="w"> </span>--replication-factor<span class="w"> </span><span class="m">2</span><span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Created topic replicated.</span>
+<span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--describe<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Topic: replicated       TopicId: O8Z52kMvQWSsOwsJOpoOlw PartitionCount: 2       ReplicationFactor: 2     Configs: segment.bytes=1073741824</span>
+<span class="go">        Topic: replicated       Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1,2</span>
+<span class="go">        Topic: replicated       Partition: 1    Leader: 2       Replicas: 2,3   Isr: 2,3</span>
+</pre></div>
+</div>
+<p>Как видно, у нас имеется топик <code class="docutils literal notranslate"><span class="pre">replicated</span></code> с двумя партициями, сами же партиции
+имеют по две реплики на разных узлах.</p>
+</section>
+<section id="consume">
+<h3>Consume<a class="headerlink" href="#consume" title="Permalink to this heading"></a></h3>
+<p>Запустим пару консьюмеров в разных терминалах, как это делали в предыдущем разделе
+и запишем несколько сообщений в топик:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--group<span class="w"> </span>replicated<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">0</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--group<span class="w"> </span>replicated<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">2</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--property<span class="w"> </span>parse.key<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--property<span class="w"> </span>key.separator<span class="o">=</span>:<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;0:0</span>
+<span class="go">&gt;0:1</span>
+<span class="go">&gt;1:2</span>
+<span class="go">&gt;1:3</span>
+<span class="go">&gt;</span>
+</pre></div>
+</div>
+</section>
+<section id="stop-broker">
+<h3>Stop Broker<a class="headerlink" href="#stop-broker" title="Permalink to this heading"></a></h3>
+<p>Попробуем отключить второй брокер, так как на нем находится лидер для одной из
+партиций, для этого зайдем на машину <code class="docutils literal notranslate"><span class="pre">broker2</span></code> и выполним команду:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>kafka
+</pre></div>
+</div>
+<p>Вернемся обратно на первый узел и посмотрим состояние:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-broker-api-versions.sh<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s1">&#39;^\w&#39;</span>
+<span class="go">broker1.local:9092 (id: 1 rack: null) -&gt; (</span>
+<span class="go">broker3.local:9092 (id: 3 rack: null) -&gt; (</span>
+<span class="gp">$ </span>kafka-topics.sh<span class="w"> </span>--describe<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">Topic: replicated       TopicId: O8Z52kMvQWSsOwsJOpoOlw PartitionCount: 2       ReplicationFactor: 2     Configs: segment.bytes=1073741824</span>
+<span class="go">        Topic: replicated       Partition: 0    Leader: 1       Replicas: 1,2   Isr: 1</span>
+<span class="go">        Topic: replicated       Partition: 1    Leader: 3       Replicas: 2,3   Isr: 3</span>
+</pre></div>
+</div>
+<p>Как видно, узел <code class="docutils literal notranslate"><span class="pre">broker2</span></code> не отображается в списке, а лидером у партиции стал
+узел 3.
+При этом наши консьюмеры продолжают работать, допишем еще несколько сообщений
+в топик, чтобы убедиться:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--group<span class="w"> </span>replicated<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">0</span>
+<span class="go">1</span>
+<span class="go">4</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-consumer.sh<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--group<span class="w"> </span>replicated<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">2</span>
+<span class="go">3</span>
+<span class="go">5</span>
+<span class="go">7</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>kafka-console-producer.sh<span class="w"> </span>--topic<span class="w"> </span>replicated<span class="w"> </span>--property<span class="w"> </span>parse.key<span class="o">=</span><span class="nb">true</span><span class="w"> </span>--property<span class="w"> </span>key.separator<span class="o">=</span>:<span class="w"> </span>--bootstrap-server<span class="w"> </span>localhost:9092
+<span class="go">&gt;0:4</span>
+<span class="go">&gt;1:5</span>
+<span class="go">&gt;0:6</span>
+<span class="go">&gt;1:7</span>
+<span class="go">&gt;</span>
+</pre></div>
+</div>
+<p>Таким образом при потери узла работоспособность приложений не нарушилась.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="15_practice_kafka.html" class="btn btn-neutral float-left" title="Apache Kafka" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="17_practice_terraform.html" class="btn btn-neutral float-right" title="Terraform" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Алексей Юдолевич.</p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
