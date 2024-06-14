@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
     end
     c.vm.box = "ubuntu/lunar64"
     c.vm.hostname = "argocd"
-    c.vm.network "forwarded_port", guest: 80, host: 8888
+    c.vm.network "forwarded_port", guest: 8888, host: 8888
     c.vm.provision "shell", inline: <<-SHELL
       apt-get update -q
       apt-get install -yq docker.io docker-compose-v2
